@@ -1,0 +1,2007 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>닌진중국어 - 스마트 뉴스레터 학습 플랫폼</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=M+PLUS+Rounded+1c:wght@700;800;900&family=Noto+Sans+KR:wght@400;500;700;800;900&family=Noto+Sans+SC:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Noto Sans KR', 'Noto Sans SC', 'Inter', sans-serif;
+      background-color: #f1f5f9;
+      color: #1e293b;
+    }
+    .font-cute {
+      font-family: 'M PLUS Rounded 1c', 'Noto Sans KR', sans-serif;
+    }
+    .chinese-text {
+      font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    /* 3D 플래시카드 스타일 */
+    .perspective-1000 {
+      perspective: 1000px;
+    }
+    .transform-style-3d {
+      transform-style: preserve-3d;
+    }
+    .backface-hidden {
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    .rotate-y-180 {
+      transform: rotateY(180deg);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-rose-100 selection:text-rose-600">
+
+  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-200 px-4 lg:px-8 py-2.5 shadow-sm">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      
+      <!-- 로고 및 호차 정보 (제34기) -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-rose-600 to-red-500 flex items-center justify-center text-white shadow-md shadow-rose-200 font-black text-lg">
+          恁
+        </div>
+        <span class="text-xl font-extrabold text-slate-800 tracking-tight">닌진중국어</span>
+        
+        <!-- 제34기 뱃지 -->
+        <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#e11d48] text-white shadow-sm">
+          제 <span id="currentIssueNumber">34</span>기
+        </span>
+
+        <!-- 당근 아이콘 + ニンジン(닌진) 뱃지 -->
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-900 shadow-sm select-none">
+          <svg class="w-4 h-4 text-orange-500 flex-shrink-0 animate-bounce" style="animation-duration: 2.2s;" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M14.5 2.5C14.5 2.5 13.5 5 11 5.5C10.5 4 11 2 12.5 1.5C14 1 14.5 2.5 14.5 2.5Z" fill="#22c55e"/>
+            <path d="M12 4C12 4 10 3.5 9 1.5C8 3 9 5 10.5 5.5C11.5 5.8 12 4 12 4Z" fill="#16a34a"/>
+            <path d="M15.8 7.2C17.2 8.6 17.1 10.9 15.6 12.3L9.5 22C9.1 22.6 8.2 22.6 7.8 22L5.8 18.8C3.8 15.6 4.6 11.4 7.6 9.1L10.7 6.8C12.2 5.6 14.4 5.8 15.8 7.2Z" fill="#f97316"/>
+            <path d="M10 10L13 11" stroke="#ea580c" stroke-width="1.2" stroke-linecap="round"/>
+            <path d="M8 14L11 15" stroke="#ea580c" stroke-width="1.2" stroke-linecap="round"/>
+            <path d="M7 18L9 18.6" stroke="#ea580c" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+          <span class="font-cute text-xs font-black tracking-wide text-orange-600">ニンジン<span class="text-[11px] font-medium text-amber-700 ml-0.5">(닌진)</span></span>
+        </div>
+      </div>
+
+      <!-- 상단 컨트롤: 음성 멈춤 및 배속 조절 컨트롤 (이전/오늘/다음/소장본 제거 완료) -->
+      <div class="flex items-center gap-2 sm:gap-3 text-xs">
+        <!-- 음성 멈춤 버튼 -->
+        <button onclick="globalStopAudio()" class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-rose-600 text-white font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95" title="재생 중인 모든 음성을 즉각 정지합니다">
+          <svg class="w-3.5 h-3.5 text-rose-400" fill="currentColor" viewBox="0 0 24 24">
+            <rect x="6" y="6" width="12" height="12" rx="2"></rect>
+          </svg>
+          <span>음성 멈춤</span>
+        </button>
+
+        <!-- 배속 조절 컨트롤 (0.5배, 0.75배, 1배, 1.2배) -->
+        <div class="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-[11px] font-bold text-slate-600">
+          <span class="px-1.5 text-slate-400 text-[10px] hidden sm:inline">속도</span>
+          <button onclick="setGlobalPlaybackRate(0.5, this)" class="rate-btn px-2 py-1 rounded-lg transition hover:text-slate-900">0.5배</button>
+          <button onclick="setGlobalPlaybackRate(0.75, this)" class="rate-btn px-2 py-1 rounded-lg transition hover:text-slate-900">0.75배</button>
+          <button onclick="setGlobalPlaybackRate(1.0, this)" class="rate-btn px-2 py-1 rounded-lg transition bg-white text-rose-600 shadow-2xs font-black">1배</button>
+          <button onclick="setGlobalPlaybackRate(1.2, this)" class="rate-btn px-2 py-1 rounded-lg transition hover:text-slate-900">1.2배</button>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <nav class="bg-white border-b border-slate-200 px-4 lg:px-8">
+    <div class="max-w-7xl mx-auto flex items-center gap-2 overflow-x-auto py-2.5 no-scrollbar">
+      
+      <button onclick="switchMainTab('dashboard')" id="nav-btn-dashboard" class="main-tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold border transition whitespace-nowrap bg-slate-900 text-white border-slate-900 shadow-sm">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+        <span>대시보드</span>
+      </button>
+
+      <button onclick="switchMainTab('articles')" id="nav-btn-articles" class="main-tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold border transition whitespace-nowrap bg-white text-slate-600 border-slate-200 hover:bg-slate-50">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
+        <span>기사 심층해설 (5大)</span>
+      </button>
+
+      <button onclick="switchMainTab('vocabulary')" id="nav-btn-vocabulary" class="main-tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold border transition whitespace-nowrap bg-white text-slate-600 border-slate-200 hover:bg-slate-50">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+        <span>100개 핵심 단어장</span>
+        <span class="bg-rose-100 text-rose-700 text-[10px] px-1.5 py-0.5 rounded-full font-extrabold">음성지원</span>
+      </button>
+
+      <button onclick="switchMainTab('quiz')" id="nav-btn-quiz" class="main-tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold border transition whitespace-nowrap bg-white text-slate-600 border-slate-200 hover:bg-slate-50">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <span>HSK 실전 테스트</span>
+      </button>
+
+      <button onclick="switchMainTab('links')" id="nav-btn-links" class="main-tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold border transition whitespace-nowrap bg-white text-slate-600 border-slate-200 hover:bg-slate-50">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+        <span>공식 링크 허브</span>
+      </button>
+
+    </div>
+  </nav>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+
+    <!-- ============================================== -->
+    <!-- TAB 1: 대시보드 (DASHBOARD - 2026.09.21 제34기)  -->
+    <!-- ============================================== -->
+    <section id="view-dashboard" class="space-y-6">
+      
+      <!-- 상단 메인 히어로 배너 (제34기 9/21) -->
+      <div class="bg-gradient-to-r from-rose-600 via-rose-500 to-amber-500 rounded-3xl p-6 sm:p-8 text-white shadow-lg relative overflow-hidden">
+        <div class="absolute -right-6 -bottom-10 opacity-20 transform rotate-12 pointer-events-none">
+          <svg class="w-64 h-64 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M15.8 7.2C17.2 8.6 17.1 10.9 15.6 12.3L9.5 22C9.1 22.6 8.2 22.6 7.8 22L5.8 18.8C3.8 15.6 4.6 11.4 7.6 9.1L10.7 6.8C12.2 5.6 14.4 5.8 15.8 7.2Z"/></svg>
+        </div>
+        <div class="max-w-3xl relative z-10 space-y-2.5">
+          <div class="flex items-center gap-2">
+            <span class="inline-block px-3 py-1 bg-white/20 backdrop-blur rounded-full text-xs font-extrabold tracking-wide uppercase">
+              Today's Briefing &bull; 2026.09.21 (월)
+            </span>
+            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-400 text-amber-950">
+              뉴스레터 제 34기 완벽 해설
+            </span>
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-black leading-tight tracking-tight">
+            닌진중국어 시사 핫이슈 & 원문 완벽 독해 대시보드
+          </h1>
+          <p class="text-rose-100 text-sm sm:text-base font-medium leading-relaxed">
+            전 국민의 관심이 쏠린 <strong class="text-white underline decoration-amber-300">진시황릉 미발굴 미스터리 과학적 해명</strong>부터 충칭 쟈링강 대교 교각 사이 아슬아슬 불법 저공 활공 패러글라이더 적발, 충칭 식당 주방 내 조리사 채혈 자가검사 파문, 배터리 대기업 닝더스다이 화장실 통제 가짜뉴스 유포자 구류, 쓰러진 노인을 구호했다 92만 위안 소송당한 의로운 택배기사의 완승 판결까지! CCTV, 澎湃, 潇湘 등 공신력 있는 현지 정식 언론 기사로 중국어를 완전 정복하세요!
+          </p>
+          <div class="pt-2 flex flex-wrap gap-3">
+            <button onclick="switchMainTab('articles')" class="px-4 py-2 bg-white text-rose-600 font-extrabold rounded-xl shadow-md hover:bg-rose-50 transition text-sm flex items-center gap-1.5">
+              <span>오늘의 5대 기사 강독</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+            </button>
+            <button onclick="switchMainTab('vocabulary')" class="px-4 py-2 bg-rose-700/60 hover:bg-rose-700 text-white font-bold rounded-xl backdrop-blur transition text-sm">
+              핵심 단어 100선 암기
+            </button>
+            <button onclick="switchMainTab('quiz')" class="px-4 py-2 bg-amber-400 hover:bg-amber-300 text-amber-950 font-extrabold rounded-xl transition text-sm">
+              실전 퀴즈 풀기
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 상단 그리드: 오늘의 歇后语 + 웨이보 실검 TOP 5 -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- 1. 오늘의 歇后语 (9/21 제34기 공식 해후어) [7/12] -->
+        <div class="lg:col-span-7 bg-white p-6 rounded-3xl border border-slate-200/90 shadow-2xs space-y-4 flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+              <div class="flex items-center gap-2">
+                <span class="w-7 h-7 rounded-xl bg-amber-100 text-amber-700 font-black text-sm flex items-center justify-center">歇</span>
+                <h2 class="font-extrabold text-slate-800 text-base sm:text-lg">오늘의 歇后语 <span class="text-xs font-semibold text-amber-600 ml-1">중국인 애용 필수 해후어</span></h2>
+              </div>
+              <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200">HSK 6급 빈출 언어유희</span>
+            </div>
+
+            <!-- 해후어 메인 표현 -->
+            <div class="p-4 rounded-2xl bg-gradient-to-br from-amber-50/70 to-rose-50/40 border border-amber-200/80 space-y-2">
+              <div class="flex items-start justify-between gap-2">
+                <div>
+                  <div class="text-xl sm:text-2xl font-black chinese-text text-slate-900 tracking-tight flex items-center gap-2">
+                    <span>狗咬吕洞宾</span>
+                    <span class="text-rose-500 font-mono text-sm">——</span>
+                    <span class="text-[#e11d48]">不识好人心</span>
+                  </div>
+                  <div class="text-xs sm:text-sm font-semibold text-rose-600 font-mono mt-0.5">
+                    gǒu yǎo Lǚ Dòngbīn —— bù shí hǎo rén xīn
+                  </div>
+                </div>
+                <button onclick="speakChinese('狗咬吕洞宾，不识好人心')" class="p-2 rounded-xl bg-white shadow-2xs border border-amber-200 text-amber-700 hover:text-rose-600 hover:bg-rose-50 transition" title="발음 듣기">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
+                </button>
+              </div>
+
+              <div class="pt-2 border-t border-amber-200/50 space-y-1">
+                <div class="text-xs sm:text-sm font-bold text-slate-800">
+                  <span class="text-amber-700 mr-1.5">[한국어 의미]</span> 개가 여동빈을 물다 — 어진 사람의 고마운 마음을 몰라보다 (은혜를 원수로 갚는 배은망덕한 태도)
+                </div>
+                <p class="text-xs text-slate-600 leading-relaxed font-medium">
+                  팔선(八仙) 중 하나인 신선 여동宾이 자비로운 마음으로 다가갔으나 미련한 개가 도리어 다리를 물었다는 고사에서 유래하여, 선한 사람의 호의를 곡해하고 배은망덕하게 해코지하는 행태를 꼬집는 유명 해후어입니다.
+                </p>
+              </div>
+            </div>
+
+            <!-- 실전 회화 예문 (기사 05 시사 매칭) -->
+            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-1.5">
+              <div class="font-bold text-slate-700 flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+                <span>현지 실전 대화 응용 (제34기 시사 매칭):</span>
+              </div>
+              <div class="chinese-text text-slate-800 font-bold">
+                “快递员好心救助摔倒老人，家属却反咬一口索赔92万，这种做法简直就是<span class="text-rose-600 underline">狗咬吕洞宾——不识好人心</span>，幸好法院最终硬气判决施救者无责！”
+              </div>
+              <div class="text-slate-500">
+                (택배기사가 피 흘리며 쓰러진 노인을 도왔더니 가족들이 적반하장으로 92만 위안을 내놓으라 소송을 걸다니, 이야말로 은혜를 원수로 갚는 후안무치한 짓이며 법원이 단호히 무죄 판결을 내려 다행입니다!)
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-2 flex items-center justify-between text-xs text-slate-400">
+            <span>💡 歇后语 Tip: 앞부분(수수께끼)만 말하고 뒷부분을 생략해도 통하는 2단계 관용어</span>
+            <button onclick="toggleOtherXiehouyu()" class="text-rose-600 font-bold hover:underline">다른 해후어 더보기 &rarr;</button>
+          </div>
+        </div>
+
+        <!-- 2. 웨이보 실시간 검색어 TOP 5 (제34기 연동 & 한국어 번역 병기) [5/12] -->
+        <div class="lg:col-span-5 bg-white p-6 rounded-3xl border border-slate-200/90 shadow-2xs space-y-3.5 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+              <div class="flex items-center gap-2">
+                <span class="w-7 h-7 rounded-xl bg-red-100 text-red-600 font-black text-sm flex items-center justify-center">热</span>
+                <h2 class="font-extrabold text-slate-800 text-base sm:text-lg">웨이보 실시간 검색어 TOP 5</h2>
+              </div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-red-50 text-red-600 border border-red-200 animate-pulse">LIVE 实时热搜</span>
+            </div>
+
+            <p class="text-xs text-slate-500 mt-2 mb-3">
+              오늘자 뉴스레터 5대 기사와 직결된 현지 SNS 핫이슈 실시간 검색어입니다. 클릭 시 해당 기사로 이동합니다.
+            </p>
+
+            <!-- 실검 1~5위 리스트 -->
+            <div class="space-y-2">
+              <div onclick="jumpToArticle(0)" class="p-3 rounded-2xl border border-rose-200 bg-rose-50/50 hover:bg-rose-100/70 cursor-pointer transition flex items-center justify-between group">
+                <div class="flex items-start gap-2.5 truncate min-w-0 pr-2">
+                  <span class="w-5 h-5 rounded-md bg-red-600 text-white font-black text-xs flex items-center justify-center flex-shrink-0 mt-0.5">1</span>
+                  <div class="truncate">
+                    <div class="font-bold chinese-text text-xs sm:text-sm text-slate-900 group-hover:text-rose-600 truncate">#秦始皇陵为什么不挖#</div>
+                    <div class="text-[11px] text-slate-500 group-hover:text-slate-700 font-medium truncate mt-0.5">진시황릉 미발굴 과학적 이유 실검 1위 & 전문가 해명</div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-1.5 flex-shrink-0 ml-1">
+                  <span class="text-[10px] font-extrabold px-2 py-0.5 rounded bg-red-500 text-white shadow-2xs">爆 995만</span>
+                  <span class="text-xs text-slate-400 group-hover:text-rose-600">&rarr;</span>
+                </div>
+              </div>
+
+              <div onclick="jumpToArticle(1)" class="p-3 rounded-2xl border border-slate-200 hover:border-rose-300 hover:bg-slate-50 cursor-pointer transition flex items-center justify-between group">
+                <div class="flex items-start gap-2.5 truncate min-w-0 pr-2">
+                  <span class="w-5 h-5 rounded-md bg-orange-500 text-white font-black text-xs flex items-center justify-center flex-shrink-0 mt-0.5">2</span>
+                  <div class="truncate">
+                    <div class="font-bold chinese-text text-xs sm:text-sm text-slate-800 group-hover:text-rose-600 truncate">#重庆嘉陵江大桥滑翔伞被罚#</div>
+                    <div class="text-[11px] text-slate-500 group-hover:text-slate-700 font-medium truncate mt-0.5">충칭 대교 교각 사이 불법 초저공 활공 낙하산 적발 및 구류</div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-1.5 flex-shrink-0 ml-1">
+                  <span class="text-[10px] font-extrabold px-2 py-0.5 rounded bg-orange-100 text-orange-700">热 970만</span>
+                  <span class="text-xs text-slate-400 group-hover:text-rose-600">&rarr;</span>
+                </div>
+              </div>
+
+              <div onclick="jumpToArticle(4)" class="p-3 rounded-2xl border border-slate-200 hover:border-rose-300 hover:bg-slate-50 cursor-pointer transition flex items-center justify-between group">
+                <div class="flex items-start gap-2.5 truncate min-w-0 pr-2">
+                  <span class="w-5 h-5 rounded-md bg-amber-500 text-white font-black text-xs flex items-center justify-center flex-shrink-0 mt-0.5">3</span>
+                  <div class="truncate">
+                    <div class="font-bold chinese-text text-xs sm:text-sm text-slate-800 group-hover:text-rose-600 truncate">#救老人遭索赔92万终审无责#</div>
+                    <div class="text-[11px] text-slate-500 group-hover:text-slate-700 font-medium truncate mt-0.5">낙상 노인 구호 택배기사 92만위안 피소에 법원 완전 무책임 판결</div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-1.5 flex-shrink-0 ml-1">
+                  <span class="text-[10px] font-extrabold px-2 py-0.5 rounded bg-amber-100 text-amber-700">热 950만</span>
+                  <span class="text-xs text-slate-400 group-hover:text-rose-600">&rarr;</span>
+                </div>
+              </div>
+
+              <div onclick="jumpToArticle(2)" class="p-3 rounded-2xl border border-slate-200 hover:border-rose-300 hover:bg-slate-50 cursor-pointer transition flex items-center justify-between group">
+                <div class="flex items-start gap-2.5 truncate min-w-0 pr-2">
+                  <span class="w-5 h-5 rounded-md bg-slate-400 text-white font-black text-xs flex items-center justify-center flex-shrink-0 mt-0.5">4</span>
+                  <div class="truncate">
+                    <div class="font-bold chinese-text text-xs sm:text-sm text-slate-800 group-hover:text-rose-600 truncate">#厨师后厨测艾滋门店被立案#</div>
+                    <div class="text-[11px] text-slate-500 group-hover:text-slate-700 font-medium truncate mt-0.5">식당 조리사 주방 내 채혈 자가검사 파문, 영업정지 및 입건</div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-1.5 flex-shrink-0 ml-1">
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-600">热 925만</span>
+                  <span class="text-xs text-slate-400 group-hover:text-rose-600">&rarr;</span>
+                </div>
+              </div>
+
+              <div onclick="jumpToArticle(3)" class="p-3 rounded-2xl border border-slate-200 hover:border-rose-300 hover:bg-slate-50 cursor-pointer transition flex items-center justify-between group">
+                <div class="flex items-start gap-2.5 truncate min-w-0 pr-2">
+                  <span class="w-5 h-5 rounded-md bg-slate-400 text-white font-black text-xs flex items-center justify-center flex-shrink-0 mt-0.5">5</span>
+                  <div class="truncate">
+                    <div class="font-bold chinese-text text-xs sm:text-sm text-slate-800 group-hover:text-rose-600 truncate">#造谣宁德时代限制如厕被拘#</div>
+                    <div class="text-[11px] text-slate-500 group-hover:text-slate-700 font-medium truncate mt-0.5">배터리 공장 화장실 통제 가짜뉴스 유포자 경찰에 행정 구류</div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-1.5 flex-shrink-0 ml-1">
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-600">热 895만</span>
+                  <span class="text-xs text-slate-400 group-hover:text-rose-600">&rarr;</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-2 text-[11px] text-slate-400 flex items-center justify-between border-t border-slate-100">
+            <span>출처: 微博热搜榜 / 오늘자 시사 키워드 연동</span>
+            <span class="font-mono text-[10px] text-slate-400">Update: 2026.09.21 18:00</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 하단 그리드: 今日最火金句 + 今日实战打卡任务 -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- 3. 今日最火金句 명사 정독 명언 (제34기) [6/12] -->
+        <div class="lg:col-span-6 bg-white p-6 rounded-3xl border border-slate-200/90 shadow-2xs space-y-4 flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+              <div class="flex items-center gap-2">
+                <span class="w-7 h-7 rounded-xl bg-purple-100 text-purple-700 font-black text-sm flex items-center justify-center">金</span>
+                <h2 class="font-extrabold text-slate-800 text-base sm:text-lg">今日最火金句 <span class="text-xs font-semibold text-purple-600 ml-1">명사 정독 명언</span></h2>
+              </div>
+              <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-purple-50 text-purple-700 border border-purple-200">언론사 사설 논평</span>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-gradient-to-br from-purple-50/50 via-white to-rose-50/30 border-2 border-purple-200/80 relative space-y-3">
+              <div class="text-3xl font-serif text-purple-300 leading-none">“</div>
+              <p id="goldenQuoteZh" class="chinese-text font-black text-base sm:text-lg text-slate-900 leading-relaxed -mt-4">
+                法治的温度在于绝不让善良寒心，科学的敬畏在于克制盲目的贪求；守住底线，方见人间公道与历史长青。
+              </p>
+              <p id="goldenQuotePinyin" class="text-xs font-mono font-semibold text-purple-600 leading-snug">
+                Fǎzhì de wēndù zàiyú juébú ràng shànliáng hánxīn, kēxué de jìngwèi zàiyú kèzhì mángmù de tānqiú; shǒuzhù dǐxiàn, fāng jiàn rénjiān gōngdào yǔ lìshǐ chángqīng.
+              </p>
+              
+              <div class="pt-3 border-t border-purple-100/80 space-y-1.5">
+                <div class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                  <span class="px-1.5 py-0.2 rounded bg-purple-100 text-purple-700 text-[10px]">정밀 번역</span>
+                  <span>법치의 온도는 결코 선한 마음을 얼어붙게 하지 않는 데 있으며, 과학의 경외는 맹목적인 탐욕을 절제하는 데 있습니다. 마지노선을 굳건히 지켜낼 때 비로소 세상의 공도와 역사의 영원함이 피어납니다.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 핵심 구문 분석 및 작문 포인트 -->
+            <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-1">
+              <div class="font-bold text-slate-700 flex items-center gap-1">
+                <span>📌</span> 고급 작문 핵심 틀 (HSK 6급 구문):
+              </div>
+              <p class="text-slate-600">
+                <code class="bg-purple-100 text-purple-800 px-1.5 py-0.5 rounded font-mono font-bold">……在于……；守住……，方见……</code> (~는 …에 있고; ~을 지켜내야 비로소 …을 볼 수 있다) &rarr; 사회적 정의와 문명 보존의 철학을 엄숙히 결론짓는 고급 사설 문형입니다.
+              </p>
+            </div>
+          </div>
+
+          <div class="pt-2 flex items-center justify-between">
+            <button onclick="speakChinese(document.getElementById('goldenQuoteZh').textContent)" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-purple-50 text-purple-700 hover:bg-purple-100 transition flex items-center gap-1.5 border border-purple-200">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
+              <span>명언 원음 듣기</span>
+            </button>
+            <button onclick="copyQuoteText()" class="text-xs font-bold text-slate-500 hover:text-purple-600 transition flex items-center gap-1">
+              <span>📋 본문 복사</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 4. 今日实战打卡任务 오늘의 미션 작문 과제 (제34기) [6/12] -->
+        <div class="lg:col-span-6 bg-white p-6 rounded-3xl border border-slate-200/90 shadow-2xs space-y-4 flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+              <div class="flex items-center gap-2">
+                <span class="w-7 h-7 rounded-xl bg-emerald-100 text-emerald-700 font-black text-sm flex items-center justify-center">练</span>
+                <h2 class="font-extrabold text-slate-800 text-base sm:text-lg">今日实战打卡任务 <span class="text-xs font-semibold text-emerald-600 ml-1">오늘의 미션 작문 과제</span></h2>
+              </div>
+              <span id="missionStatusBadge" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">
+                미완료 ⏳
+              </span>
+            </div>
+
+            <div class="p-3.5 rounded-2xl bg-emerald-50/50 border border-emerald-200 text-xs space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-emerald-800">🎯 오늘의 작문 챌린지 (HSK 5~6급 쓰기 실전)</span>
+                <span class="text-slate-400 font-medium">권장 분량: 25~90자</span>
+              </div>
+              <p class="text-slate-700 leading-relaxed">
+                오늘 학습한 핵심 문형인 <strong>‘<span class="text-emerald-700 font-bold">一次满怀善念的……，反遭……，法院终审硬气判决：绝不能让施救者……，明确为全社会善意撑腰</span>’</strong> 구문을 활용하여, 선한 행동이 부당한 의심을 받아서는 안 되는 이유를 중국어로 작문해 보세요.
+              </p>
+            </div>
+
+            <!-- 사용자 입력 텍스트에어리어 -->
+            <div class="space-y-1.5">
+              <div class="relative">
+                <textarea id="userMissionInput" rows="3" placeholder="여기에 중국어로 문장을 입력해보세요 (예: 一次满怀善念的紧急救援，绝不容许反遭无理索赔，法治的刚性判决正是为每一份温暖人心的善意撑腰。)" class="w-full p-3 rounded-2xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:outline-none text-xs sm:text-sm chinese-text bg-slate-50/70"></textarea>
+                <div class="absolute right-3 bottom-3 text-[11px] text-slate-400 font-mono" id="missionCharCount">0 자</div>
+              </div>
+            </div>
+
+            <!-- 자동 피드백 결과 박스 -->
+            <div id="missionFeedbackBox" class="hidden p-3.5 rounded-2xl bg-white border border-emerald-300 text-xs space-y-2">
+              <div class="flex items-center justify-between font-bold">
+                <span class="text-emerald-700 flex items-center gap-1">
+                  <span>🎉</span> 미션 인증 완료 & 피드백
+                </span>
+                <span id="missionScoreTag" class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px]">100점 탁월</span>
+              </div>
+              <div id="missionFeedbackText" class="text-slate-600 leading-relaxed">
+                훌륭합니다! 핵심 어휘와 구문 틀이 완벽하게 결합되었습니다.
+              </div>
+              <div class="p-2.5 rounded-xl bg-slate-50 text-[11px] text-slate-600 space-y-0.5">
+                <div class="font-bold text-slate-700">⭐ 원어민 추천 모범 문장:</div>
+                <div class="chinese-text font-bold text-slate-800">“一次满怀善念的紧急救援，绝不容许反遭无理索赔，法治的刚性判决正是为每一份温暖人心的善意撑腰。”</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-2 flex items-center justify-between border-t border-slate-100">
+            <span class="text-xs text-slate-400">매일 꾸준한 1문장 작문이 HSK 고득점의 열쇠입니다.</span>
+            <div class="flex gap-2">
+              <button onclick="loadMissionSample()" class="px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 transition border border-slate-200">
+                예문 불러오기
+              </button>
+              <button onclick="submitMissionTask()" class="px-4 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition">
+                작문 제출 & 실전 타카
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 기사 및 어휘 요약 통계 카드 그리드 -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 pt-2">
+        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-2xs flex items-center gap-4 cursor-pointer hover:border-rose-300 transition" onclick="switchMainTab('articles')">
+          <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center font-bold text-xl">📰</div>
+          <div>
+            <div class="text-xs font-semibold text-slate-500">엄선된 실시간 기사</div>
+            <div class="text-xl font-extrabold text-slate-800">5편 완벽 해설</div>
+          </div>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-2xs flex items-center gap-4 cursor-pointer hover:border-amber-300 transition" onclick="switchMainTab('vocabulary')">
+          <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold text-xl">🥕</div>
+          <div>
+            <div class="text-xs font-semibold text-slate-500">핵심 단어장 & 발음</div>
+            <div class="text-xl font-extrabold text-slate-800">100개 고급어휘</div>
+          </div>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-2xs flex items-center gap-4 cursor-pointer hover:border-blue-300 transition" onclick="switchMainTab('quiz')">
+          <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-xl">🎯</div>
+          <div>
+            <div class="text-xs font-semibold text-slate-500">실전 평가 퀴즈</div>
+            <div class="text-xl font-extrabold text-slate-800">HSK 5~6급 실전</div>
+          </div>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-2xs flex items-center gap-4 cursor-pointer hover:border-emerald-300 transition" onclick="switchMainTab('links')">
+          <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-xl">🔗</div>
+          <div>
+            <div class="text-xs font-semibold text-slate-500">원문 출처 직통 링크</div>
+            <div class="text-xl font-extrabold text-slate-800">100% 공신력 검증</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 대시보드 하단 컴팩트 소장본(HTML) 저장 바 -->
+      <div class="pt-4 pb-2 flex flex-col sm:flex-row items-center justify-between gap-3 p-4 rounded-2xl bg-white border border-slate-200 text-xs shadow-2xs">
+        <div class="flex items-center gap-2 text-slate-600 font-medium">
+          <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+          <span>현재 제 34기 대시보드(기사 5편, 100단어, 실검, 퀴즈)를 오프라인용 단일 HTML 파일로 영구 소장하세요.</span>
+        </div>
+        <button onclick="exportStandaloneHtml()" class="px-3.5 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95 text-xs whitespace-nowrap" title="현재 학습 대시보드를 오프라인 영구 보관용 HTML 파일로 저장합니다">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+          </svg>
+          <span>소장본(HTML) 저장</span>
+        </button>
+      </div>
+
+    </section>
+
+    <!-- ============================================== -->
+    <!-- TAB 2: 기사 심층해설 (ARTICLES - 제34기 5大)     -->
+    <!-- ============================================== -->
+    <section id="view-articles" class="hidden space-y-6">
+
+      <!-- 서브 탭: 기사 01 ~ 기사 05 (제34기 토픽) -->
+      <div class="bg-white p-2 rounded-2xl border border-slate-200/90 shadow-2xs flex items-center gap-2 overflow-x-auto no-scrollbar">
+        <button onclick="selectArticle(0)" id="article-tab-0" class="article-tab-btn flex-1 min-w-[110px] py-2.5 px-4 rounded-xl font-extrabold text-sm transition text-center shadow-xs bg-[#e11d48] text-white">
+          기사 <span class="font-black">01</span> (진시황릉 미발굴)
+        </button>
+        <button onclick="selectArticle(1)" id="article-tab-1" class="article-tab-btn flex-1 min-w-[110px] py-2.5 px-4 rounded-xl font-bold text-sm transition text-center text-slate-600 hover:bg-slate-100">
+          기사 <span class="font-black">02</span> (충칭 대교 활공)
+        </button>
+        <button onclick="selectArticle(2)" id="article-tab-2" class="article-tab-btn flex-1 min-w-[110px] py-2.5 px-4 rounded-xl font-bold text-sm transition text-center text-slate-600 hover:bg-slate-100">
+          기사 <span class="font-black">03</span> (식당 주방 채혈검사)
+        </button>
+        <button onclick="selectArticle(3)" id="article-tab-3" class="article-tab-btn flex-1 min-w-[110px] py-2.5 px-4 rounded-xl font-bold text-sm transition text-center text-slate-600 hover:bg-slate-100">
+          기사 <span class="font-black">04</span> (배터리 공장 루머)
+        </button>
+        <button onclick="selectArticle(4)" id="article-tab-4" class="article-tab-btn flex-1 min-w-[110px] py-2.5 px-4 rounded-xl font-bold text-sm transition text-center text-slate-600 hover:bg-slate-100">
+          기사 <span class="font-black">05</span> (택배기사 소송 완승)
+        </button>
+      </div>
+
+      <!-- 기사 본문 상세 카드 -->
+      <article class="bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-8 lg:p-10 shadow-sm space-y-6">
+
+        <!-- 기사 메타 헤더 -->
+        <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-100">
+          <div class="flex flex-wrap items-center gap-2.5">
+            <span id="articleBadgeNumber" class="px-3 py-1 rounded-md text-xs font-black bg-[#e11d48] text-white">
+              기사 01
+            </span>
+            <span id="articleCategory" class="px-3 py-1 rounded-md text-xs font-extrabold bg-slate-100 text-slate-700">
+              SNS 실검 1위 & 핫이슈
+            </span>
+          </div>
+
+          <!-- 정확한 원문 기사 링크 연결 박스 -->
+          <div class="flex items-center gap-1.5 text-xs text-slate-600 font-medium bg-slate-50 px-3.5 py-1.5 rounded-xl border border-slate-200/80 shadow-2xs">
+            <span class="text-slate-400 font-normal">공식 원문 출처:</span>
+            <span id="articleSourcesContainer" class="flex items-center gap-1.5">
+              <!-- JS 동적 렌더링 -->
+            </span>
+          </div>
+        </div>
+
+        <!-- 중국어 헤드라인 및 TTS 발음 버튼 -->
+        <div class="space-y-3">
+          <div class="flex items-start justify-between gap-4">
+            <h2 id="articleHeadlineZh" class="text-2xl sm:text-3xl font-black chinese-text text-slate-900 tracking-tight leading-snug">
+              “秦始皇陵为什么不挖”冲上热搜第一！专家回应：地宫水银超标70倍、脆弱文物难抵空气冲击，“不打扰是最好的保护”
+            </h2>
+            <button onclick="playArticleHeadlineVoice()" class="flex-shrink-0 p-2.5 rounded-2xl bg-rose-50 text-rose-600 hover:bg-rose-100 transition shadow-xs" title="헤드라인 중국어 발음 듣기">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
+            </button>
+          </div>
+          <div id="articleHeadlinePinyin" class="text-xs sm:text-sm font-semibold text-rose-600 font-mono tracking-wide">
+            “Qín Shǐhuánglíng wèishénme bù wā” chōng shàng rèsōu dì-yī! Zhuānjiā huíyìng: Dìgōng shuǐyín chāobiāo 70 bèi, cuìruò wénwù nán dǐ kōngqì chōngjī, “bù dǎrǎo shì zuì hǎo de bǎohù”
+          </div>
+          <div class="pt-2 border-t border-slate-100">
+            <div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-slate-100 text-slate-600 text-[11px] font-bold">
+              <span>🇰🇷 한국어 제목:</span>
+            </div>
+            <p id="articleHeadlineKo" class="text-sm sm:text-base font-bold text-slate-800 mt-1 leading-snug">
+              "진시황릉 왜 안 파나" 실검 1위 폭발! 전문가 "지하궁전 수은 기준치 70배 초과, 취약한 유물 공기 닿으면 산화... 발굴하지 않는 것이 최고의 보호"
+            </p>
+          </div>
+        </div>
+
+        <!-- 핵심 요약 명사 한마디 포인트 박스 -->
+        <div class="border-l-4 border-[#e11d48] bg-rose-50/40 p-4 sm:p-5 rounded-r-2xl">
+          <div class="flex items-start gap-2.5">
+            <span class="text-base flex-shrink-0">⭐</span>
+            <div>
+              <span class="font-extrabold text-sm sm:text-base text-slate-900 mr-1">명사 한마디 핵심 포인트:</span>
+              <span id="articleSummaryKo" class="text-sm sm:text-base text-slate-700 font-medium leading-relaxed">
+                2천 년간 잠든 진시황릉을 둘러싸고 '왜 적극 발굴하지 않는가'라는 화두가 실검 1위에 오르자, 고고학 전문가들이 치명적인 수은 증기와 유기물 산화 위험 등 과학적 보존 이유를 밝혔습니다.
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 본문 문장별 중국어/병음/한국어 번역 및 음성 하이라이트 박스 -->
+        <div class="space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <h3 class="font-extrabold text-slate-800 text-lg flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-slate-700"></span>
+              심층 강독 및 문장 단위 정밀 해설 (전체 본문 수록)
+            </h3>
+            <div class="flex items-center gap-2">
+              <button id="fullArticlePlayBtn" onclick="playEntireArticle()" class="px-3.5 py-1.5 rounded-full text-xs font-bold text-[#e11d48] bg-rose-50 border border-rose-200 hover:bg-rose-100 transition flex items-center gap-1.5 shadow-2xs" title="1번 문장부터 마지막 문장까지 순차적으로 청취합니다">
+                <span>▷</span> 기사 전체 본문 연속 듣기
+              </button>
+              <span class="text-xs text-slate-400 font-medium hidden sm:inline">문장 박스를 누르면 원어민 발음과 함께 하이라이트됩니다</span>
+            </div>
+          </div>
+
+          <div id="articleSentencesList" class="space-y-4">
+            <!-- JS 동적 렌더링 -->
+          </div>
+        </div>
+
+        <!-- 본 기사 출현 핵심 20대 어휘 암기장 -->
+        <div class="pt-6 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-2.5">
+              <span id="vocabTableBadge" class="px-2.5 py-0.5 rounded-full text-xs font-black bg-[#e11d48] text-white">
+                기사 01
+              </span>
+              <h3 class="text-base sm:text-lg font-black text-slate-800 tracking-tight">
+                본 기사 출현 핵심 <span class="text-[#e11d48]">20대 어휘</span> 암기장 <span class="text-xs font-semibold text-slate-400 font-normal">(출현도 100% 검증)</span>
+              </h3>
+            </div>
+            <button onclick="playAllArticleVocab()" class="px-3 py-1.5 rounded-full text-xs font-bold text-[#e11d48] bg-rose-50 border border-rose-200 hover:bg-rose-100 transition flex items-center gap-1.5 shadow-2xs">
+              <span>▷</span> 이 기사 20단어 연속 청취
+            </button>
+          </div>
+
+          <!-- 어휘 표 -->
+          <div class="overflow-x-auto border border-slate-200/90 rounded-2xl shadow-2xs bg-white">
+            <table class="w-full text-left text-xs border-collapse min-w-[780px]">
+              <thead>
+                <tr class="bg-[#f0f4f9] text-slate-600 font-bold border-b border-slate-200">
+                  <th class="py-3 px-3 text-center w-12">NO</th>
+                  <th class="py-3 px-4 w-28">어휘</th>
+                  <th class="py-3 px-4 w-32">병음</th>
+                  <th class="py-3 px-4 w-32">품사</th>
+                  <th class="py-3 px-5">규범 한국어 해석</th>
+                  <th class="py-3 px-5">어맥 실전 팁</th>
+                  <th class="py-3 px-4 text-center w-24">발음 / 보관</th>
+                </tr>
+              </thead>
+              <tbody id="articleVocabTableBody" class="divide-y divide-slate-100">
+                <!-- JS 렌더링 -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </article>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- TAB 3: 100개 핵심 단어장 (VOCABULARY)           -->
+    <!-- ============================================== -->
+    <section id="view-vocabulary" class="hidden space-y-6">
+      <div class="bg-white p-6 rounded-3xl border border-slate-200/90 shadow-2xs space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h2 class="text-xl font-extrabold text-slate-800 flex items-center gap-2">
+              <span>📖</span> 뉴스레터 100개 핵심 단어장
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-500 mt-1">
+              시사 뉴스레터에 등장하는 빈출 고난도 어휘를 원어민 발음과 함께 체계적으로 외워보세요.
+            </p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button id="vocabPlayAllBtn" onclick="playAllVocabAudio()" class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95">
+              <svg class="w-4 h-4 text-rose-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/></svg>
+              <span id="vocabPlayAllText">현재 목록 순차 듣기</span>
+            </button>
+            <button id="vocabPauseBtn" onclick="togglePauseResumeVocabList()" class="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-bold transition flex items-center gap-1.5 shadow-2xs">
+              <span id="vocabPauseIcon">⏸</span>
+              <span id="vocabPauseText">일시정지</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center gap-3 pt-2">
+          <div class="relative w-full sm:flex-1">
+            <input type="text" id="vocabSearchInput" oninput="filterVocabList()" placeholder="한자, 병음, 한국어 뜻 검색..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 bg-slate-50">
+            <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+          </div>
+          <div class="flex items-center gap-1.5 w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0">
+            <button onclick="setVocabCategory('all')" id="vcat-all" class="vcat-btn px-3 py-1.5 rounded-xl text-xs font-bold border transition bg-rose-600 text-white border-rose-600">전체보기</button>
+            <button onclick="setVocabCategory('사회/IT')" id="vcat-사회/IT" class="vcat-btn px-3 py-1.5 rounded-xl text-xs font-bold border transition bg-white text-slate-600 border-slate-200 hover:bg-slate-50">사회/IT</button>
+            <button onclick="setVocabCategory('경제/산업')" id="vcat-경제/산업" class="vcat-btn px-3 py-1.5 rounded-xl text-xs font-bold border transition bg-white text-slate-600 border-slate-200 hover:bg-slate-50">경제/산업</button>
+            <button onclick="setVocabCategory('성어/숙어')" id="vcat-성어/숙어" class="vcat-btn px-3 py-1.5 rounded-xl text-xs font-bold border transition bg-white text-slate-600 border-slate-200 hover:bg-slate-50">사자성어</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="vocabGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- JS 렌더링 -->
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- TAB 4: HSK 실전 테스트 (QUIZ - 제34기)          -->
+    <!-- ============================================== -->
+    <section id="view-quiz" class="hidden space-y-6">
+      <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/90 shadow-2xs space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-100">
+          <div>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800">
+              뉴스레터 제34기 연계 실전 평가
+            </span>
+            <h2 class="text-xl font-extrabold text-slate-800 mt-1">HSK 5~6급 독해·어휘 모의 테스트</h2>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold text-slate-500">현재 점수:</span>
+            <span id="quizScoreText" class="text-lg font-black text-rose-600">0 / 4</span>
+          </div>
+        </div>
+
+        <div id="quizContainer" class="space-y-8">
+          <!-- JS 퀴즈 렌더링 -->
+        </div>
+
+        <div class="pt-4 flex justify-end">
+          <button onclick="resetQuiz()" class="px-4 py-2 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-600 text-xs font-bold transition">
+            다시 풀기
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- TAB 5: 공식 링크 허브 (LINKS)                   -->
+    <!-- ============================================== -->
+    <section id="view-links" class="hidden space-y-6">
+      <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/90 shadow-2xs space-y-6">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-800 flex items-center gap-2">
+            <span>🔗</span> 중국 주요 언론사 및 제34기 공식 링크 허브
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-500 mt-1">
+            닌진중국어 제34기 뉴스레터에 인용된 공식 중국 언론 매체 원문 및 HSK 시험 공식 사이트 바로가기입니다.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <a href="https://news.cctv.com/" target="_blank" rel="noopener noreferrer" class="p-5 rounded-2xl border border-slate-200 hover:border-rose-300 hover:shadow-md transition bg-gradient-to-br from-white to-slate-50 group flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-red-100 text-red-700">기사 01 & 05 원문</span>
+                <svg class="w-4 h-4 text-slate-400 group-hover:text-rose-600 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+              </div>
+              <h3 class="chinese-text font-black text-lg text-slate-800 mt-3 group-hover:text-rose-600 transition">央视新闻 (CCTV 뉴스)</h3>
+              <p class="text-xs text-slate-500 mt-1">진시황릉 미발굴 과학적 이유 심층 해설 / 낙상 노인 구호 택배기사 승소 판결 보도</p>
+            </div>
+            <div class="text-[11px] font-mono text-slate-400 mt-4">news.cctv.com &rarr;</div>
+          </a>
+
+          <a href="https://m.thepaper.cn/" target="_blank" rel="noopener noreferrer" class="p-5 rounded-2xl border border-slate-200 hover:border-rose-300 hover:shadow-md transition bg-gradient-to-br from-white to-slate-50 group flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-blue-100 text-blue-700">기사 01~05 탐사보도</span>
+                <svg class="w-4 h-4 text-slate-400 group-hover:text-rose-600 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+              </div>
+              <h3 class="chinese-text font-black text-lg text-slate-800 mt-3 group-hover:text-rose-600 transition">澎湃新闻 (The Paper)</h3>
+              <p class="text-xs text-slate-500 mt-1">충칭 대교 불법 패러글라이딩 적발 / 식당 주방 채혈 검사 입건 / 배터리 공장 루머 유포자 구류</p>
+            </div>
+            <div class="text-[11px] font-mono text-slate-400 mt-4">thepaper.cn &rarr;</div>
+          </a>
+
+          <a href="https://www.hsk.or.kr/" target="_blank" rel="noopener noreferrer" class="p-5 rounded-2xl border border-rose-200 bg-rose-50/40 hover:border-rose-400 hover:shadow-md transition group flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-rose-600 text-white">공식 시험 센터</span>
+                <svg class="w-4 h-4 text-rose-500 group-hover:translate-x-0.5 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+              </div>
+              <h3 class="font-black text-lg text-slate-900 mt-3 group-hover:text-rose-600 transition">HSK 한국사무국 (공식 접수처)</h3>
+              <p class="text-xs text-slate-600 mt-1">HSK, HSKK 정기 시험 일정 조회, 접수, 성적 발표 및 샘플 문제 다운로드</p>
+            </div>
+            <div class="text-[11px] font-mono text-rose-600 font-bold mt-4">hsk.or.kr &rarr;</div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 토스트 알림 -->
+  <div id="toastNotification" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 pointer-events-none transition-all duration-300 bg-slate-900/95 text-white text-xs font-semibold px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-2.5 border border-slate-700 backdrop-blur">
+    <span class="text-base" id="toastIcon">📥</span>
+    <span id="toastMessage">소장본 HTML 파일이 다운로드되었습니다.</span>
+  </div>
+
+  <!-- 푸터 -->
+  <footer class="bg-white border-t border-slate-200 py-6 px-4 text-center text-xs text-slate-400">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div class="flex items-center gap-2">
+        <span class="font-cute font-bold text-orange-500">ニンジン 닌진중국어</span>
+        <span>&copy; 2026 스마트 뉴스레터 학습 플랫폼. All rights reserved.</span>
+      </div>
+      <div class="flex items-center gap-4 font-medium text-slate-500">
+        <span>Web Speech TTS 실시간 발음 지원</span>
+        <span>공신력 있는 현지 언론사 원문 100% 매핑</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // 제34기 (2026.09.21) 5대 기사 데이터베이스
+    const ARTICLES_DATA = [
+      {
+        id: 0,
+        badge: "기사 01",
+        category: "SNS 실검 1위 & 핫이슈",
+        sources: [
+          { name: "央视新闻 (CCTV)", url: "https://news.cctv.com/" },
+          { name: "澎湃新闻 (The Paper)", url: "https://m.thepaper.cn/" }
+        ],
+        date: "2026-09-20",
+        headlineZh: "“秦始皇陵为什么不挖”冲上热搜第一！专家回应：地宫水银超标70倍、脆弱文物难抵空气冲击，“不打扰是最好的保护”",
+        headlinePinyin: "“Qín Shǐhuánglíng wèishénme bù wā” chōng shàng rèsōu dì-yī! Zhuānjiā huíyìng: Dìgōng shuǐyín chāobiāo 70 bèi, cuìruò wénwù nán dǐ kōngqì chōngjī, “bù dǎrǎo shì zuì hǎo de bǎohù”",
+        headlineKo: "“진시황릉 왜 안 파나” 실검 1위 폭발! 전문가 “지하궁전 수은 기준치 70배 초과, 취약한 유기물 유물 공기 닿으면 산화... 발굴하지 않는 것이 최고의 보호”",
+        summaryKo: "2천 년간 잠든 진시황릉을 둘러싸고 '왜 적극 발굴하지 않는가'라는 화두가 실검 1위에 오르자, 고고학 전문가들이 치명적인 수은 증기와 유기물 산화 위험 등 과학적 보존 이유를 밝혔습니다.",
+        sentences: [
+          {
+            num: 1,
+            zh: "沉睡两千余年的秦始皇陵，近日因话题“秦始皇陵为什么不挖”强势登顶微博热搜榜首，再度掀起全民对地下神秘幽宫的狂热探秘热潮。",
+            zhPlain: "沉睡两千余年的秦始皇陵，近日因话题“秦始皇陵为什么不挖”强势登顶微博热搜榜首，再度掀起全民对地下神秘幽宫的狂热探秘热潮。",
+            zhHtml: "<span class='text-[#e11d48] font-black'>沉睡</span>两千余年的秦始皇陵，近日因话题“秦始皇陵为什么不挖”强势登顶微博热搜榜首，再度掀起全民对地下神秘<span class='text-[#e11d48] font-black'>幽宫</span>의 狂热<span class='text-[#e11d48] font-black'>探秘</span>热潮。",
+            pinyin: "Chénsùi liǎng qiān yú nián de Qín Shǐhuánglíng, jìnrì yīn huàtí “Qín Shǐhuánglíng wèishénme bù wā” qiángshì dēngdǐng wēibó rèsōubǎng bǎngshǒu, zàidù xiānqǐ quánmín duì dìxià shénmì yōugōng de kuángrè tànmì rècháo.",
+            ko: "2천 년 넘게 깊은 잠에 빠져 있는 진시황릉이 최근 '진시황릉은 왜 발굴하지 않는가'라는 화두로 웨이보 실검 1위에 오르며, 지하 신비의 황궁을 향한 전 국민적 탐구 열풍을 다시금 불러일으켰습니다."
+          },
+          {
+            num: 2,
+            zh: "面对公众对地宫长明灯与水银江河的无限遐想，秦始皇帝陵博物院专家与文保权威人士郑重解密：不主动发掘绝非怯懦推诿，而是对自然与先祖最深沉的敬畏。",
+            zhPlain: "面对公众对地宫长明灯与水银江河的无限遐想，秦始皇帝陵博物院专家与文保权威人士郑重解密：不主动发掘绝非怯懦推诿，而是对自然与先祖最深沉的敬畏。",
+            zhHtml: "面对公众对地宫长明灯与水银江河的无限<span class='text-[#e11d48] font-black'>遐想</span>，秦始皇帝陵博物院专家与文保权威人士郑重<span class='text-[#e11d48] font-black'>解密</span>：不主动发掘绝非<span class='text-[#e11d48] font-black'>怯懦</span><span class='text-[#e11d48] font-black'>推诿</span>，而是对自然与先祖最深沉的<span class='text-[#e11d48] font-black'>敬畏</span>。",
+            pinyin: "Miànduì gōngzhòng duì dìgōng chángmíngdēng yǔ shuǐyín jiānghé de wúxiàn xiáxiǎng, Qín Shǐhuángdìlíng Bówùyuàn zhuānjiā yǔ wénbǎo quánwēi rénshì zhèngzhòng jiěmì: Bù zhǔdòng fājué juéfēi qiènuò tuīwěi, ér shì duì zìrán yǔ xiānzǔ zuì shēnchén de jìngwèi.",
+            ko: "꺼지지 않는 장명등과 수은 강물이 흐른다는 지하 궁전을 둘러싼 대중의 환상에 대해, 박물원 전문가들과 문화재 보존 권위자들은 능을 적극적으로 파헤치지 않는 것은 나태나 회피가 아니라 자연과 역사를 향한 가장 깊은 경외심 때문이라고 답했습니다."
+          },
+          {
+            num: 3,
+            zh: "现代地球物理勘探证实，皇陵封土中汞含量竟高达周边常规土壤本体的70余倍，贸然开掘极易引发高浓度剧毒水银蒸汽泄露，酿成灾难性环境生态污染。",
+            zhPlain: "现代地球物理勘探证实，皇陵封土中汞含量竟高达周边常规土壤本体的70余倍，贸然开掘极易引发高浓度剧毒水银蒸汽泄露，酿成灾难性环境生态污染。",
+            zhHtml: "现代地球物理<span class='text-[#e11d48] font-black'>勘探</span>证实，皇陵<span class='text-[#e11d48] font-black'>封土</span>中汞含量竟高达周边常规土壤本体的70余倍，贸然<span class='text-[#e11d48] font-black'>开掘</span>极易引发高浓度剧毒水银蒸汽<span class='text-[#e11d48] font-black'>泄露</span>，酿成灾难性环境生态污染。",
+            pinyin: "Xiàndài dìqiú wùlǐ kāntàn zhèngshí, huánglíng fēngtǔ zhōng gǒng hánliàng jìng gāodá zhōubiān chángguī tǔrǎng běntǐ de 70 yú bèi, màorán kāijué jí yì yǐnfā gāo nóngdù jùdú shuǐyín zhēngqì xièlòu, niàngchéng zāinànxìng huánjìng shēngtài wūrǎn.",
+            ko: "현대 물리탐사 결과 능원 봉토의 수은 함량은 주변 일반 토양보다 무려 70배 이상 높은 것으로 확인되었으며, 섣불리 파헤칠 경우 고농도의 맹독성 수은 증기가 대기 중으로 누출되는 치명적인 재앙을 초래할 수 있습니다."
+          },
+          {
+            num: 4,
+            zh: "更为关键的是，地下深埋两千载的彩绘颜料、丝帛织物等有机质文物极为脆弱，一旦骤然接触外界空气与温湿度剧变，微观结构会发生不可逆的坍塌氧化，瞬间化为乌有。",
+            zhPlain: "更为关键的是，地下深埋两千载的彩绘颜料、丝帛织物等有机质文物极为脆弱，一旦骤然接触外界空气与温湿度剧变，微观结构会发生不可逆的坍塌氧化，瞬间化为乌有。",
+            zhHtml: "更为关键的是，地下<span class='text-[#e11d48] font-black'>深埋</span>两千载的彩绘颜料、<span class='text-[#e11d48] font-black'>丝帛</span>织物等有机质文物极为脆弱，一旦<span class='text-[#e11d48] font-black'>骤然</span>接触外界空气与温湿度剧变，微观结构会发生不可逆的<span class='text-[#e11d48] font-black'>坍塌</span>氧化，瞬间化为乌有。",
+            pinyin: "Gèngwéi guānjiàn de shì, dìxià shēnmái liǎng qiān zǎi de cǎihuì yánliào, sībó zhīwù děng yǒujīzhì wénwù jíwéi cuìruò, yídàn zhòurán jiēchù wàijiè kōngqì yǔ wēnshīdù jùbiàn, wēiguān jiégòu huì fāshēng bùkěnì de tāntā yǎnghuà, shùnjiān huàwéiwūyǒu.",
+            ko: "더욱이 지하에 2천 년간 묻혀 있던 화려한 채색 안료와 비단 섬유 등 유기질 유물은 극도로 취약하여, 바깥공기와 급격한 온습도 변화에 노출되는 즉시 미세 구조가 산화되어 형체도 없이 바스러집니다."
+          },
+          {
+            num: 5,
+            zh: "业内专家强调，在无损探测与原址保护技术尚未取得颠覆性突破的当下，克制人类盲目的好奇欲望，让沉睡的文明古迹在幽冥中完好长眠，才是对千古一帝最好的守护与传承。",
+            zhPlain: "业内专家强调，在无损探测与原址保护技术尚未取得颠覆性突破的当下，克制人类盲目的好奇欲望，让沉睡的文明古迹在幽冥中完好长眠，才是对千古一帝最好的守护与传承。",
+            zhHtml: "业内专家强调，在<span class='text-[#e11d48] font-black'>无损</span>探测与<span class='text-[#e11d48] font-black'>原址</span>保护技术尚未取得<span class='text-[#e11d48] font-black'>颠覆性</span>突破的当下，克制人类盲目的好奇欲望，让沉睡的文明古迹在幽冥中完好<span class='text-[#e11d48] font-black'>长眠</span>，才是对千古一帝最好的守护与传承。",
+            pinyin: "Yènèi zhuānjiā qiángdiào, zài wúsǔn tàncè yǔ yuánzhǐ bǎohù jìshù shàngwèi qǔdé diānfùxìng tūpò de dāngxià, kèzhì rénlèi mángmù de hàoqí yùwàng, ràng chénsùi de wénmíng gǔjì zài yōumíng zhōng wánhǎo chángmián, cái shì duì qiāngǔyídì zuì hǎo de shǒuhù yǔ chuánchéng.",
+            ko: "전문가들은 비파괴 탐사와 현장 원형 보존 기술이 획기적인 혁신을 이루지 못한 지금, 맹목적인 호기심을 절제하고 유적을 온전히 잠들게 두는 것이야말로 가장 위대한 보존이자 계승이라고 강조했습니다."
+          }
+        ],
+        vocab20: [
+          { no: "01", word: "沉睡", pinyin: "chénsùi", pos: "动词", mean: "깊고 고요한 잠에 빠져 오랜 세월을 보내다", tip: "지하 묘역에서 2천 년간 인류의 손길을 타지 않고 보존됨" },
+          { no: "02", word: "幽宫", pinyin: "yōugōng", pos: "典雅名词", mean: "깊고 그윽하며 신비로운 지하 궁전", tip: "사마천 사기에 기록된 진시황릉의 전설적인 지하 세계" },
+          { no: "03", word: "探秘", pinyin: "tànmì", pos: "动宾短语", mean: "숨겨진 미지의 비밀과 진실을 깊이 탐구하다", tip: "네티즌들이 유적의 내부 구조와 보물에 품은 호기심" },
+          { no: "04", word: "遐想", pinyin: "xiáxiǎng", pos: "名词/动词", mean: "아득히 먼 미지의 세계를 자유롭게 상상하다", tip: "수은 바다와 보석 별자리가 수놓아진 지하 궁전에 대한 공상" },
+          { no: "05", word: "解密", pinyin: "jiěmì", pos: "动词", mean: "숨겨진 진실이나 비밀을 과학적으로 밝혀내다", tip: "고고학 연구 성과를 바탕으로 발굴 중단 이유를 대중에게 설명함" },
+          { no: "06", word: "怯懦", pinyin: "qiènuò", pos: "形容词", mean: "비겁하고 겁이 많아 앞으로 나서지 못하는", tip: "기술이 부족해서 발굴을 피한다는 세간의 편견을 불식함" },
+          { no: "07", word: "推诿", pinyin: "tuīwěi", pos: "动词", mean: "자신이 마땅히 져야 할 책임을 회피하고 떠넘기다", tip: "문화재 보호 책무를 방기하는 것이 아님을 명백히 선언함" },
+          { no: "08", word: "敬畏", pinyin: "jìngwèi", pos: "动词/名词", mean: "거룩한 대상을 깊이 공경하면서도 두려워하다", tip: "역사 유산과 대자연의 섭리 앞에 겸허해야 한다는 고고학적 철학" },
+          { no: "09", word: "勘探", pinyin: "kāntàn", pos: "科学动词", mean: "지질이나 매장물을 전문 장비로 정밀 탐사하다", tip: "땅을 파지 않고 지하 내부 밀도와 금속 분포를 분석한 기술" },
+          { no: "10", word: "封土", pinyin: "fēngtǔ", pos: "考古名词", mean: "무덤의 지하 석실 위에 높게 쌓아 올린 흙더미", tip: "수은 증기가 지표면으로 올라와 검출된 거대한 능묘 봉분" },
+          { no: "11", word: "开掘", pinyin: "kāijué", pos: "动词", mean: "땅을 깊이 파헤쳐 묻힌 대상을 드러내다", tip: "무턱대고 유적을 굴착하는 행위가 초래할 환경 참사를 경고함" },
+          { no: "12", word: "泄露", pinyin: "xièlòu", pos: "动词", mean: "밀폐되어 갇혀 있던 기체나 비밀이 밖으로 새어 나오다", tip: "봉인된 지하 공간이 열리며 유독 수은 기체가 대기로 뿜어져 나옴" },
+          { no: "13", word: "深埋", pinyin: "shēnmái", pos: "动宾短语", mean: "지하 깊숙한 흙 속에 파묻혀 외부와 차단되다", tip: "천 년 세월 동안 밀폐된 진공 상태에서 보존된 부장품들" },
+          { no: "14", word: "丝帛", pinyin: "sībó", pos: "古代名词", mean: "비단실로 곱게 짠 명주와 견직물", tip: "공기와 접촉하는 순간 찰나에 재로 변해버리는 취약한 유물" },
+          { no: "15", word: "骤然", pinyin: "zhòurán", pos: "副词", mean: "예상치 못한 순간에 매우 갑작스럽고 급격하게", tip: "지하의 밀폐 환경이 깨지며 들이닥치는 바깥공기의 습격" },
+          { no: "16", word: "坍塌", pinyin: "tāntā", pos: "动词/比喻", mean: "형태를 유지하던 구조물이 힘없이 와르르 무너지다", tip: "유물의 미세 섬유 분자 구조가 산화 반응으로 허물어짐" },
+          { no: "17", word: "无损", pinyin: "wúsǔn", pos: "科技定语", mean: "대상에 아무런 물리적 손상이나 훼손을 입히지 않는", tip: "유적을 파괴하지 않고 투시 레이더로 내부를 읽어내는 보존 공학" },
+          { no: "18", word: "原址", pinyin: "yuánzhǐ", pos: "名词", mean: "문화재나 유적이 처음 세워지고 출토된 본래 자리", tip: "박물관으로 옮기지 않고 현장에서 영구 보존하는 고고학적 원칙" },
+          { no: "19", word: "颠覆性", pinyin: "diānfùxìng", pos: "流行词", mean: "기존의 틀과 방식을 근본적으로 뒤흔들어 혁신하는", tip: "완벽한 유물 산화 방지 신소재가 개발되는 기술적 특이점" },
+          { no: "20", word: "长眠", pinyin: "chángmián", pos: "文学动词", mean: "영원한 안식에 들어 깊이 잠들다", tip: "시대를 호령했던 영웅의 넋과 유적을 존중하는 숭고한 결론" }
+        ]
+      },
+      {
+        id: 1,
+        badge: "기사 02",
+        category: "기이한 사건사고 & 사회 화제",
+        sources: [
+          { name: "澎湃新闻 / 平安两江新区", url: "https://m.thepaper.cn/" }
+        ],
+        date: "2026-09-20",
+        headlineZh: "重庆嘉陵江大桥惊现“低空滑翔伞”！穿越闹市桥墩上演空中惊魂，警方深夜发布警情通报：两人被依法行政处罚",
+        headlinePinyin: "Chóngqìng Jiālíngjiāng Dàqiáo jīngxiàn “dīkōng huáxiángsǎn”! Chuānyuè nàoshì qiáodūn shàngyǎn kōngzhōng jīnghún, jǐngfāng shēnyè fābù jǐngqíng tōngbào: Liǎng rén bèi yīfǎ xíngzhèng chǔfá",
+        headlineKo: "충칭 쟈링강 대교에 '초저공 패러글라이딩' 출현! 번화가 교각 틈새 곡예비행 충격, 경찰 심야 통보: 2명 행정구류 처분",
+        summaryKo: "충칭 도심의 랜드마크인 쟈링강 대교 교각 사이로 동력 패러글라이딩을 타고 아슬아슬한 곡예비행을 벌인 무모한 일당이 공안에 붙잡혀 전원 행정 구류 처분을 받았습니다.",
+        sentences: [
+          {
+            num: 1,
+            zh: "一具色彩斑斓的动力滑翔伞，光天化日之下竟在车水马龙的特大跨江桥梁下方肆意穿梭！",
+            zhPlain: "一具色彩斑斓的动力滑翔伞，光天化日之下竟在车水马龙的特大跨江桥梁下方肆意穿梭！",
+            zhHtml: "一具色彩<span class='text-[#e11d48] font-black'>斑斓</span>의 动力滑翔伞，光天化日之下竟在车水马龙的特大跨江桥梁下方肆意<span class='text-[#e11d48] font-black'>穿梭</span>！",
+            pinyin: "Yī jù sècǎi bānlán de dònglì huáxiángsǎn, guāngtiānhuàrì zhī xià jìng zài chēshuǐmǎlóng de tèdà kuàjiāng qiáoliáng xiàfāng sìyì chuānsuō!",
+            ko: "알록달록한 색상의 동력 패러글라이더 한 대가 대낮에 수많은 차량이 오가는 거대한 대교 밑을 제멋대로 누비는 기상천외한 소동이 벌어졌습니다!"
+          },
+          {
+            num: 2,
+            zh: "20日，多段摄于重庆嘉陵江大桥的惊险视频引爆全网，画面中滑翔伞紧贴江面低空掠过，甚至冒险从高耸庞大的混凝土桥墩夹缝中呼啸穿行。",
+            zhPlain: "20日，多段摄于重庆嘉陵江大桥的惊险视频引爆全网，画面中滑翔伞紧贴江面低空掠过，甚至冒险从高耸庞大的混凝土桥墩夹缝中呼啸穿行。",
+            zhHtml: "20日，多段摄于重庆嘉陵江大桥的惊险视频<span class='text-[#e11d48] font-black'>引爆</span>全网，画面中滑翔伞紧贴江面低空<span class='text-[#e11d48] font-black'>掠过</span>，甚至冒险从高耸庞大的混凝土桥墩<span class='text-[#e11d48] font-black'>夹缝</span>中呼啸穿行。",
+            pinyin: "20 rì, duō duàn shè yú Chóngqìng Jiālíngjiāng Dàqiáo de jīngxiǎn shìpín yǐnbào quánwǎng, huàmiàn zhōng huáxiángsǎn jǐntiē jiāngmiàn dīkōng lüèguò, shènzhì màoxiǎn cóng gāosǒng pángdà de hùnníngtǔ qiáodūn jiāfèng zhōng hūxiào chuānxíng.",
+            ko: "20일 충칭 쟈링강 대교 주변에서 촬영된 아찔한 영상들이 인터넷을 발칵 뒤집어놓았습니다. 화면 속 패러글라이더는 강수면을 스치듯 초저공 비행을 하더니, 거대한 콘크리트 교각 틈새를 굉음을 내며 아슬아슬하게 통과했습니다."
+          },
+          {
+            num: 3,
+            zh: "距离桥面疾驰的密集成群车流仅咫尺之遥，稍有气流扰动便可能机毁人亡甚至殃及过往无辜车辆，场面惊心动魄令人冷汗直冒。",
+            zhPlain: "距离桥面疾驰的密集成群车流仅咫尺之遥，稍有气流扰动便可能机毁人亡甚至殃及过往无辜车辆，场面惊心动魄令人冷汗直冒。",
+            zhHtml: "距离桥面<span class='text-[#e11d48] font-black'>疾驰</span>의 密集成群车流仅<span class='text-[#e11d48] font-black'>咫尺</span>之遥，稍有气流扰动便可能<span class='text-[#e11d48] font-black'>机毁人亡</span>甚至<span class='text-[#e11d48] font-black'>殃及</span>过往无辜车辆，场面惊心动魄令人冷汗直冒。",
+            pinyin: "Jùlí qiáomiàn jíchí de mìjí chéngqún chēliú jǐn zhǐchǐ zhī yáo, shāo yǒu qìliú rǎodòng biàn kěnéng jīhuǐrénwáng shènzhì yāngjí guòwǎng wúgū chēliàng, chǎngmiàn jīngxīndòngpò lìng rén lěnghàn zhí mào.",
+            ko: "대교 위를 질주하는 빽빽한 차량 행렬과 불과 한 뼘 거리에 불과하여, 돌풍이라도 불었다면 즉사하거나 무고한 차량들까지 연쇄 추돌 참사로 이어질 수 있었던 아찔한 순간이었습니다."
+          },
+          {
+            num: 4,
+            zh: "视频曝光后，两江新区警方闻警即动迅速展开拉网式排查，于当晚将涉案当事人唐某及协助同伙查获归案。",
+            zhPlain: "视频曝光后，两江新区警方闻警即动迅速展开拉网式排查，于当晚将涉案当事人唐某及协助同伙查获归案。",
+            zhHtml: "视频曝光后，两江新区警方<span class='text-[#e11d48] font-black'>闻警即动</span>迅速展开拉网式<span class='text-[#e11d48] font-black'>排查</span>，于当晚将涉案当事人唐某及协助<span class='text-[#e11d48] font-black'>同伙</span>查获归案。",
+            pinyin: "Shìpín bàoguāng hòu, Liǎngjiāng Xīnqū jǐngfāng wénjǐngjídòng xùnsù zhǎnkāi lāwǎngshì páichá, yú dàngwǎn jiāng shè'àn dāngshìrén Táng mǒu jí xiézhù tónghuǒ chahuò guī'àn.",
+            ko: "여론이 들끓자 관할 공안국은 즉각 그물망식 추적에 나서 당일 밤 조종사 탕(唐) 모 씨와 공범을 전격 체포했습니다."
+          },
+          {
+            num: 5,
+            zh: "经查，二人为博取网络眼球与猎奇流量，在未经任何空域飞行报备审批的非法状态下，擅自私自组装并操纵黑飞航空器，警方依法对二人处以行政拘留并处罚款的严厉制裁。",
+            zhPlain: "经查，二人为博取网络眼球与猎奇流量，在未经任何空域飞行报备审批的非法状态下，擅自私自组装并操纵黑飞航空器，警方依法对二人处以行政拘留并处罚款的严厉制裁。",
+            zhHtml: "经查，二人为博取网络眼球与<span class='text-[#e11d48] font-black'>猎奇</span>流量，在未经任何空域飞行<span class='text-[#e11d48] font-black'>报备</span>审批的非法状态下，擅自私自组装并操纵<span class='text-[#e11d48] font-black'>黑飞</span>航空器，警方依法对二人处以行政拘留并处罚款的严厉<span class='text-[#e11d48] font-black'>制裁</span>。",
+            pinyin: "Jīng chá, èr rén wèi bóqǔ wǎngluò yǎnqiú yǔ lièqí liúliàng, zài wèijīng rènhé kōngyù fēixíng bàobèi shěnpī de fēifǎ zhuàngtài xià, shànzì sīzì zǔzhuāng bìng cāozòng hēifēi hángkōngqì, jǐngfāng yīfǎ duì èr rén chǔyǐ xíngzhèng jūliú bìng chǔ fákuǎn de yánlì zhìcái.",
+            ko: "조사 결과 이들은 SNS 숏폼 영상의 자극적인 조회수를 노리고 비행 승인도 받지 않은 무허가 불법 비행체(黑飞)를 조립해 난기류 가득한 도심 상공에 띄운 것으로 드러났으며, 경찰은 즉각 행정 구류와 벌금형을 내렸습니다."
+          },
+          {
+            num: 6,
+            zh: "法治与空域安全红线绝不容许以“极限潮流”为名肆意践踏，任何将公众生命安危视同儿戏的任性作秀，等待他们的必将是法律铁腕的严惩。",
+            zhPlain: "法治与空域安全红线绝不容许以“极限潮流”为名肆意践踏，任何将公众生命安危视同儿戏的任性作秀，等待他们的必将是法律铁腕的严惩。",
+            zhHtml: "法治与空域安全红线绝不容许以“极限潮流”为名肆意践踏，任何将公众生命安危视同<span class='text-[#e11d48] font-black'>儿戏</span>의 任性<span class='text-[#e11d48] font-black'>作秀</span>，等待他们的必将是法律<span class='text-[#e11d48] font-black'>铁腕</span>의 <span class='text-[#e11d48] font-black'>严惩</span>。",
+            pinyin: "Fǎzhì yǔ kōngyù ānquán hóngxiàn juébù róngxǔ yǐ “jíxiàn cháoliú” wéi míng sìyì jiàntà, rènhé jiāng gōngzhòng shēngmìng ānwēi shìtóng érxì de rènxìng zuòxiù, děngdài tāmen de bìjiāng shì fǎlǜ tiěwàn de yánchéng.",
+            ko: "대중의 생명을 담보로 위험천만한 서커스를 벌이는 무분별한 관종 행위는 결코 용납될 수 없으며, 법의 철퇴를 피할 수 없습니다."
+          }
+        ],
+        vocab20: [
+          { no: "01", word: "斑斓", pinyin: "bānlán", pos: "形容词", mean: "찬란하고 화려한 여러 가지 빛깔이 섞여 있는", tip: "멀리서도 한눈에 알아볼 수 있을 만큼 눈에 띄는 활공 낙하산의 색채" },
+          { no: "02", word: "穿梭", pinyin: "chuānsuō", pos: "动词", mean: "베틀의 북이 오가듯 좁은 공간 사이를 빠르게 누비다", tip: "대교 기둥과 강물 사이의 좁은 틈새를 스릴 있게 통과함" },
+          { no: "03", word: "引爆", pinyin: "yǐnbào", pos: "比喻动词", mean: "폭탄이 터지듯 엄청난 논란과 화제를 촉발하다", tip: "도심 한복판에서 벌어진 기상천외한 활공 영상이 SNS를 강타함" },
+          { no: "04", word: "掠过", pinyin: "lüèguò", pos: "动词", mean: "닿을 듯 말 듯 가볍고 빠르게 스쳐 지나가다", tip: "강물 표면과 교각 벽면에 살갗이 닿을 만큼 위험하게 초저공 비행함" },
+          { no: "05", word: "夹缝", pinyin: "jiāfèng", pos: "名词", mean: "양쪽의 거대한 물체 사이에 끼어 있는 좁은 틈새", tip: "충돌 사고의 위험이 극도로 높은 다리 교각 사이의 사각지대" },
+          { no: "06", word: "疾驰", pinyin: "jíchí", pos: "动词", mean: "자동차가 도로 위를 매우 빠르고 거칠게 내달리다", tip: "다리 상판 위에서 시속 60km 이상으로 달리고 있던 승용차 행렬" },
+          { no: "07", word: "咫尺", pinyin: "zhǐchǐ", pos: "形容词/名词", mean: "불과 한 뼘에 불과할 정도로 거리가 매우 가까운", tip: "조금만 궤도를 벗어나도 다리 난간이나 차량에 그대로 충돌할 거리" },
+          { no: "08", word: "机毁人亡", pinyin: "jī huǐ rén wáng", pos: "成语", mean: "비행기가 박살 나고 탑승자가 그 자리에서 즉사하다", tip: "모터 동력 장치가 교각에 부딪혀 추락할 뻔한 치명적 순간" },
+          { no: "09", word: "殃及", pinyin: "yāngjí", pos: "动词", mean: "재앙이나 화가 무고한 다른 사람에게까지 미치다", tip: "개인의 철없는 일탈이 다리 위 시민들의 대형 참사로 번질 뻔함" },
+          { no: "10", word: "闻警即动", pinyin: "wén jǐng jí dòng", pos: "成语/公安词", mean: "신고나 제보를 받자마자 지체 없이 즉각 출동하다", tip: "영상이 확산되자마자 경찰 수사대가 야간 비상 검거 작전에 돌입함" },
+          { no: "11", word: "排查", pinyin: "páichá", pos: "动词", mean: "단서를 바탕으로 의심 지역과 용의자를 샅샅이 뒤지다", tip: "강변 착륙 지점과 CCTV 동선을 추적해 은신처를 찾아냄" },
+          { no: "12", word: "同伙", pinyin: "tónghuǒ", pos: "法律贬义词", mean: "범죄나 위법 행위를 함께 모의하고 거든 패거리", tip: "낙하산 이착륙을 돕고 촬영을 맡아 망을 보던 일행" },
+          { no: "13", word: "猎奇", pinyin: "lièqí", pos: "形容词/动词", mean: "기괴하고 자극적인 구경거리를 쫓아 탐닉하다", tip: "자극적인 숏폼 영상을 만들어 팔로워를 끌어모으려던 비뚤어진 심리" },
+          { no: "14", word: "报备", pinyin: "bàobèi", pos: "行政动词", mean: "규정에 따라 관할 관청에 정식으로 서면 보고하다", tip: "도심 상공 비행 전 관제소의 허가와 공역 배정을 받아야 하는 의무" },
+          { no: "15", word: "黑飞", pinyin: "hēifēi", pos: "行业流行词", mean: "허가받지 않은 불법 장비로 무단 비행하는 행위", tip: "항공 안전을 위협하며 당국의 레이더망을 피해 날아든 불법체" },
+          { no: "16", word: "制裁", pinyin: "zhìcái", pos: "法律动词", mean: "법률의 권위로 위법 행위자에게 강력한 처벌을 가하다", tip: "공공질서를 어지럽힌 대가로 부과된 엄정한 인신 구속과 벌금" },
+          { no: "17", word: "儿戏", pinyin: "érxì", pos: "比喻名词", mean: "아이들의 장난처럼 지극히 가볍고 하찮게 여기다", tip: "불특정 다수 시민의 안전을 장난거리로 치부한 경솔함" },
+          { no: "18", word: "作秀", pinyin: "zuòxiù", pos: "社会动词", mean: "남들의 시선을 끌기 위해 가식적인 쇼를 벌이다", tip: "오로지 온라인 '좋아요'를 얻기 위해 위험을 무릅쓴 보여주기식 난동" },
+          { no: "19", word: "铁腕", pinyin: "tiěwàn", pos: "比喻名词", mean: "쇠붙이처럼 단호하고 자비가 없는 강력한 수단", tip: "불법 비행 행위를 뿌리 뽑겠다는 치안 당국의 무관용 원칙" },
+          { no: "20", word: "严惩", pinyin: "yánchéng", pos: "动词", mean: "선처 없이 법이 정한 최고의 수위로 엄하게 다스리다", tip: "사회적 경각심을 일깨우기 위해 철퇴를 내린 사법적 처벌" }
+        ]
+      },
+      {
+        id: 2,
+        badge: "기사 03",
+        category: "식품안전 & 소비자 이슈",
+        sources: [
+          { name: "潇湘晨报 / 澎湃新闻", url: "https://m.thepaper.cn/" }
+        ],
+        date: "2026-09-20",
+        headlineZh: "重庆一餐馆男厨师在后厨食品加工区“针刺采血测艾滋”引恐慌！市监局连夜通报：复测全阴性，涉事员工离岗停职、门店立案整改",
+        headlinePinyin: "Chóngqìng yì cānguǎn nán chúshī zài hòuchú shípǐn jiāgōngqū “zhēncì cǎixuè cè Àizī” yǐn kǒnghuāng! Shìjiānjú liányè tōngbào: Fùcè quán yīnxìng, shèshì yuángōng lígǎng tíngzhí, méndiàn lì'àn zhěnggǎi",
+        headlineKo: "충칭 식당 조리사 주방 식품 조리대서 “바늘로 채혈해 에이즈 자가검사” 공포 확산! 시 감독국 긴급 조사: 전원 음성, 해당 직원 정직·식당 입건 정비",
+        summaryKo: "식당 조리사가 주방 안에서 손가락을 찔러 피를 내어 진단 키트를 사용하는 충격적인 장면이 포착되자, 보건 당국이 긴급 검사를 실시하고 영업 정지 및 전면 시정 명령을 내렸습니다.",
+        sentences: [
+          {
+            num: 1,
+            zh: "舌尖之上的食安防线，容不得哪怕一丝一毫的麻痹大意。",
+            zhPlain: "舌尖之上的食安防线，容不得哪怕一丝一毫的麻痹大意。",
+            zhHtml: "舌尖之上的食安防线，容不得哪怕一丝一毫的<span class='text-[#e11d48] font-black'>麻痹</span>大意。",
+            pinyin: "Shéjiān zhī shàng de shí'ān fángxiàn, róngbùdé nǎpà yì sī yì háo de mábì dàyì.",
+            ko: "입으로 들어가는 음식의 안전 방선은 단 1%의 방심도 결코 허용되어서는 안 됩니다."
+          },
+          {
+            num: 2,
+            zh: "近日，一段拍摄于重庆市两江新区某餐饮门店的爆料视频将公众神经推至崩溃边缘：一名身着便装的男厨师，竟在明晃晃的厨房食品加工操作区内，堂而皇之拆封所谓医疗检测试纸，甚至直接用针头刺破指尖进行当场采血操作！",
+            zhPlain: "近日，一段拍摄于重庆市两江新区某餐饮门店的爆料视频将公众神经推至崩溃边缘：一名身着便装的男厨师，竟在明晃晃的厨房食品加工操作区内，堂而皇之拆封所谓医疗检测试纸，甚至直接用针头刺破指尖进行当场采血操作！",
+            zhHtml: "近日，一段拍摄于重庆市两江新区某餐饮门店的爆料视频将公众神经推至崩溃边缘：一名身着<span class='text-[#e11d48] font-black'>便装</span>의 男厨师，竟在明晃晃的厨房食品加工操作区内，堂而皇之<span class='text-[#e11d48] font-black'>拆封</span>所谓医疗检测试纸，甚至直接用<span class='text-[#e11d48] font-black'>针头</span>刺破指尖进行当场采血操作！",
+            pinyin: "Jìnrì, yí duàn pāishè yú Chóngqìngshì Liǎngjiāng Xīnqū mǒu cānyǐn méndiàn de bàoliào shìpín jiāng gōngzhòng shénjīng tuī zhì bēngkuì biānyuán: Yī míng shēnzhe biànzhuāng de nán chúshī, jìng zài mínghuǎnghuǎng de chúfáng shípǐn jiāgōng cāozuòqū nèi, táng'érhuángzhī chāifēng suǒwèi yīliáo jiǎncè shìzhǐ, shènzhì zhíjiē yòng zhēntóu cìpò zhǐjiān jìnxíng dāngchǎng cǎixuè cāozuò!",
+            ko: "최근 충칭시 량장신구의 한 음식점에서 촬영된 영상이 소비자들의 신경을 곤두서게 했습니다. 평상복 차림의 조리사가 조리대 한복판에서 태연하게 의료용 검사 키트를 뜯더니 바늘로 손가락 끝을 찔러 피를 짜내는 충격적인 장면이 포착된 것입니다!"
+          },
+          {
+            num: 3,
+            zh: "这触目惊心的一幕随即在社交平台引发轩然大波，食客纷纷对交叉感染与血液污染产生强烈恐慌。",
+            zhPlain: "这触目惊心的一幕随即在社交平台引发轩然大波，食客纷纷对交叉感染与血液污染产生强烈恐慌。",
+            zhHtml: "这<span class='text-[#e11d48] font-black'>触目惊心</span>의 一幕随即在社交平台引发<span class='text-[#e11d48] font-black'>轩然大波</span>，食客纷纷对交叉感染与血液污染产生强烈<span class='text-[#e11d48] font-black'>恐慌</span>。",
+            pinyin: "Zhè chùmùjīngxīn de yímù suíjí zài shèjiāo píngtái yǐnfā xuānrán dàbō, shíkè fēnfēn duì jiāochā gǎnrǎn yǔ xuèyè wūrǎn chǎnshēng qiángliè kǒnghuāng.",
+            ko: "이 끔찍한 모습은 즉각 인터넷을 강타하며 혈액 오염과 세균 전파에 대한 극도의 공포를 불러일으켰습니다."
+          },
+          {
+            num: 4,
+            zh: "两江新区市场监管局火速入驻调查并发布权威通报。通报证实，涉事员工因近期身体抱恙疑虑肝部受损，遂网购试纸在操作区自测。经监管部门监督其在正规医疗机构权威复测，HIV与各型肝炎病毒指标结果均为阴性，成功排除了传染源风险。",
+            zhPlain: "两江新区市场监管局火速入驻调查并发布权威通报。通报证实，涉事员工因近期身体抱恙疑虑肝部受损，遂网购试纸在操作区自测。经监管部门监督其在正规医疗机构权威复测，HIV与各型肝炎病毒指标结果均为阴性，成功排除了传染源风险。",
+            zhHtml: "两江新区市场监管局<span class='text-[#e11d48] font-black'>火速</span><span class='text-[#e11d48] font-black'>入驻</span>调查并发布权威通报。通报证实，涉事员工因近期身体<span class='text-[#e11d48] font-black'>抱恙</span>疑虑肝部受损，遂网购试纸在操作区自测。经监管部门监督其在正规医疗机构权威<span class='text-[#e11d48] font-black'>复测</span>，HIV与各型肝炎病毒指标结果均为阴性，成功<span class='text-[#e11d48] font-black'>排除</span>了传染源风险。",
+            pinyin: "Liǎngjiāng Xīnqū shìchǎng jiānguǎnjú huǒsù rùzhù diàochá bìng fābù quánwēi tōngbào. Tōngbào zhèngshí, shèshì yuángōng yīn jìnqī shēntǐ bàoyàng yílǜ gānbù shòusǔn, suì wǎnggòu shìzhǐ zài cāozuòqū zìcè. Jīng jiānguǎn bùmén jiāndū qí zài zhèngguī yīliáo jīgòu quánwēi fùcè, HIV yǔ gè xíng gānyán bìngdú zhǐbiāo jiéguǒ jūn wéi yīnxìng, chénggōng páichú le chuánrǎnyuán fēngxiǎn.",
+            ko: "시장감독관리국이 즉각 출동해 조사를 벌였습니다. 해당 직원은 몸이 찌뿌둥하자 인터넷으로 주문한 키트를 조리대에서 자가 테스트한 것으로 밝혀졌으며, 공인 병원 재검 결과 에이즈와 간염 등 모든 바이러스는 음성으로 판명되어 전염 위험은 배제되었습니다."
+          },
+          {
+            num: 5,
+            zh: "然而，后厨乃直接入口食品的核心重地，如此罔顾行业规范的荒唐行径暴露出门店在卫生内控上的严重漏洞。监管部门已依法责令涉事员工暂时停工离岗，责令该门店即刻全面停业整改并立案深挖，坚决守牢千家万户餐桌安全的钢铁底线。",
+            zhPlain: "然而，后厨乃直接入口食品的核心重地，如此罔顾行业规范的荒唐行径暴露出门店在卫生内控上的严重漏洞。监管部门已依法责令涉事员工暂时停工离岗，责令该门店即刻全面停业整改并立案深挖，坚决守牢千家万户餐桌安全的钢铁底线。",
+            zhHtml: "然而，后厨乃直接入口食品的核心<span class='text-[#e11d48] font-black'>重地</span>，如此<span class='text-[#e11d48] font-black'>罔顾</span>行业规范的荒唐行径暴露出门店在卫生内控上的严重<span class='text-[#e11d48] font-black'>漏洞</span>。监管部门已依法责令涉事员工暂时<span class='text-[#e11d48] font-black'>停工</span><span class='text-[#e11d48] font-black'>离岗</span>，责令该门店即刻全面停业整改并<span class='text-[#e11d48] font-black'>立案</span><span class='text-[#e11d48] font-black'>深挖</span>，坚决守牢千家万户餐桌安全的钢铁<span class='text-[#e11d48] font-black'>底线</span>。",
+            pinyin: "Rán'ér, hòuchú nǎi zhíjiē rùkǒu shípǐn de héxīn zhòngdì, rúcǐ wǎnggù hángyè guīfàn de huāngtáng xíngjìng bàolù chū méndiàn zài wèishēng nèikòng shàng de yánzhòng lòudòng. Jiānguǎn bùmén yǐ yīfǎ zélìng shèshì yuángōng zànshí tínggōng lígǎng, zélìng gāi méndiàn jíkè quánmiàn tíngyè zhěnggǎi bìng lì'àn shēnwā, jiānjué shǒuláo qiānjiāwànhù cānzhuō ānquán de gāngtiě dǐxiàn.",
+            ko: "그러나 음식을 조리하는 주방에서 피를 흘리며 자가 검사를 벌인 것은 중대한 위생 규정 위반입니다. 당국은 해당 직원을 직무 정지시키고 식당에 대해 전면 영업 중단과 입건 조사를 명령했습니다."
+          }
+        ],
+        vocab20: [
+          { no: "01", word: "麻痹", pinyin: "mábì", pos: "形容词/动词", mean: "경각심을 잃고 감각이 무디어져 방심하다", tip: "위생 관리에 대한 경계를 늦추어 황당한 사태를 초래한 태도" },
+          { no: "02", word: "便装", pinyin: "biànzhuāng", pos: "名词", mean: "위생복이나 규정 유니폼이 아닌 일상 평상복", tip: "위생 모자와 조리복도 제대로 갖춰 입지 않은 불량한 근무 실태" },
+          { no: "03", word: "拆封", pinyin: "chāifēng", pos: "动宾短语", mean: "밀봉되어 있던 포장이나 봉인을 뜯어 열다", tip: "음식 재료가 놓인 조리대 위에서 의료 키트 포장을 개봉함" },
+          { no: "04", word: "针头", pinyin: "zhēntóu", pos: "医学名词", mean: "피를 뽑거나 약물을 주입하기 위한 뾰족한 주삿바늘", tip: "식당 주방에서 절대 나와서는 안 될 흉기이자 채혈 도구" },
+          { no: "05", word: "触目惊心", pinyin: "chù mù jīng xīn", pos: "成语", mean: "끔찍하고 충격적인 광경을 보고 가슴이 덜컥 내려앉다", tip: "음식을 만드는 곳에서 피를 흘리며 검사를 하는 기괴한 행태" },
+          { no: "06", word: "轩然大波", pinyin: "xuān rán dà bō", pos: "成语", mean: "거센 파도가 일듯 사회적으로 거대한 분노와 파문이 일다", tip: "영상이 공개되자마자 외식업계 위생 불신이 걷잡을 수 없이 번짐" },
+          { no: "07", word: "恐慌", pinyin: "kǒnghuāng", pos: "心理名词", mean: "극심한 공포에 휩싸여 불안해하고 허둥대다", tip: "혹시 내가 먹은 음식에 피가 튀지 않았을까 전전긍긍하는 손님들" },
+          { no: "08", word: "火速", pinyin: "huǒsù", pos: "副词", mean: "불길이 번지듯 지체 없이 매우 다급하고 빠르게", tip: "사태가 번지기 전에 즉시 공무원들을 투입한 감독 당국의 대처" },
+          { no: "09", word: "入驻", pinyin: "rùzhù", pos: "公文动词", mean: "현장에 들어가 본부를 차리고 집중 조사에 착수하다", tip: "시 감독국 단속반이 매장에 들이닥쳐 장부와 CCTV를 압수함" },
+          { no: "10", word: "抱恙", pinyin: "bàoyàng", pos: "书面动词", mean: "몸에 병이나 이상 증세가 있어 편치 못하다", tip: "환절기 피로감으로 인해 스스로 간 질환을 의심했던 조리사의 핑계" },
+          { no: "11", word: "复测", pinyin: "fùcè", pos: "医学动词", mean: "신뢰성을 담보하기 위해 전문 기관에서 다시 검사하다", tip: "자가 키트의 오류를 배제하기 위해 삼갑 병원 혈액 검사를 진행함" },
+          { no: "12", word: "排除", pinyin: "páichú", pos: "动词", mean: "의심이나 위험 요소를 조사하여 말끔히 털어내다", tip: "정밀 분석을 통해 2차 감염병 병원균이 없음을 공식 확인받음" },
+          { no: "13", word: "重地", pinyin: "zhòngdì", pos: "比喻名词", mean: "엄격한 관리와 출입 통제가 요구되는 핵심 요충지", tip: "직접 섭취하는 음식을 다루는 곳이기에 엄격한 멸균이 필수적인 주방" },
+          { no: "14", word: "罔顾", pinyin: "wǎnggù", pos: "书面动词", mean: "마땅히 지켜야 할 법과 도덕을 완전히 무시하고 저버리다", tip: "식품위생법의 대원칙을 헌신짝처럼 내팽개친 몰지각한 처사" },
+          { no: "15", word: "漏洞", pinyin: "lòudòng", pos: "比喻名词", mean: "허술하여 물이 새듯 관리 체계에 생긴 치명적 결함", tip: "직원이 주방에서 딴짓을 해도 아무런 제재가 없었던 관리 부실" },
+          { no: "16", word: "停工", pinyin: "tínggōng", pos: "劳动动词", mean: "진행하던 모든 작업과 업무를 즉각 중단하다", tip: "위생 문제가 불거진 요리사를 현장에서 즉각 배제함" },
+          { no: "17", word: "离岗", pinyin: "lígǎng", pos: "人事动词", mean: "맡고 있던 직책이나 근무지에서 물러나다", tip: "추가 감염 위험을 차단하기 위해 조리 자격을 정지시킴" },
+          { no: "18", word: "立案", pinyin: "lì'àn", pos: "司法动词", mean: "위법 혐의를 공식 인정하고 정식 수사 및 조사에 착수하다", tip: "행정처분뿐만 아니라 형사적 처벌 가능성까지 염두에 둔 법적 절차" },
+          { no: "19", word: "深挖", pinyin: "shēnwā", pos: "比喻动词", mean: "표면적 문제에 그치지 않고 배후 원인을 깊이 파헤치다", tip: "해당 프랜차이즈 전체 매장의 위생 관리 부실을 전수 조사함" },
+          { no: "20", word: "底线", pinyin: "dǐxiàn", pos: "比喻名词", mean: "결코 무너뜨려서는 안 되는 최후의 한계점이자 마지노선", tip: "국민의 생명과 건강을 담보하는 식품 안전의 절대적 가치" }
+        ]
+      },
+      {
+        id: 3,
+        badge: "기사 04",
+        category: "직장 갑질 & 황당 논란",
+        sources: [
+          { name: "澎湃新闻 (The Paper 탐사)", url: "https://m.thepaper.cn/" }
+        ],
+        date: "2026-09-20",
+        headlineZh: "“宁德时代班长限制如厕致员工裸奔”？造谣者被警方行拘！起底真相：涉事外厂打工人离职交接起冲突情绪失控",
+        headlinePinyin: "“Níngdé Shídài bānzhǎng xiànzhì rúcè zhì yuángōng luǒbēn”? Zàoyáozhě bèi jǐngfāng xíngjū! Qǐdǐ zhēnxiàng: Shèshì wàichǎng dǎgōngrén lízhí jiāojiē qǐ chōngtū qíngxù shīkòng",
+        headlineKo: "“닝더스다이(CATL) 반장 화장실 통제해 직원 알몸 난동”? 유포자 경찰에 행정 구류! 전말 폭로: 타사 직원의 퇴사 마찰로 인한 돌출 행동 날조",
+        summaryKo: "대기업 배터리 공장에서 '화장실 통제로 직원이 폭발했다'는 허위 직장 갑질 루머가 퍼졌으나, 경찰 수사 결과 퇴사 처리 갈등을 날조한 유언비어로 밝혀져 유포자가 구류되었습니다.",
+        sentences: [
+          {
+            num: 1,
+            zh: "一则配文声称“宁德时代车间班长苛刻限制员工上厕所，致打工人情绪崩溃脱衣奔跑”的短视频，近日在互联网掀起轩然大波，迅速将制造业基层用工生态推上舆论审判台。",
+            zhPlain: "一则配文声称“宁德时代车间班长苛刻限制员工上厕所，致打工人情绪崩溃脱衣奔跑”的短视频，近日在互联网掀起轩然大波，迅速将制造业基层用工生态推上舆论审判台。",
+            zhHtml: "一则配文声称“宁德时代车间班长<span class='text-[#e11d48] font-black'>苛刻</span>限制员工上厕所，致打工人情绪崩溃脱衣奔跑”의 短视频，近日在互联网掀起轩然大波，迅速将制造业基层用工生态推上舆论<span class='text-[#e11d48] font-black'>审判台</span>。",
+            pinyin: "Yī zé pèiwén shēngchēng “Níngdé Shídài chējiān bānzhǎng kēkè xiànzhì yuángōng shàng cèsuǒ, zhì dǎgōngrén qíngxù bēngkuì tuōyī bēnpǎo” de duǎnshìpín, jìnrì zài hùliánwǎng xiānqǐ xuānrán dàbō, xùnsù jiāng zhìzàoyè jīcéng yònggōng shēngtài tuī shàng yúlùn shěnpàntái.",
+            ko: "'닝더스다이 공장 반장이 화장실 가는 것조차 가혹하게 통제하여 노동자가 감정이 폭발해 옷을 벗고 난동을 부렸다'는 영상이 인터넷을 강타하며 제조업 현장의 노동 착취 논란이 뜨거운 도마 위에 올랐습니다."
+          },
+          {
+            num: 2,
+            zh: "视频中一名未着衣物男子在生产线失控奔走，瞬间引爆网民对“血汗工厂非人道严苛管束”的汹涌声讨。",
+            zhPlain: "视频中一名未着衣物男子在生产线失控奔走，瞬间引爆网民对“血汗工厂非人道严苛管束”的汹涌声讨。",
+            zhHtml: "视频中一名未着衣物男子在生产线失控奔走，瞬间引爆网民对“血汗工厂<span class='text-[#e11d48] font-black'>非人道</span>严苛管束”의 汹涌<span class='text-[#e11d48] font-black'>声讨</span>。",
+            pinyin: "Shìpín zhōng yī míng wèizhe yīwù nánzǐ zài shēngchǎnxiàn shīkòng bēnzǒu, shùnjiān yǐnbào wǎngmín duì “xuèhàn gōngchǎng fēiréndào yánkē guǎnshù” de xiōngyǒng shēngtǎo.",
+            ko: "영상 속 남성이 공장 라인을 활보하는 모습은 '피도 눈물도 없는 블랙기업의 비인도적 갑질'이라는 네티즌들의 거센 공분을 샀습니다."
+          },
+          {
+            num: 3,
+            zh: "然而，警方连夜介入彻查后水落石出，该视频纯属移花接木的恶毒造谣。真实情况系另一家电池供应商的一名青年普工，在主动提出离职时要求现场即刻办结走人，因未遵照正常交接程序与管理层产生激烈言语口角，在压力与冲动下做出偏激举动。",
+            zhPlain: "然而，警方连夜介入彻查后水落石出，该视频纯属移花接木的恶毒造谣。真实情况系另一家电池供应商的一名青年普工，在主动提出离职时要求现场即刻办结走人，因未遵照正常交接程序与管理层产生激烈言语口角，在压力与冲动下做出偏激举动。",
+            zhHtml: "然而，警方连夜介入<span class='text-[#e11d48] font-black'>彻查</span>后水落石出，该视频纯属<span class='text-[#e11d48] font-black'>移花接木</span>의 恶毒造谣。真实情况系另一家电池供应商的一名青年<span class='text-[#e11d48] font-black'>普工</span>，在主动提出离职时要求现场即刻<span class='text-[#e11d48] font-black'>办结</span>走人，因未遵照正常交接程序与管理层产生激烈言语口角，在压力与冲动下做出<span class='text-[#e11d48] font-black'>偏激</span>举动。",
+            pinyin: "Rán'ér, jǐngfāng liányè jièrù chèchá hòu shuǐluòshíchū, gāi shìpín chúnshǔ yíhuājiēmù de èdú zàoyáo. Zhēnshí qíngkuàng xì lìng yī jiā diànchí gōngyìngshāng de yī míng qīngnián pǔgōng, zài zhǔdòng tíchū lízhí shí yāoqiú xiànchǎng jíkè bànjié zǒurén, yīn wèi zūnzhào zhèngcháng jiāojiē chéngxù yǔ guǎnlǐcéng chǎnshēng jīliè yányǔ kǒujiǎo, zài yālì yǔ chōngdòng xià zuòchū piānjī jǔdòng.",
+            ko: "그러나 경찰 수사 결과 짜깁기한 날조로 드러났습니다. 실제로는 다른 협력업체 직원이 당장 사직서를 수리하라고 떼를 쓰다 인사 담당자와 마찰을 빚어 우발적으로 돌출 행동을 벌였던 것이었습니다."
+          },
+          {
+            num: 4,
+            zh: "而网民林某某为蹭取顶级企业热度疯狂吸粉，故意虚构“限制如厕”等耸人听闻的苦情戏码恶意栽赃宁德时代。目前林某某已被依法行政拘留并处顶格罚款。",
+            zhPlain: "而网民林某某为蹭取顶级企业热度疯狂吸粉，故意虚构“限制如厕”等耸人听闻的苦情戏码恶意栽赃宁德时代。目前林某某已被依法行政拘留并处顶格罚款。",
+            zhHtml: "而网民林某某为<span class='text-[#e11d48] font-black'>蹭取</span>顶级企业热度疯狂<span class='text-[#e11d48] font-black'>吸粉</span>，故意虚构“限制如厕”等<span class='text-[#e11d48] font-black'>耸人听闻</span>의 苦情戏码恶意<span class='text-[#e11d48] font-black'>栽赃</span>宁德时代。目前林某某已被依法行政拘留并处<span class='text-[#e11d48] font-black'>顶格</span>罚款。",
+            pinyin: "Ér wǎngmín Lín mǒumǒu wèi cèngqǔ dǐngjí qǐyè rèdù fēngkuáng xīfěn, gùyì xūgòu “xiànzhì rúcè” děng sǒngrēntīngwén de kǔqíng xìmǎ èyì zāizhāng Níngdé Shídài. Mùqián Lín mǒumǒu yǐ bèi yīfǎ xíngzhèng jūliú bìng chǔ dǐnggé fákuǎn.",
+            ko: "피의자 린 모 씨가 대기업의 이름을 팔아 팔로워를 끌어모으려고 '화장실 통제'라는 거짓 프레임을 씌워 영상을 퍼뜨린 것으로 확인되었으며, 경찰은 린 씨를 즉각 행정 구류하고 최고 한도 과태료를 부과했습니다."
+          },
+          {
+            num: 5,
+            zh: "真相虽已大白，但这场闹剧也深刻折射出当代工厂青年在机械化高压作息下的心理重负，企业在规范离职合规流程的同时，如何建立有温度的疏导机制，依然是制造业必须正视的现实必修课。",
+            zhPlain: "真相虽已大白，但这场闹剧也深刻折射出当代工厂青年在机械化高压作息下的心理重负，企业在规范离职合规流程的同时，如何建立有温度的疏导机制，依然是制造业必须正视的现实必修课。",
+            zhHtml: "真相虽已大白，但这场闹剧也深刻折射出当代工厂青年在机械化高压<span class='text-[#e11d48] font-black'>作息</span>下的心理<span class='text-[#e11d48] font-black'>重负</span>，企业在规范离职<span class='text-[#e11d48] font-black'>合规</span>流程的同时，如何建立有温度的<span class='text-[#e11d48] font-black'>疏导</span>机制，依然是制造业必须<span class='text-[#e11d48] font-black'>正视</span>의 现实<span class='text-[#e11d48] font-black'>必修课</span>。",
+            pinyin: "Zhēnxiàng suī yǐ dàbái, dàn zhè chǎng nàojù yě shēnkè zhéshè chū dāngdài gōngchǎng qīngnián zài jīxièhuà gāoyā zuòxī xià de xīnlǐ zhòngfù, qǐyè zài guīfàn lízhí héguī liúchéng de tóngshí, rúhé jiànlì yǒu wēndù de shūdǎo jīzhì, yīrán shì zhìzàoyè bìxū zhèngshì de xiànshí bìxiūkè.",
+            ko: "루머의 진상은 밝혀졌으나, 이번 사건은 톱니바퀴처럼 돌아가는 공장 환경에서 청년 노동자들이 겪는 심리적 피로감과 경직된 인사 관리의 한계를 되돌아보게 하는 씁쓸한 교훈을 남겼습니다."
+          }
+        ],
+        vocab20: [
+          { no: "01", word: "苛刻", pinyin: "kēkè", pos: "形容词", mean: "조건이나 대우가 몹시 까다롭고 가혹한", tip: "직원들의 기본적인 생리현상까지 통제했다는 과장된 갑질 프레임" },
+          { no: "02", word: "审判台", pinyin: "shěnpàntái", pos: "比喻名词", mean: "여론과 대중이 모여 도덕적 단죄를 내리는 가상의 심판대", tip: "사실 확인도 거치지 않은 채 기업을 악덕 고용주로 몰아간 인터넷 재판" },
+          { no: "03", word: "非人道", pinyin: "fēiréndào", pos: "形容词", mean: "인간의 기본적 존엄과 인권을 무시하는", tip: "공장 노동자를 기계 부품처럼 취급했다는 루머 속 묘사" },
+          { no: "04", word: "声讨", pinyin: "shēngtǎo", pos: "动词", mean: "부당한 잘못에 대해 공개적으로 소리 높여 꾸짖다", tip: "네티즌들이 커뮤니티와 댓글을 통해 일제히 쏟아낸 분노" },
+          { no: "05", word: "彻查", pinyin: "chèchá", pos: "动词", mean: "근본부터 끝까지 숨김없이 낱낱이 조사하다", tip: "경찰과 노동 당국이 투입되어 영상의 최초 유포 경로를 추적함" },
+          { no: "06", word: "移花接木", pinyin: "yí huā jiē mù", pos: "成语", mean: "서로 다른 두 사건을 교묘하게 짜깁기하여 사람을 속이다", tip: "타 사의 단순 퇴사 소동을 유명 대기업의 가혹 행위로 둔갑시킨 사기극" },
+          { no: "07", word: "普工", pinyin: "pǔgōng", pos: "劳动名词", mean: "특별한 전문 기술 없이 일반 공정에 투입되는 현장 생산직", tip: "교대 근무 라인에서 단순 조립 업무를 수행하던 젊은 근로자" },
+          { no: "08", word: "办结", pinyin: "bànjié", pos: "行政动词", mean: "신청된 행정 업무나 퇴사 서류 처리를 완료하다", tip: "규정된 인수인계 기간을 무시하고 당장 사직서를 수리하라고 요구함" },
+          { no: "09", word: "偏激", pinyin: "piānjī", pos: "形容词", mean: "생각이나 행동이 상식을 벗어나 지나치게 극단적인", tip: "분노를 삭이지 못하고 작업장 한가운데서 벌인 비정상적인 돌출 행동" },
+          { no: "10", word: "蹭取", pinyin: "cèngqǔ", pos: "网络流行动词", mean: "유명인이나 대기업의 명성에 편승해 이득을 챙기다", tip: "트래픽을 빨아들이기 위해 국내 1위 배터리 기업의 이름을 악용함" },
+          { no: "11", word: "吸粉", pinyin: "xīfěn", pos: "网络商业词", mean: "자극적인 콘텐츠로 소셜미디어 팔로워 수를 불리다", tip: "계정의 조회수를 높여 향후 인플루언서 수익을 노린 불순한 의도" },
+          { no: "12", word: "耸人听闻", pinyin: "sǒng rén tīng wén", pos: "成语", mean: "듣는 사람을 깜짝 놀라게 할 만큼 터무니없고 해괴한", tip: "화장실도 못 가게 막았다는 허위 사실로 대중의 동정심을 자극함" },
+          { no: "13", word: "栽赃", pinyin: "zāizhāng", pos: "动词", mean: "자신이 지어낸 허위 사실이나 죄를 무고한 타인에게 뒤집어씌우다", tip: "무관한 유명 대기업에 악덕 기업이라는 오명을 씌운 범죄 행위" },
+          { no: "14", word: "顶格", pinyin: "dǐnggé", pos: "法律/公文副词", mean: "법률이 규정한 최고 한도에 도달하는 수준으로", tip: "사회적 파장이 큰 유언비어 사범에게 가장 무거운 과태료를 매김" },
+          { no: "15", word: "作息", pinyin: "zuòxī", pos: "生活名词", mean: "일하고 휴식하는 규칙적인 일과 스케줄", tip: "초단위로 분절되어 여유가 부족한 첨단 공장의 타이트한 근무 환경" },
+          { no: "16", word: "重负", pinyin: "zhòngfù", pos: "比喻名词", mean: "어깨를 짓누르는 무겁고 버거운 정신적 짐", tip: "반복되는 생산 라인 업무와 대인 관계에서 오는 극심한 스트레스" },
+          { no: "17", word: "合规", pinyin: "héguī", pos: "商业名词/动词", mean: "법률과 사내 규정에 맞추어 합법적으로 처리하다", tip: "근로기준법에 명시된 정상적인 퇴사 절차와 고용 계약 해지" },
+          { no: "18", word: "疏导", pinyin: "shūdǎo", pos: "心理/社会动词", mean: "막힌 감정이나 고충을 잘 풀어서 달래어 주다", tip: "감정이 격해진 청년 근로자들의 심리적 불안을 완화하는 상담 지원" },
+          { no: "19", word: "正视", pinyin: "zhèngshì", pos: "动词", mean: "회피하거나 눈 돌리지 않고 문제를 똑바로 직시하다", tip: "노사 갈등의 근본적인 원인을 마주하고 처우를 개선하려는 자세" },
+          { no: "20", word: "必修课", pinyin: "bìxiūkè", pos: "比喻名词", mean: "반드시 이수해야 하는 필수적인 과제와 교훈", tip: "선진 제조 기업으로 도약하기 위해 갖추어야 할 인간 중심의 경영 철학" }
+        ]
+      },
+      {
+        id: 4,
+        badge: "기사 05",
+        category: "감동 실화 & 법률 정의",
+        sources: [
+          { name: "央视网 (CCTV)", url: "https://news.cctv.com/" },
+          { name: "澎湃新闻 (The Paper)", url: "https://m.thepaper.cn/" }
+        ],
+        date: "2026-09-20",
+        headlineZh: "快递员好心救助鼻血流淌摔倒老人，反遭家属索赔92万！法院终审硬气判决：“不让施救者蒙冤，为全社会善意撑腰”",
+        headlinePinyin: "Kuàidìyuán hǎoxīn jiùzhù bíxiě liútǎng shuāidǎo lǎorén, fǎn zāo jiāshǔ suǒpéi 92 wàn! Fǎyuàn zhōngshěn yìngqì pànjué: “Bú ràng shījiùzhě méngyuān, wèi quán shèhuì shànyì chēngyāo”",
+        headlineKo: "피 흘리며 쓰러진 노인 구한 착한 택배기사, 유족에 92만 위안 소송당해! 법원 최종 심리 사이다 판결: “구호자가 억울하게 하지 않으며, 선의의 든든한 버팀목 되겠다”",
+        summaryKo: "길가에 피를 흘리며 쓰러진 노인을 발견하고 구급차를 불러 병원까지 동행한 의로운 택배기사에게 92만 위안을 내놓으라며 소송을 건 유족에 대해, 법원이 청구를 전면 기각했습니다.",
+        sentences: [
+          {
+            num: 1,
+            zh: "一次满怀善念的见义勇为，不仅未获感恩，反在数月后遭遇索赔巨款的无妄之灾！",
+            zhPlain: "一次满怀善念的见义勇为，不仅未获感恩，反在数月后遭遇索赔巨款的无妄之灾！",
+            zhHtml: "一次满怀<span class='text-[#e11d48] font-black'>善念</span>의 <span class='text-[#e11d48] font-black'>见义勇为</span>，不仅未获感恩，反在数月后遭遇索赔巨款的<span class='text-[#e11d48] font-black'>无妄之灾</span>！",
+            pinyin: "Yī cì mǎnhuái shànniàn de jiànyìyǒngwéi, bùjǐn wèi huò gǎn'ēn, fǎn zài shù yuè hòu zāoyù suǒpéi jùkuǎn de wúwàngzhīzāi!",
+            ko: "따뜻한 선의로 위기에 처한 이웃을 도왔으나 감사는커녕 수개월 뒤 거액의 손해배상 소송을 당하는 황당한 날벼락을 맞았던 택배기사가 마침내 법원에서 결백을 증명받았습니다!"
+          },
+          {
+            num: 2,
+            zh: "广东省江门市中级人民法院近日审结了一起引发全社会高度瞩目的助人反被诉侵权案。",
+            zhPlain: "广东省江门市中级人民法院近日审结了一起引发全社会高度瞩目的助人反被诉侵权案。",
+            zhHtml: "广东省江门市中级人民法院近日<span class='text-[#e11d48] font-black'>审结</span>了一起引发全社会高度瞩目的助人反被诉<span class='text-[#e11d48] font-black'>侵权</span>案。",
+            pinyin: "Guǎngdōngshěng Jiāngménshì zhōngjí rénmín fǎyuàn jìnrì shěnjié le yì qǐ yǐnfā quán shèhuì gāodù zhǔmù de zhùrén fǎn bèi sù qīnquán àn.",
+            ko: "광둥성 장먼시 중급인민법원은 최근 온 사회의 뜨거운 이목이 집중되었던 '낙상 노인 구호 기사 피소 사건'의 최종 판결을 선고했습니다."
+          },
+          {
+            num: 3,
+            zh: "快递员李师傅在日常派件途中，偶遇一名失足摔倒、鼻部鲜血凝固的老人，他不仅未曾冷眼旁观，反而当即驻足看护并主动拨打120急救，甚至一路护送至医院病房留守照料，后续数日更是频繁嘘寒问暖。",
+            zhPlain: "快递员李师傅在日常派件途中，偶遇一名失足摔倒、鼻部鲜血凝固的老人，他不仅未曾冷眼旁观，反而当即驻足看护并主动拨打120急救，甚至一路护送至医院病房留守照料，后续数日更是频繁嘘寒问暖。",
+            zhHtml: "快递员李师傅在日常<span class='text-[#e11d48] font-black'>派件</span>途中，偶遇一名<span class='text-[#e11d48] font-black'>失足</span>摔倒、鼻部鲜血凝固的老人，他不仅未曾冷眼旁观，反而当即<span class='text-[#e11d48] font-black'>驻足</span>看护并主动拨打120急救，甚至一路<span class='text-[#e11d48] font-black'>护送</span>至医院病房留守照料，后续数日更是频繁<span class='text-[#e11d48] font-black'>嘘寒问暖</span>。",
+            pinyin: "Kuàidìyuán Lǐ shīfu zài rìcháng pàijiàn túzhōng, ǒuyù yī míng shīzú shuāidǎo, bíbù xiānxuè nínggù de lǎorén, tā bùjǐn wèicéng lěngyǎnpángguān, fǎn'ér dāngjí zhùzú kànhù bìng zhǔdòng bōdǎ 120 jíjiù, shènzhì yílù hùsòng zhì yīyuàn bìngfáng liúshǒu zhàoliào, hòuxù shù rì gèngshì pínfán xūhánwènnuǎn.",
+            ko: "택배기사 리 씨는 배달 도중 넘어져 코피를 흘리는 노인을 목격하자 지나치지 않고 즉각 멈춰 서서 상처를 살폈으며, 120 구급차를 부른 뒤 응급실까지 동행하여 입원 수속을 돕고 며칠간 안부까지 챙겼습니다."
+          },
+          {
+            num: 4,
+            zh: "岂料老人出院数月后，其家属竟将李师傅告上法庭索赔92万余元，在毫无碰撞擦痕证据的前提下，荒唐坚称系快递车驶过的气流与鸣笛造成老人受惊吓倒地，构成所谓的“非接触式侵权”。",
+            zhPlain: "岂料老人出院数月后，其家属竟将李师傅告上法庭索赔92万余元，在毫无碰撞擦痕证据的前提下，荒唐坚称系快递车驶过的气流与鸣笛造成老人受惊吓倒地，构成所谓的“非接触式侵权”。",
+            zhHtml: "岂料老人出院数月后，其家属竟将李师傅告上法庭索赔92万余元，在毫无碰撞擦痕证据的前提下，荒唐坚称系快递车驶过的气流与<span class='text-[#e11d48] font-black'>鸣笛</span>造成老人受惊吓倒地，构成所谓的“非接触式侵权”。",
+            pinyin: "Qǐliào lǎorén chūyuàn shù yuè hòu, qí jiāshǔ jìng jiāng Lǐ shīfu gào shàng fǎtíng suǒpéi 92 wàn yú yuán, zài háowú pèngzhuàng cāhén zhèngjù de qiántí xià, huāngtáng jiānchēng xì kuàidìchē shǐguò de qìliú yǔ míngdí zàochéng lǎorén shòu jīngxià dǎodì, gòuchéng suǒwèi de “fēi jiēchùshì qīnquán”.",
+            ko: "그런데 몇 달 뒤 유족들은 리 씨를 상대로 92만 위안에 달하는 소송을 걸었고, 접촉 흔적이 없음에도 '바람과 경적 소리에 놀라 넘어진 비접촉 사고'라는 억지 주장을 폈습니다."
+          },
+          {
+            num: 5,
+            zh: "江门中院经过严谨细致的现场勘验与笔录复核，终审依法驳回原告全部无理诉求，坚定判决施救者无责！",
+            zhPlain: "江门中院经过严谨细致的现场勘验与笔录复核，终审依法驳回原告全部无理诉求，坚定判决施救者无责！",
+            zhHtml: "江门中院经过严谨细致的现场<span class='text-[#e11d48] font-black'>勘验</span>与笔录<span class='text-[#e11d48] font-black'>复核</span>，终审依法驳回原告全部无理<span class='text-[#e11d48] font-black'>诉求</span>，坚定判决施救者无责！",
+            pinyin: "Jiāngmén zhōngyuàn jīngguò yánjǐn xìzhì de xiànchǎng kānyàn yǔ bǐlù fùhé, zhōngshěn yīfǎ bóhuí yuángào quánbù wúlǐ sùqiú, jiāndìng pànjué shījiùzhě wúzé!",
+            ko: "법원은 엄정한 현장 검증 끝에 유족들의 모든 청구를 기각하고 리 씨의 완전 무죄를 선고했습니다."
+          },
+          {
+            num: 6,
+            zh: "主审法官掷地有声地指出：司法审判绝不能让见义勇为者流血又流泪！法治对每一份纯粹善意的明确撑腰，正是对中华民族扶危济困公序良俗最郑重的托举与捍卫！",
+            zhPlain: "主审法官掷地有声地指出：司法审判绝不能让见义勇为者流血又流泪！法治对每一份纯粹善意的明确撑腰，正是对中华民族扶危济困公序良俗最郑重的托举与捍卫！",
+            zhHtml: "主审法官<span class='text-[#e11d48] font-black'>掷地有声</span>地指出：司法审判绝不能让见义勇为者流血又流泪！法治对每一份纯粹善意的明确<span class='text-[#e11d48] font-black'>撑腰</span>，正是对中华民族<span class='text-[#e11d48] font-black'>扶危济困</span><span class='text-[#e11d48] font-black'>公序良俗</span>最郑重的<span class='text-[#e11d48] font-black'>托举</span>与<span class='text-[#e11d48] font-black'>捍卫</span>！",
+            pinyin: "Zhǔshěn fǎguān zhìdìyǒushēng de zhǐchū: Sīfǎ shěnpàn juébùnéng ràng jiànyìyǒngwéizhě liúxiè yòu liú lèi! Fǎzhì duì měi yí fèn chúncuì shànyì de míngquè chēngyāo, zhèng shì duì Zhōnghuá mínzú fúwēijìkùn gōngxùliángsú zuì zhèngzhòng de tuōjǔ yǔ hànwèi!",
+            ko: "재판부는 '사법 정의는 결코 의인을 눈물 흘리게 두지 않을 것이며, 선의를 향한 법원의 지지야말로 우리 사회의 온기를 지탱하는 든든한 방패'라고 단언했습니다."
+          }
+        ],
+        vocab20: [
+          { no: "01", word: "善念", pinyin: "shànniàn", pos: "名词", mean: "타인을 돕고자 하는 순수하고 어진 마음", tip: "길가에 피를 흘리고 쓰러진 노인을 보고 저절로 우러나온 온정" },
+          { no: "02", word: "见义勇为", pinyin: "jiàn yì yǒng wéi", pos: "成语", mean: "옳은 일을 보고 주저 없이 용감하게 행동에 옮기다", tip: "바쁜 배달 일정 중에도 발걸음을 멈추고 환자를 돌본 살신성인" },
+          { no: "03", word: "无妄之灾", pinyin: "wú wàng zhī zāi", pos: "成语", mean: "아무런 잘못도 없이 뜻밖에 닥쳐온 억울한 날벼락", tip: "선행을 베풀고도 92만 위안이라는 거액의 소송에 휘말린 황당한 처지" },
+          { no: "04", word: "派件", pinyin: "pàijiàn", pos: "行业动宾", mean: "택배 기사가 담당 구역의 화물을 고객에게 배달하다", tip: "정해진 시간 내에 배송을 마쳐야 하는 분주한 택배 기사의 일과" },
+          { no: "05", word: "失足", pinyin: "shīzú", pos: "动词", mean: "발을 헛디뎌 균형을 잃고 바닥으로 넘어지다", tip: "고령의 노인이 보행 중 스스로 중심을 잃고 넘어진 사고 원인" },
+          { no: "06", word: "驻足", pinyin: "zhùzú", pos: "书面动词", mean: "가던 걸음을 멈추고 현장에 자리를 잡고 서다", tip: "위급 상황을 목격하고 그냥 지나치지 않고 노인 곁을 지킴" },
+          { no: "07", word: "嘘寒问暖", pinyin: "xū hán wèn nuǎn", pos: "成语", mean: "추위와 더위를 묻듯 상대방의 안부를 극진히 챙기다", tip: "병원에 입원한 노인이 회복될 때까지 며칠 동안 지속적으로 안부를 전함" },
+          { no: "08", word: "鸣笛", pinyin: "míngdí", pos: "动宾短语", mean: "자동차나 오토바이가 경적을 울려 소리를 내다", tip: "기사가 경적을 울려 노인을 놀라게 했다며 유족 측이 날조한 억지 주장" },
+          { no: "09", word: "侵权", pinyin: "qīnquán", pos: "法律动词/名词", mean: "타인의 신체나 재산상 권리를 불법적으로 침해하다", tip: "충돌이 없었음에도 기사에게 억지 책임을 씌우려 한 민사 청구" },
+          { no: "10", word: "勘验", pinyin: "kānyàn", pos: "司法动词", mean: "사건 현장이나 차량의 물리적 상태를 정밀 감식하다", tip: "삼륜차와 도로 표면을 감식해 물리적 접촉이 전혀 없었음을 과학적으로 규명함" },
+          { no: "11", word: "复核", pinyin: "fùhé", pos: "司法动词", mean: "기존의 조사 기록과 진술 조서를 다시 꼼꼼히 대조하다", tip: "노인이 병원에서 '치이지 않았다'고 답한 진술을 재확인함" },
+          { no: "12", word: "诉求", pinyin: "sùqiú", pos: "法律名词", mean: "소송을 통해 법원에 판결을 구하는 원고의 청구 내용", tip: "파렴치한 유족들이 요구한 92만 위안의 부당한 금전 배상" },
+          { no: "13", word: "掷地有声", pinyin: "zhì dì yǒu shēng", pos: "成语", mean: "말이나 글이 쇠붙이가 땅에 떨어지듯 힘차고 명확하다", tip: "선한 사람을 반드시 지키겠다는 판사의 준엄하고 감동적인 판결 요지" },
+          { no: "14", word: "撑腰", pinyin: "chēngyāo", pos: "比喻动宾", mean: "약자나 정의로운 사람의 든든한 버팀목이 되어주다", tip: "억울한 누명을 쓸 뻔한 의인을 법률의 힘으로 온전히 구제함" },
+          { no: "15", word: "扶危济困", pinyin: "fú wēi jì kùn", pos: "成语", mean: "위험에 빠진 이를 돕고 곤경에 처한 이를 구제하다", tip: "어려운 이웃을 돕는 유구한 전통 미덕이자 인간 사회의 도덕적 근간" },
+          { no: "16", word: "公序良俗", pinyin: "gōng xù liáng sú", pos: "法律名词", mean: "사회의 건전한 질서와 선량한 풍속", tip: "사법부가 법 판결을 통해 지켜내야 할 사회적 양심의 가치 기준" },
+          { no: "17", word: "托举", pinyin: "tuōjǔ", pos: "比喻动词", mean: "두 손으로 소중히 받쳐 높이 들어 올리다", tip: "타인을 돕는 숭고한 정신이 퇴색되지 않도록 사법 제도가 굳건히 지탱함" },
+          { no: "18", word: "捍卫", pinyin: "hànwèi", pos: "动词", mean: "외부의 부당한 침해로부터 소중한 가치를 굳건히 지키다", tip: "악의적인 모함으로부터 선량한 사마리아인의 명예와 권리를 사수함" },
+          { no: "19", word: "审结", pinyin: "shěnjié", pos: "法律动词", mean: "치열한 공방을 거쳐 최종 판결을 내리고 재판을 매듭짓다", tip: "오랜 불안에 떨던 택배 기사의 억울함을 씻어주고 소송을 종결함" },
+          { no: "20", word: "护送", pinyin: "hùsòng", pos: "动词", mean: "위험이 없도록 곁에서 보살피며 목적지까지 데려다주다", tip: "구급차에 함께 탑승하여 가족이 올 때까지 환자의 곁을 지킨 선행" }
+        ]
+      }
+    ];
+
+    // 제34기 100개 핵심 단어장 데이터베이스 (기사 01~05 각 20개씩 100% 동기화: 1301~1400번)
+    const VOCABULARY_LIST = [
+      // 기사 01 (01 ~ 20)
+      { id: 1, word: "沉睡", pinyin: "chénsùi", mean: "깊고 고요한 잠에 빠져 오랜 세월을 보내다", pos: "动词", tip: "지하 묘역에서 2천 년간 인류의 손길을 타지 않고 보존됨", cat: "문화/생활", article: 0, ex: "沉睡两千余年的秦始皇陵。" },
+      { id: 2, word: "幽宫", pinyin: "yōugōng", mean: "깊고 그윽하며 신비로운 지하 궁전", pos: "典雅名词", tip: "사마천 사기에 기록된 진시황릉의 전설적인 지하 세계", cat: "문화/생활", article: 0, ex: "掀起对地下神秘幽宫的狂热探秘热潮。" },
+      { id: 3, word: "探秘", pinyin: "tànmì", mean: "숨겨진 미지의 비밀과 진실을 깊이 탐구하다", pos: "动宾短语", tip: "네티즌들이 유적의 내부 구조와 보물에 품은 호기심", cat: "사회/IT", article: 0, ex: "全民参与考古探秘讨论。" },
+      { id: 4, word: "遐想", pinyin: "xiáxiǎng", mean: "아득히 먼 미지의 세계를 자유롭게 상상하다", pos: "名词/动词", tip: "수은 바다와 보석 별자리가 수놓아진 지하 궁전에 대한 공상", cat: "문화/생활", article: 0, ex: "面对公众对地宫的无限遐想。" },
+      { id: 5, word: "解密", pinyin: "jiěmì", mean: "숨겨진 진실이나 비밀을 과학적으로 밝혀내다", pos: "动词", tip: "고고학 연구 성과를 바탕으로 발굴 중단 이유를 대중에게 설명함", cat: "사회/IT", article: 0, ex: "专家郑重解密不主动发掘的原因。" },
+      { id: 6, word: "怯懦", pinyin: "qiènuò", mean: "비겁하고 겁이 많아 앞으로 나서지 못하는", pos: "形容词", tip: "기술이 부족해서 발굴을 피한다는 세간의 편견을 불식함", cat: "문화/생활", article: 0, ex: "不发掘绝非怯懦推诿。" },
+      { id: 7, word: "推诿", pinyin: "tuīwěi", mean: "자신이 마땅히 져야 할 책임을 회피하고 떠넘기다", pos: "动词", tip: "문화재 보호 책무를 방기하는 것이 아님을 명백히 선언함", cat: "사회/IT", article: 0, ex: "绝非怯懦与责任推诿。" },
+      { id: 8, word: "敬畏", pinyin: "jìngwèi", mean: "거룩한 대상을 깊이 공경하면서도 두려워하다", pos: "动词/名词", tip: "역사 유산과 대자연의 섭리 앞에 겸허해야 한다는 고고학적 철학", cat: "문화/생활", article: 0, ex: "是对自然与先祖最深沉的敬畏。" },
+      { id: 9, word: "勘探", pinyin: "kāntàn", mean: "지질이나 매장물을 전문 장비로 정밀 탐사하다", pos: "科学动词", tip: "땅을 파지 않고 지하 내부 밀도와 금속 분포를 분석한 기술", cat: "사회/IT", article: 0, ex: "现代地球物理勘探证实封土异常。" },
+      { id: 10, word: "封土", pinyin: "fēngtǔ", mean: "무덤의 지하 석실 위에 높게 쌓아 올린 흙더미", pos: "考古名词", tip: "수은 증기가 지표면으로 올라와 검출된 거대한 능묘 봉분", cat: "문화/생활", article: 0, ex: "皇陵封土中汞含量超标70倍。" },
+      { id: 11, word: "开掘", pinyin: "kāijué", mean: "땅을 깊이 파헤쳐 묻힌 대상을 드러내다", pos: "动词", tip: "무턱대고 유적을 굴착하는 행위가 초래할 환경 참사를 경고함", cat: "문화/생활", article: 0, ex: "贸然开掘极易引发高浓度毒气泄露。" },
+      { id: 12, word: "泄露", pinyin: "xièlòu", mean: "밀폐되어 갇혀 있던 기체나 비밀이 밖으로 새어 나오다", pos: "动词", tip: "봉인된 지하 공간이 열리며 유독 수은 기체가 대기로 뿜어져 나옴", cat: "사회/IT", article: 0, ex: "防止水银蒸汽泄露污染环境。" },
+      { id: 13, word: "深埋", pinyin: "shēnmái", mean: "지하 깊숙한 흙 속에 파묻혀 외부와 차단되다", pos: "动宾短语", tip: "천 년 세월 동안 밀폐된 진공 상태에서 보존된 부장품들", cat: "문화/생활", article: 0, ex: "深埋两千载的彩绘文物极为脆弱。" },
+      { id: 14, word: "丝帛", pinyin: "sībó", mean: "비단실로 곱게 짠 명주와 견직물", pos: "古代名词", tip: "공기와 접촉하는 순간 찰나에 재로 변해버리는 취약한 유물", cat: "문화/생활", article: 0, ex: "丝帛织物难抵外界空气冲击。" },
+      { id: 15, word: "骤然", pinyin: "zhòurán", mean: "예상치 못한 순간에 매우 갑작스럽고 급격하게", pos: "副词", tip: "지하의 밀폐 환경이 깨지며 들이닥치는 바깥공기의 습격", cat: "문화/생활", article: 0, ex: "骤然接触外界空气会发生氧化。" },
+      { id: 16, word: "坍塌", pinyin: "tāntā", mean: "형태를 유지하던 구조물이 힘없이 와르르 무너지다", pos: "动词/比喻", tip: "유물의 미세 섬유 분자 구조가 산화 반응으로 허물어짐", cat: "문화/생활", article: 0, ex: "微观结构发生不可逆坍塌。" },
+      { id: 17, word: "无损", pinyin: "wúsǔn", mean: "대상에 아무런 물리적 손상이나 훼손을 입히지 않는", pos: "科技定语", tip: "유적을 파괴하지 않고 투시 레이더로 내부를 읽어내는 보존 공학", cat: "사회/IT", article: 0, ex: "无损探测技术尚在探索中。" },
+      { id: 18, word: "原址", pinyin: "yuánzhǐ", mean: "문화재나 유적이 처음 세워지고 출토된 본래 자리", pos: "名词", tip: "박물관으로 옮기지 않고 현장에서 영구 보존하는 고고학적 원칙", cat: "문화/생활", article: 0, ex: "原址保护技术取得突破前不宜发掘。" },
+      { id: 19, word: "颠覆性", pinyin: "diānfùxìng", mean: "기존의 틀과 방식을 근본적으로 뒤흔들어 혁신하는", pos: "流行词", tip: "완벽한 유물 산화 방지 신소재가 개발되는 기술적 특이점", cat: "사회/IT", article: 0, ex: "亟需颠覆性文保技术突破。" },
+      { id: 20, word: "长眠", pinyin: "chángmián", mean: "영원한 안식에 들어 깊이 잠들다", pos: "文学动词", tip: "시대를 호령했던 영웅의 넋과 유적을 존중하는 숭고한 결론", cat: "문화/생활", article: 0, ex: "让文明古迹在幽冥中完好长眠。" },
+
+      // 기사 02 (21 ~ 40)
+      { id: 21, word: "斑斓", pinyin: "bānlán", mean: "찬란하고 화려한 여러 가지 빛깔이 섞여 있는", pos: "形容词", tip: "멀리서도 한눈에 알아볼 수 있을 만큼 눈에 띄는 활공 낙하산의 색채", cat: "문화/생활", article: 1, ex: "一具色彩斑斓的动力滑翔伞。" },
+      { id: 22, word: "穿梭", pinyin: "chuānsuō", mean: "베틀의 북이 오가듯 좁은 공간 사이를 빠르게 누비다", pos: "动词", tip: "대교 기둥과 강물 사이의 좁은 틈새를 스릴 있게 통과함", cat: "문화/생활", article: 1, ex: "在跨江大桥下方肆意穿梭。" },
+      { id: 23, word: "引爆", pinyin: "yǐnbào", mean: "폭탄이 터지듯 엄청난 논란과 화제를 촉발하다", pos: "比喻动词", tip: "도심 한복판에서 벌어진 기상천외한 활공 영상이 SNS를 강타함", cat: "사회/IT", article: 1, ex: "惊险视频引爆全网热议。" },
+      { id: 24, word: "掠过", pinyin: "lüèguò", mean: "닿을 듯 말 듯 가볍고 빠르게 스쳐 지나가다", pos: "动词", tip: "강물 표면과 교각 벽면에 살갗이 닿을 만큼 위험하게 초저공 비행함", cat: "문화/생활", article: 1, ex: "紧贴江面低空掠过险象环生。" },
+      { id: 25, word: "夹缝", pinyin: "jiāfèng", mean: "양쪽의 거대한 물체 사이에 끼어 있는 좁은 틈새", pos: "名词", tip: "충돌 사고의 위험이 극도로 높은 다리 교각 사이의 사각지대", cat: "문화/생활", article: 1, ex: "从庞大混凝土桥墩夹缝中呼啸穿行。" },
+      { id: 26, word: "疾驰", pinyin: "jíchí", mean: "자동차가 도로 위를 매우 빠르고 거칠게 내달리다", pos: "动词", tip: "다리 상판 위에서 시속 60km 이상으로 달리고 있던 승용차 행렬", cat: "문화/생활", article: 1, ex: "距离桥面疾驰的车流仅咫尺之遥。" },
+      { id: 27, word: "咫尺", pinyin: "zhǐchǐ", mean: "불과 한 뼘에 불과할 정도로 거리가 매우 가까운", pos: "形容词/名词", tip: "조금만 궤도를 벗어나도 다리 난간이나 차량에 그대로 충돌할 거리", cat: "문화/생활", article: 1, ex: "与疾驰车辆仅咫尺之隔。" },
+      { id: 28, word: "机毁人亡", pinyin: "jī huǐ rén wáng", mean: "비행기가 박살 나고 탑승자가 그 자리에서 즉사하다", pos: "成语", tip: "모터 동력 장치가 교각에 부딪혀 추락할 뻔한 치명적 순간", cat: "성어/숙어", article: 1, ex: "稍有不慎便可能导致机毁人亡。" },
+      { id: 29, word: "殃及", pinyin: "yāngjí", mean: "재앙이나 화가 무고한 다른 사람에게까지 미치다", pos: "动词", tip: "개인의 철없는 일탈이 다리 위 시민들의 대형 참사로 번질 뻔함", cat: "사회/IT", article: 1, ex: "极易殃及桥上过往无辜车辆。" },
+      { id: 30, word: "闻警即动", pinyin: "wén jǐng jí dòng", mean: "신고나 제보를 받자마자 지체 없이 즉각 출동하다", pos: "成语/公安词", tip: "영상이 확산되자마자 경찰 수사대가 야간 비상 검거 작전에 돌입함", cat: "사회/IT", article: 1, ex: "警方闻警即动迅速展开排查。" },
+      { id: 31, word: "排查", pinyin: "páichá", mean: "단서를 바탕으로 의심 지역과 용의자를 샅샅이 뒤지다", pos: "动词", tip: "강변 착륙 지점과 CCTV 동선을 추적해 은신처를 찾아냄", cat: "사회/IT", article: 1, ex: "展开拉网式严密排查锁定嫌疑人。" },
+      { id: 32, word: "同伙", pinyin: "tónghuǒ", mean: "범죄나 위법 행위를 함께 모의하고 거든 패거리", pos: "法律贬义词", tip: "낙하산 이착륙을 돕고 촬영을 맡아 망을 보던 일행", cat: "사회/IT", article: 1, ex: "涉案当事人及协助同伙全被查获。" },
+      { id: 33, word: "猎奇", pinyin: "lièqí", mean: "기괴하고 자극적인 구경거리를 쫓아 탐닉하다", pos: "形容词/动词", tip: "자극적인 숏폼 영상을 만들어 팔로워를 끌어모으려던 비뚤어진 심리", cat: "사회/IT", article: 1, ex: "为博取网络眼球与猎奇流量铤而走险。" },
+      { id: 34, word: "报备", pinyin: "bàobèi", mean: "규정에 따라 관할 관청에 정식으로 서면 보고하다", pos: "行政动词", tip: "도심 상공 비행 전 관제소의 허가와 공역 배정을 받아야 하는 의무", cat: "사회/IT", article: 1, ex: "未经任何空域飞行报备审批。" },
+      { id: 35, word: "黑飞", pinyin: "hēifēi", mean: "허가받지 않은 불법 장비로 무단 비행하는 행위", pos: "行业流行词", tip: "항공 안전을 위협하며 당국의 레이더망을 피해 날아든 불법체", cat: "사회/IT", article: 1, ex: "私自组装操纵黑飞航空器受惩。" },
+      { id: 36, word: "制裁", pinyin: "zhìcái", mean: "법률의 권위로 위법 행위자에게 강력한 처벌을 가하다", pos: "法律动词", tip: "공공질서를 어지럽힌 대가로 부과된 엄정한 인신 구속과 벌금", cat: "사회/IT", article: 1, ex: "依法处以行政拘留等严厉制裁。" },
+      { id: 37, word: "儿戏", pinyin: "érxì", mean: "아이들의 장난처럼 지극히 가볍고 하찮게 여기다", pos: "比喻名词", tip: "불특정 다수 시민의 안전을 장난거리로 치부한 경솔함", cat: "문화/생활", article: 1, ex: "绝不容许将公众生命安危视同儿戏。" },
+      { id: 38, word: "作秀", pinyin: "zuòxiù", mean: "남들의 시선을 끌기 위해 가식적인 쇼를 벌이다", pos: "社会动词", tip: "오로지 온라인 '좋아요'를 얻기 위해 위험을 무릅쓴 보여주기식 난동", cat: "사회/IT", article: 1, ex: "任性作秀终将受到法律严惩。" },
+      { id: 39, word: "铁腕", pinyin: "tiěwàn", mean: "쇠붙이처럼 단호하고 자비가 없는 강력한 수단", pos: "比喻名词", tip: "불법 비행 행위를 뿌리 뽑겠다는 치안 당국의 무관용 원칙", cat: "사회/IT", article: 1, ex: "必将受到法律铁腕的严惩。" },
+      { id: 40, word: "严惩", pinyin: "yánchéng", mean: "선처 없이 법이 정한 최고의 수위로 엄하게 다스리다", pos: "动词", tip: "사회적 경각심을 일깨우기 위해 철퇴를 내린 사법적 처벌", cat: "사회/IT", article: 1, ex: "严惩危害公共安全违法行为。" },
+
+      // 기사 03 (41 ~ 60)
+      { id: 41, word: "麻痹", pinyin: "mábì", mean: "경각심을 잃고 감각이 무디어져 방심하다", pos: "形容词/动词", tip: "위생 관리에 대한 경계를 늦추어 황당한 사태를 초래한 태도", cat: "사회/IT", article: 2, ex: "食安防线容不得哪怕一丝一毫麻痹。" },
+      { id: 42, word: "便装", pinyin: "biànzhuāng", mean: "위생복이나 규정 유니폼이 아닌 일상 평상복", pos: "名词", tip: "위생 모자와 조리복도 제대로 갖춰 입지 않은 불량한 근무 실태", cat: "문화/생활", article: 2, ex: "身着便装的厨师违规操作。" },
+      { id: 43, word: "拆封", pinyin: "chāifēng", mean: "밀봉되어 있던 포장이나 봉인을 뜯어 열다", pos: "动宾短语", tip: "음식 재료가 놓인 조리대 위에서 의료 키트 포장을 개봉함", cat: "문화/생활", article: 2, ex: "堂而皇之拆封检测试纸。" },
+      { id: 44, word: "针头", pinyin: "zhēntóu", mean: "피를 뽑거나 약물을 주입하기 위한 뾰족한 주삿바늘", pos: "医学名词", tip: "식당 주방에서 절대 나와서는 안 될 흉기이자 채혈 도구", cat: "사회/IT", article: 2, ex: "直接用针头刺破指尖采血。" },
+      { id: 45, word: "触目惊心", pinyin: "chù mù jīng xīn", mean: "끔찍하고 충격적인 광경을 보고 가슴이 덜컥 내려앉다", pos: "成语", tip: "음식을 만드는 곳에서 피를 흘리며 검사를 하는 기괴한 행태", cat: "성어/숙어", article: 2, ex: "后厨采血触目惊心的一幕引发轩然大波。" },
+      { id: 46, word: "轩然大波", pinyin: "xuān rán dà bō", mean: "거센 파도가 일듯 사회적으로 거대한 분노와 파문이 일다", pos: "成语", tip: "영상이 공개되자마자 외식업계 위생 불신이 걷잡을 수 없이 번짐", cat: "성어/숙어", article: 2, ex: "事件在社交平台引发轩然大波。" },
+      { id: 47, word: "恐慌", pinyin: "kǒnghuāng", mean: "극심한 공포에 휩싸여 불안해하고 허둥대다", pos: "心理名词", tip: "혹시 내가 먹은 음식에 피가 튀지 않았을까 전전긍긍하는 손님들", cat: "사회/IT", article: 2, ex: "食客对血液交叉感染产生强烈恐慌。" },
+      { id: 48, word: "火速", pinyin: "huǒsù", mean: "불길이 번지듯 지체 없이 매우 다급하고 빠르게", pos: "副词", tip: "사태가 번지기 전에 즉시 공무원들을 투입한 감독 당국의 대처", cat: "사회/IT", article: 2, ex: "市监局火速入驻调查通报。" },
+      { id: 49, word: "入驻", pinyin: "rùzhù", mean: "현장에 들어가 본부를 차리고 집중 조사에 착수하다", pos: "公文动词", tip: "시 감독국 단속반이 매장에 들이닥쳐 장부와 CCTV를 압수함", cat: "사회/IT", article: 2, ex: "监管执法队伍连夜入驻涉事门店。" },
+      { id: 50, word: "抱恙", pinyin: "bàoyàng", mean: "몸에 병이나 이상 증세가 있어 편치 못하다", pos: "书面动词", tip: "환절기 피로감으로 인해 스스로 간 질환을 의심했던 조리사의 핑계", cat: "문화/생활", article: 2, ex: "员工因身体抱恙网购试纸自测。" },
+      { id: 51, word: "复测", pinyin: "fùcè", mean: "신뢰성을 담보하기 위해 전문 기관에서 다시 검사하다", pos: "医学动词", tip: "자가 키트의 오류를 배제하기 위해 삼갑 병원 혈액 검사를 진행함", cat: "사회/IT", article: 2, ex: "送往正规医疗机构权威复测全阴性。" },
+      { id: 52, word: "排除", pinyin: "páichú", mean: "의심이나 위험 요소를 조사하여 말끔히 털어내다", pos: "动词", tip: "정밀 분석을 통해 2차 감염병 병원균이 없음을 공식 확인받음", cat: "사회/IT", article: 2, ex: "成功排除了传染源传播风险。" },
+      { id: 53, word: "重地", pinyin: "zhòngdì", mean: "엄격한 관리와 출입 통제가 요구되는 핵심 요충지", pos: "比喻名词", tip: "직접 섭취하는 음식을 다루는 곳이기에 엄격한 멸균이 필수적인 주방", cat: "문화/생활", article: 2, ex: "后厨乃食品加工核心重地。" },
+      { id: 54, word: "罔顾", pinyin: "wǎnggù", mean: "마땅히 지켜야 할 법과 도덕을 완전히 무시하고 저버리다", pos: "书面动词", tip: "식품위생법의 대원칙을 헌신짝처럼 내팽개친 몰지각한 처사", cat: "사회/IT", article: 2, ex: "如此罔顾行业规范的荒唐行径。" },
+      { id: 55, word: "漏洞", pinyin: "lòudòng", mean: "허술하여 물이 새듯 관리 체계에 생긴 치명적 결함", pos: "比喻名词", tip: "직원이 주방에서 딴짓을 해도 아무런 제재가 없었던 관리 부실", cat: "사회/IT", article: 2, ex: "暴露出在卫生内控上的严重漏洞。" },
+      { id: 56, word: "停工", pinyin: "tínggōng", mean: "진행하던 모든 작업과 업무를 즉각 중단하다", pos: "劳动动词", tip: "위생 문제가 불거진 요리사를 현장에서 즉각 배제함", cat: "경제/산업", article: 2, ex: "责令涉事员工暂时停工离岗。" },
+      { id: 57, word: "离岗", pinyin: "lígǎng", mean: "맡고 있던 직책이나 근무지에서 물러나다", pos: "人事动词", tip: "추가 감염 위험을 차단하기 위해 조리 자격을 정지시킴", cat: "경제/산업", article: 2, ex: "配合调查期间一律离岗接受审查。" },
+      { id: 58, word: "立案", pinyin: "lì'àn", mean: "위법 혐의를 공식 인정하고 정식 수사 및 조사에 착수하다", pos: "司法动词", tip: "행정처분뿐만 아니라 형사적 처벌 가능성까지 염두에 둔 법적 절차", cat: "사회/IT", article: 2, ex: "责令门店停业整改并立案深挖。" },
+      { id: 59, word: "深挖", pinyin: "shēnwā", mean: "표면적 문제에 그치지 않고 배후 원인을 깊이 파헤치다", pos: "比喻动词", tip: "해당 프랜차이즈 전체 매장의 위생 관리 부실을 전수 조사함", cat: "사회/IT", article: 2, ex: "深挖餐饮供应链管理失责根源。" },
+      { id: 60, word: "底线", pinyin: "dǐxiàn", mean: "결코 무너뜨려서는 안 되는 최후의 한계점이자 마지노선", pos: "比喻名词", tip: "국민의 생명과 건강을 담보하는 식품 안전의 절대적 가치", cat: "사회/IT", article: 2, ex: "坚决守牢餐桌安全的钢铁底线。" },
+
+      // 기사 04 (61 ~ 80)
+      { id: 61, word: "苛刻", pinyin: "kēkè", mean: "조건이나 대우가 몹시 까다롭고 가혹한", pos: "形容词", tip: "직원들의 기본적인 생리현상까지 통제했다는 과장된 갑질 프레임", cat: "사회/IT", article: 3, ex: "声称车间苛刻限制员工上厕所。" },
+      { id: 62, word: "审判台", pinyin: "shěnpàntái", mean: "여론과 대중이 모여 도덕적 단죄를 내리는 가상의 심판대", pos: "比喻名词", tip: "사실 확인도 거치지 않은 채 기업을 악덕 고용주로 몰아간 인터넷 재판", cat: "사회/IT", article: 3, ex: "将制造业基层用工生态推上舆论审判台。" },
+      { id: 63, word: "非人道", pinyin: "fēiréndào", mean: "인간의 기본적 존엄과 인권을 무시하는", pos: "形容词", tip: "공장 노동자를 기계 부품처럼 취급했다는 루머 속 묘사", cat: "사회/IT", article: 3, ex: "网民声讨血汗工厂非人道管束。" },
+      { id: 64, word: "声讨", pinyin: "shēngtǎo", mean: "부당한 잘못에 대해 공개적으로 소리 높여 꾸짖다", pos: "动词", tip: "네티즌들이 커뮤니티와 댓글을 통해 일제히 쏟아낸 분노", cat: "사회/IT", article: 3, ex: "引发全网汹涌激烈的公开声讨。" },
+      { id: 65, word: "彻查", pinyin: "chèchá", mean: "근본부터 끝까지 숨김없이 낱낱이 조사하다", pos: "动词", tip: "경찰과 노동 당국이 투입되어 영상의 최초 유포 경로를 추적함", cat: "사회/IT", article: 3, ex: "警方连夜彻查后真相水落石出。" },
+      { id: 66, word: "移花接木", pinyin: "yí huā jiē mù", mean: "서로 다른 두 사건을 교묘하게 짜깁기하여 사람을 속이다", pos: "成语", tip: "타 사의 단순 퇴사 소동을 유명 대기업의 가혹 행위로 둔갑시킨 사기극", cat: "성어/숙어", article: 3, ex: "该视频纯属移花接木的恶毒造谣。" },
+      { id: 67, word: "普工", pinyin: "pǔgōng", mean: "특별한 전문 기술 없이 일반 공정에 투입되는 현장 생산직", pos: "劳动名词", tip: "교대 근무 라인에서 단순 조립 업무를 수행하던 젊은 근로자", cat: "경제/산업", article: 3, ex: "系另一家供应商的青年普工。" },
+      { id: 68, word: "办结", pinyin: "bànjié", mean: "신청된 행정 업무나 퇴사 서류 처리를 완료하다", pos: "行政动词", tip: "규정된 인수인계 기간을 무시하고 당장 사직서를 수리하라고 요구함", cat: "경제/산업", article: 3, ex: "要求现场即刻办结离职手续。" },
+      { id: 69, word: "偏激", pinyin: "piānjī", mean: "생각이나 행동이 상식을 벗어나 지나치게 극단적인", pos: "形容词", tip: "분노를 삭이지 못하고 작업장 한가운데서 벌인 비정상적인 돌출 행동", cat: "문화/생활", article: 3, ex: "在冲动下做出偏激失控举动。" },
+      { id: 70, word: "蹭取", pinyin: "cèngqǔ", mean: "유명인이나 대기업의 명성에 편승해 이득을 챙기다", pos: "网络流行动词", tip: "트래픽을 빨아들이기 위해 국내 1위 배터리 기업의 이름을 악용함", cat: "사회/IT", article: 3, ex: "为蹭取顶级企业热度疯狂吸粉。" },
+      { id: 71, word: "吸粉", pinyin: "xīfěn", mean: "자극적인 콘텐츠로 소셜미디어 팔로워 수를 불리다", pos: "网络商业词", tip: "계정의 조회수를 높여 향후 인플루언서 수익을 노린 불순한 의도", cat: "사회/IT", article: 3, ex: "通过虚构耸人听闻剧情恶意吸粉。" },
+      { id: 72, word: "耸人听闻", pinyin: "sǒng rén tīng wén", mean: "듣는 사람을 깜짝 놀라게 할 만큼 터무니없고 해괴한", pos: "成语", tip: "화장실도 못 가게 막았다는 허위 사실로 대중의 동정심을 자극함", cat: "성어/숙어", article: 3, ex: "虚构耸人听闻的苦情戏码。" },
+      { id: 73, word: "栽赃", pinyin: "zāizhāng", mean: "자신이 지어낸 허위 사실이나 죄를 무고한 타인에게 뒤집어씌우다", pos: "动词", tip: "무관한 유명 대기업에 악덕 기업이라는 오명을 씌운 범죄 행위", cat: "사회/IT", article: 3, ex: "恶意栽赃无辜知名企业。" },
+      { id: 74, word: "顶格", pinyin: "dǐnggé", mean: "법률이 규정한 최고 한도에 도달하는 수준으로", pos: "法律/公文副词", tip: "사회적 파장이 큰 유언비어 사범에게 가장 무거운 과태료를 매김", cat: "사회/IT", article: 3, ex: "依法行政拘留并处顶格罚款。" },
+      { id: 75, word: "作息", pinyin: "zuòxī", mean: "일하고 휴식하는 규칙적인 일과 스케줄", pos: "生活名词", tip: "초단위로 분절되어 여유가 부족한 첨단 공장의 타이트한 근무 환경", cat: "문화/생활", article: 3, ex: "机械化高压作息下的心理重负。" },
+      { id: 76, word: "重负", pinyin: "zhòngfù", mean: "어깨를 짓누르는 무겁고 버거운 정신적 짐", pos: "比喻名词", tip: "반복되는 생산 라인 업무와 대인 관계에서 오는 극심한 스트레스", cat: "문화/생활", article: 3, ex: "当代工厂青年承受的心理重负。" },
+      { id: 77, word: "合规", pinyin: "héguī", mean: "법률과 사내 규정에 맞추어 합법적으로 처리하다", pos: "商业名词/动词", tip: "근로기준법에 명시된 정상적인 퇴사 절차와 고용 계약 해지", cat: "경제/산업", article: 3, ex: "规范离职交接的合规流程。" },
+      { id: 78, word: "疏导", pinyin: "shūdǎo", mean: "막힌 감정이나 고충을 잘 풀어서 달래어 주다", pos: "心理/社会动词", tip: "감정이 격해진 청년 근로자들의 심리적 불안을 완화하는 상담 지원", cat: "문화/생활", article: 3, ex: "建立有温度的情感疏导机制。" },
+      { id: 79, word: "正视", pinyin: "zhèngshì", mean: "회피하거나 눈 돌리지 않고 문제를 똑바로 직시하다", pos: "动词", tip: "노사 갈등의 근본적인 원인을 마주하고 처우를 개선하려는 자세", cat: "사회/IT", article: 3, ex: "企业必须正视基层用工矛盾。" },
+      { id: 80, word: "必修课", pinyin: "bìxiūkè", mean: "반드시 이수해야 하는 필수적인 과제와 교훈", pos: "比喻名词", tip: "선진 제조 기업으로 도약하기 위해 갖추어야 할 인간 중심의 경영 철학", cat: "문화/생활", article: 3, ex: "制造业必须补上的现实必修课。" },
+
+      // 기사 05 (81 ~ 100)
+      { id: 81, word: "善念", pinyin: "shànniàn", mean: "타인을 돕고자 하는 순수하고 어진 마음", pos: "名词", tip: "길가에 피를 흘리고 쓰러진 노인을 보고 저절로 우러나온 온정", cat: "문화/생활", article: 4, ex: "一次满怀善念的见义勇为。" },
+      { id: 82, word: "见义勇为", pinyin: "jiàn yì yǒng wéi", mean: "옳은 일을 보고 주저 없이 용감하게 행동에 옮기다", pos: "成语", tip: "바쁜 배달 일정 중에도 발걸음을 멈추고 환자를 돌본 살신성인", cat: "성어/숙어", article: 4, ex: "见义勇为不仅未获感恩反遭索赔。" },
+      { id: 83, word: "无妄之灾", pinyin: "wú wàng zhī zāi", mean: "아무런 잘못도 없이 뜻밖에 닥쳐온 억울한 날벼락", pos: "成语", tip: "선행을 베풀고도 92만 위안이라는 거액의 소송에 휘말린 황당한 처지", cat: "성어/숙어", article: 4, ex: "善意救人却遭遇巨额索赔无妄之灾。" },
+      { id: 84, word: "派件", pinyin: "pàijiàn", mean: "택배 기사가 담당 구역의 화물을 고객에게 배달하다", pos: "行业动宾", tip: "정해진 시간 내에 배송을 마쳐야 하는 분주한 택배 기사의 일과", cat: "경제/산업", article: 4, ex: "快递员李师傅在日常派件途中。" },
+      { id: 85, word: "失足", pinyin: "shīzú", mean: "발을 헛디뎌 균형을 잃고 바닥으로 넘어지다", pos: "动词", tip: "고령의 노인이 보행 중 스스로 중심을 잃고 넘어진 사고 원인", cat: "문화/생활", article: 4, ex: "偶遇失足摔倒鼻部流血的老人。" },
+      { id: 86, word: "驻足", pinyin: "zhùzú", mean: "가던 걸음을 멈추고 현장에 자리를 잡고 서다", pos: "书面动词", tip: "위급 상황을 목격하고 그냥 지나치지 않고 노인 곁을 지킴", cat: "문화/생활", article: 4, ex: "当即驻足看护并主动拨打120。" },
+      { id: 87, word: "嘘寒问暖", pinyin: "xū hán wèn nuǎn", mean: "추위와 더위를 묻듯 상대방의 안부를 극진히 챙기다", pos: "成语", tip: "병원에 입원한 노인이 회복될 때까지 며칠 동안 지속적으로 안부를 전함", cat: "성어/숙어", article: 4, ex: "送医后连续数日频繁嘘寒问暖。" },
+      { id: 88, word: "鸣笛", pinyin: "míngdí", mean: "자동차나 오토바이가 경적을 울려 소리를 내다", pos: "动宾短语", tip: "기사가 경적을 울려 노인을 놀라게 했다며 유족 측이 날조한 억지 주장", cat: "문화/생활", article: 4, ex: "无理坚称车辆气流与鸣笛造成惊吓。" },
+      { id: 89, word: "侵权", pinyin: "qīnquán", mean: "타인의 신체나 재산상 권리를 불법적으로 침해하다", pos: "法律动词/名词", tip: "충돌이 없었음에도 기사에게 억지 책임을 씌우려 한 민사 청구", cat: "사회/IT", article: 4, ex: "硬扣所谓非接触式侵权帽子。" },
+      { id: 90, word: "勘验", pinyin: "kānyàn", mean: "사건 현장이나 차량의 물리적 상태를 정밀 감식하다", pos: "司法动词", tip: "삼륜차와 도로 표면을 감식해 물리적 접촉이 전혀 없었음을 과학적으로 규명함", cat: "사회/IT", article: 4, ex: "严谨细致的现场勘验与笔录复核。" },
+      { id: 91, word: "复核", pinyin: "fùhé", mean: "기존의 조사 기록과 진술 조서를 다시 꼼꼼히 대조하다", pos: "司法动词", tip: "노인이 병원에서 '치이지 않았다'고 답한 진술을 재확인함", cat: "사회/IT", article: 4, ex: "复核警方原始接警记录证实无责。" },
+      { id: 92, word: "诉求", pinyin: "sùqiú", mean: "소송을 통해 법원에 판결을 구하는 원고의 청구 내용", pos: "法律名词", tip: "파렴치한 유족들이 요구한 92만 위안의 부당한 금전 배상", cat: "사회/IT", article: 4, ex: "驳回原告家属全部无理诉求。" },
+      { id: 93, word: "掷地有声", pinyin: "zhì dì yǒu shēng", mean: "말이나 글이 쇠붙이가 땅에 떨어지듯 힘차고 명확하다", pos: "成语", tip: "선한 사람을 반드시 지키겠다는 판사의 준엄하고 감동적인 판결 요지", cat: "성어/숙어", article: 4, ex: "主审法官掷地有声地宣判施救者无责。" },
+      { id: 94, word: "撑腰", pinyin: "chēngyāo", mean: "약자나 정의로운 사람의 든든한 버팀목이 되어주다", pos: "比喻动宾", tip: "억울한 누명을 쓸 뻔한 의인을 법률의 힘으로 온전히 구제함", cat: "사회/IT", article: 4, ex: "为全社会的善良善意撑腰。" },
+      { id: 95, word: "扶危济困", pinyin: "fú wēi jì kùn", mean: "위험에 빠진 이를 돕고 곤경에 처한 이를 구제하다", pos: "成语", tip: "어려운 이웃을 돕는 유구한 전통 미덕이자 인간 사회의 도덕적 근간", cat: "성어/숙어", article: 4, ex: "捍卫中华民族扶危济困的美德。" },
+      { id: 96, word: "公序良俗", pinyin: "gōng xù liáng sú", mean: "사회의 건전한 질서와 선량한 풍속", pos: "法律名词", tip: "사법부가 법 판결을 통해 지켜내야 할 사회적 양심의 가치 기준", cat: "사회/IT", article: 4, ex: "判决有力维护了社会公序良俗。" },
+      { id: 97, word: "托举", pinyin: "tuōjǔ", mean: "두 손으로 소중히 받쳐 높이 들어 올리다", pos: "比喻动词", tip: "타인을 돕는 숭고한 정신이 퇴색되지 않도록 사법 제도가 굳건히 지탱함", cat: "문화/생활", article: 4, ex: "用公正司法托举起人间大爱。" },
+      { id: 98, word: "捍卫", pinyin: "hànwèi", mean: "외부의 부당한 침해로부터 소중한 가치를 굳건히 지키다", pos: "动词", tip: "악의적인 모함으로부터 선량한 사마리아인의 명예와 권리를 사수함", cat: "사회/IT", article: 4, ex: "坚定捍卫好人做好事的底气。" },
+      { id: 99, word: "审结", pinyin: "shěnjié", mean: "치열한 공방을 거쳐 최종 판결을 내리고 재판을 매듭짓다", pos: "法律动词", tip: "오랜 불안에 떨던 택배 기사의 억울함을 씻어주고 소송을 종결함", cat: "사회/IT", article: 4, ex: "法院终审审结该起助人被诉侵权案。" },
+      { id: 100, word: "护送", pinyin: "hùsòng", mean: "위험이 없도록 곁에서 보살피며 목적지까지 데려다주다", pos: "动词", tip: "구급차에 함께 탑승하여 가족이 올 때까지 환자의 곁을 지킨 선행", cat: "문화/생활", article: 4, ex: "一路护送老人至医院病房留守。" }
+    ];
+
+    // 실전 모의 HSK 퀴즈 (제34기 연계)
+    const QUIZ_DATA = [
+      {
+        question: "1. 기사 01에서 고고학 전문가들이 진시황릉(秦始皇陵)을 당장 적극적으로 발굴하지 않는 주된 과학적 이유로 언급한 것은 무엇인가요?",
+        options: [
+          "A. 지하 유적의 도굴 흔적이 너무 심해 남아 있는 유물이 없기 때문",
+          "B. 봉토 내 수은 함량이 70배를 초과하고 취약한 유기물 유물이 공기 접촉 시 즉각 산화 붕괴되기 때문",
+          "C. 능묘 위치가 아직 학술적으로 정확히 확인되지 않았기 때문",
+          "D. 주변 농경지 개발로 인해 지하 묘역의 지반이 완전히 침하되었기 때문"
+        ],
+        answer: 1,
+        explanation: "전문가들은 지하 수은 함량이 일반 토양의 70배에 달해 맹독 증기 누출 위험이 크고, 비단이나 채색 안료 등 유기질 유물이 바깥공기와 닿는 순간 비가역적인 산화 붕괴를 겪기 때문에 완벽한 보존 기술 개발 전까지 발굴을 자제한다고 밝혔습니다."
+      },
+      {
+        question: "2. 오늘의 歇后语인 「狗咬吕洞宾 —— 不识好人心」이 비유하는 가장 적절한 의미는 무엇인가요?",
+        options: [
+          "A. 호랑이 없는 골에 토끼가 왕 노릇 한다",
+          "B. 선한 사람의 고마운 호의를 몰라보고, 오히려 의심하거나 해코지하는 배은망덕한 태도",
+          "C. 능력도 없으면서 남의 일에 함부로 참견하는 주제넘은 행동",
+          "D. 위급한 순간에 서로 손발이 맞지 않아 일을 그르치는 상태"
+        ],
+        answer: 1,
+        explanation: "'개가 팔선 중 한 명인 어진 신선 여동빈을 물었다'는 해후어로, 타인의 숭고한 선의와 도움을 몰라보고 도리어 은혜를 원수로 갚는 배은망덕한 행태를 풍자합니다."
+      },
+      {
+        question: "3. 기사 05에서 광둥성 장먼시 법원이 넘어진 노인을 돕고 소송을 당한 택배기사에게 내린 최종 판결의 취지는 무엇인가요?",
+        options: [
+          "A. 비접촉이라도 경적을 울렸다면 일부 과실을 인정하여 50%를 배상해야 한다.",
+          "B. 120에 신고한 사람은 환자의 치료비에 대해 연대 보증 책임을 진다.",
+          "C. 사법 정의는 결코 의로운 구호자를 억울하게 하지 않으며, 접촉 증거가 없으므로 기사의 완전 무죄다.",
+          "D. 유족과 택배기사 간의 자율적 합의를 권고하고 사건을 종결했다."
+        ],
+        answer: 2,
+        explanation: "법원은 물리적 충돌 증거가 전무하고 택배기사의 선행이 명백하므로 원고의 92만 위안 배상 청구를 전면 기각하며, '선한 사마리아인이 피눈물을 흘리게 하지 않고 법이 선의의 든든한 버팀목이 되겠다'고 판결했습니다."
+      },
+      {
+        question: "4. 다음 중 '서로 다른 두 사건이나 인물을 교묘하게 억지로 짜깁기하여 사람들을 속이다'를 뜻하는 사자성어는?",
+        options: [
+          "A. 移花接木 (yí huā jiē mù)",
+          "B. 机毁人亡 (jī huǐ rén wáng)",
+          "C. 触目惊心 (chù mù jīng xīn)",
+          "D. 见义勇为 (jiàn yì yǒng wéi)"
+        ],
+        answer: 0,
+        explanation: "'移花接木'은 꽃을 다른 나무에 접붙이듯, 실제와 다른 사건을 악의적으로 교묘하게 짜깁기해 가짜 뉴스를 만들어내는 행태를 비유하는 성어입니다 (기사 04 핵심 어휘)."
+      }
+    ];
+
+    let currentArticleIndex = 0;
+    let selectedVocabCategory = 'all';
+    let userQuizAnswers = {};
+
+    let cachedChineseVoice = null;
+    let globalPlaybackRate = 1.0;
+    let currentPlayingSentenceIdx = null;
+    let currentSentenceUtterance = null;
+    let sentenceLoopIdx = null;
+    let isSentencePaused = false;
+    let isFullArticlePlaying = false;
+    let fullArticleSentenceIdx = 0;
+
+    function initVoices() {
+      if (!('speechSynthesis' in window)) return;
+      const voices = window.speechSynthesis.getVoices();
+      cachedChineseVoice = voices.find(v => v.lang === 'zh-CN' || v.lang === 'zh_CN' || v.lang.startsWith('zh-Hans')) ||
+                           voices.find(v => v.lang.startsWith('zh')) || null;
+    }
+
+    if ('speechSynthesis' in window) {
+      initVoices();
+      window.speechSynthesis.onvoiceschanged = initVoices;
+    }
+
+    function setGlobalPlaybackRate(rate, btnEl) {
+      globalPlaybackRate = rate;
+      const buttons = document.querySelectorAll('.rate-btn');
+      buttons.forEach(b => {
+        b.className = "rate-btn px-2 py-1 rounded-lg transition hover:text-slate-900";
+      });
+      if (btnEl) {
+        btnEl.className = "rate-btn px-2 py-1 rounded-lg transition bg-white text-rose-600 shadow-2xs font-black";
+      }
+      showToast("⚡", `음성 재생 속도가 ${rate}배속으로 변경되었습니다.`);
+    }
+
+    function globalStopAudio() {
+      stopAllAudio();
+      showToast("⏹", "모든 음성 출력이 중지되었습니다.");
+    }
+
+    function speakChinese(text, onEnd) {
+      if (!('speechSynthesis' in window)) {
+        showToast("⚠️", "현재 브라우저 환경이 음성 재생을 지원하지 않습니다.");
+        if (onEnd) onEnd();
+        return;
+      }
+
+      window.speechSynthesis.cancel();
+
+      if (!text || !text.trim()) {
+        if (onEnd) onEnd();
+        return;
+      }
+
+      const cleanText = text.replace(/<[^>]*>/g, '').trim();
+      const utterance = new SpeechSynthesisUtterance(cleanText);
+      utterance.lang = 'zh-CN';
+      utterance.rate = globalPlaybackRate;
+      utterance.pitch = 1.0;
+
+      if (cachedChineseVoice) {
+        utterance.voice = cachedChineseVoice;
+      }
+
+      utterance.onend = () => {
+        if (onEnd) onEnd();
+      };
+
+      utterance.onerror = (e) => {
+        if (e.error !== 'canceled' && e.error !== 'interrupted') {
+          console.warn("음성 합성 오류:", e);
+        }
+        if (onEnd) onEnd();
+      };
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function stopAllAudio() {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      if (currentPlayingSentenceIdx !== null) {
+        resetSentenceUI(currentPlayingSentenceIdx);
+      }
+      currentPlayingSentenceIdx = null;
+      currentSentenceUtterance = null;
+      isSentencePaused = false;
+      if (isFullArticlePlaying) {
+        isFullArticlePlaying = false;
+        updateFullPlayButtonUI(false);
+      }
+      stopVocabListPlayback();
+    }
+
+    function playArticleHeadlineVoice() {
+      const art = ARTICLES_DATA[currentArticleIndex];
+      if (!art || !art.headlineZh) return;
+      stopAllAudio();
+      showToast("🔊", "헤드라인 원어민 발음을 재생합니다.");
+      speakChinese(art.headlineZh);
+    }
+
+    function highlightSentenceUI(sIdx, state) {
+      const card = document.getElementById(`sentence-card-${sIdx}`);
+      const pill = document.getElementById(`sentence-playing-pill-${sIdx}`);
+      const pillText = document.getElementById(`sentence-playing-text-${sIdx}`);
+      const pauseBtn = document.getElementById(`sentence-pause-btn-${sIdx}`);
+      const loopBtn = document.getElementById(`sentence-loop-btn-${sIdx}`);
+
+      if (!card) return;
+
+      card.classList.remove('ring-4', 'ring-rose-200', 'border-[#e11d48]', 'bg-rose-50/20', 'ring-amber-200', 'border-amber-500', 'bg-amber-50/20', 'ring-purple-200', 'border-purple-500', 'bg-purple-50/20');
+
+      if (state === 'playing') {
+        card.classList.add('ring-4', 'ring-rose-200', 'border-[#e11d48]', 'bg-rose-50/20');
+        if (pill) {
+          pill.className = "flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#e11d48] text-white shadow-xs";
+          if (pillText) pillText.textContent = "재생 중 🎧";
+        }
+        if (pauseBtn) pauseBtn.innerHTML = `<span>⏸</span> 일시정지`;
+      } else if (state === 'paused') {
+        card.classList.add('ring-4', 'ring-amber-200', 'border-amber-500', 'bg-amber-50/20');
+        if (pill) {
+          pill.className = "flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500 text-white shadow-xs";
+          if (pillText) pillText.textContent = "일시정지 중 ⏸";
+        }
+        if (pauseBtn) pauseBtn.innerHTML = `<span>▶</span> 이어듣기`;
+      } else if (state === 'looping') {
+        card.classList.add('ring-4', 'ring-purple-200', 'border-purple-500', 'bg-purple-50/20');
+        if (pill) {
+          pill.className = "flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-purple-600 text-white shadow-xs";
+          if (pillText) pillText.textContent = "반복 재생 중 🔁";
+        }
+        if (loopBtn) {
+          loopBtn.classList.add('bg-purple-100', 'text-purple-700', 'border-purple-300');
+        }
+      }
+    }
+
+    function resetSentenceUI(sIdx) {
+      const card = document.getElementById(`sentence-card-${sIdx}`);
+      const pill = document.getElementById(`sentence-playing-pill-${sIdx}`);
+      const pauseBtn = document.getElementById(`sentence-pause-btn-${sIdx}`);
+      const loopBtn = document.getElementById(`sentence-loop-btn-${sIdx}`);
+
+      if (card) {
+        card.classList.remove('ring-4', 'ring-rose-200', 'border-[#e11d48]', 'bg-rose-50/20', 'ring-amber-200', 'border-amber-500', 'bg-amber-50/20', 'ring-purple-200', 'border-purple-500', 'bg-purple-50/20');
+        card.classList.add('border-slate-200/90', 'bg-white');
+      }
+      if (pill) pill.classList.add('hidden');
+      if (pauseBtn) pauseBtn.innerHTML = `<span>⏸</span> 일시정지`;
+      if (loopBtn && sentenceLoopIdx !== sIdx) {
+        loopBtn.classList.remove('bg-purple-100', 'text-purple-700', 'border-purple-300');
+      }
+    }
+
+    function playSentenceVoice(sIdx, text) {
+      if (sentenceLoopIdx !== null && sentenceLoopIdx !== sIdx) {
+        sentenceLoopIdx = null;
+      }
+      stopAllAudio();
+
+      const cleanText = (text || '').replace(/<[^>]*>/g, '').trim();
+      if (!cleanText) return;
+
+      currentPlayingSentenceIdx = sIdx;
+      isSentencePaused = false;
+
+      highlightSentenceUI(sIdx, sentenceLoopIdx === sIdx ? 'looping' : 'playing');
+
+      const utterance = new SpeechSynthesisUtterance(cleanText);
+      utterance.lang = 'zh-CN';
+      utterance.rate = globalPlaybackRate;
+      if (cachedChineseVoice) utterance.voice = cachedChineseVoice;
+      currentSentenceUtterance = utterance;
+
+      utterance.onend = () => {
+        if (sentenceLoopIdx === sIdx) {
+          setTimeout(() => {
+            if (sentenceLoopIdx === sIdx) {
+              playSentenceVoice(sIdx, text);
+            }
+          }, 400);
+        } else {
+          resetSentenceUI(sIdx);
+          currentPlayingSentenceIdx = null;
+          currentSentenceUtterance = null;
+        }
+      };
+
+      utterance.onerror = (e) => {
+        if (e.error !== 'canceled' && e.error !== 'interrupted') {
+          resetSentenceUI(sIdx);
+          currentPlayingSentenceIdx = null;
+          currentSentenceUtterance = null;
+        }
+      };
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function togglePauseResumeSentence(sIdx, text) {
+      if (!('speechSynthesis' in window)) return;
+
+      if (currentPlayingSentenceIdx === sIdx) {
+        if (window.speechSynthesis.speaking && !window.speechSynthesis.paused && !isSentencePaused) {
+          window.speechSynthesis.pause();
+          isSentencePaused = true;
+          highlightSentenceUI(sIdx, 'paused');
+        } else if (window.speechSynthesis.paused || isSentencePaused) {
+          window.speechSynthesis.resume();
+          isSentencePaused = false;
+          highlightSentenceUI(sIdx, sentenceLoopIdx === sIdx ? 'looping' : 'playing');
+        }
+      } else {
+        playSentenceVoice(sIdx, text);
+      }
+    }
+
+    function stopSentenceVoice(sIdx) {
+      if (sentenceLoopIdx === sIdx) {
+        sentenceLoopIdx = null;
+      }
+      stopAllAudio();
+      resetSentenceUI(sIdx);
+    }
+
+    function toggleSentenceLoop(sIdx, text) {
+      if (sentenceLoopIdx === sIdx) {
+        sentenceLoopIdx = null;
+        stopAllAudio();
+        showToast("🔁", `제 ${sIdx + 1}문장 반복 재생이 해제되었습니다.`);
+      } else {
+        sentenceLoopIdx = sIdx;
+        showToast("🔁", `제 ${sIdx + 1}문장 무한 반복 듣기를 시작합니다.`);
+        playSentenceVoice(sIdx, text);
+      }
+    }
+
+    function playEntireArticle() {
+      const art = ARTICLES_DATA[currentArticleIndex];
+      if (!art || !art.sentences || !art.sentences.length) return;
+
+      stopAllAudio();
+      isFullArticlePlaying = true;
+      fullArticleSentenceIdx = 0;
+
+      updateFullPlayButtonUI(true);
+      showToast("🎧", `${art.badge} 전체 본문 연속 청취를 시작합니다.`);
+
+      function playNextSentence() {
+        if (!isFullArticlePlaying) return;
+        if (fullArticleSentenceIdx >= art.sentences.length) {
+          stopEntireArticle();
+          showToast("✓", "기사 전체 청취가 완료되었습니다.");
+          return;
+        }
+
+        const s = art.sentences[fullArticleSentenceIdx];
+        const speechText = s.zhPlain || s.zh || '';
+        const idx = fullArticleSentenceIdx;
+
+        const card = document.getElementById(`sentence-card-${idx}`);
+        if (card) {
+          card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        currentPlayingSentenceIdx = idx;
+        highlightSentenceUI(idx, 'playing');
+
+        speakChinese(speechText, () => {
+          resetSentenceUI(idx);
+          if (isFullArticlePlaying) {
+            fullArticleSentenceIdx++;
+            setTimeout(playNextSentence, 500);
+          }
+        });
+      }
+
+      playNextSentence();
+    }
+
+    function stopEntireArticle() {
+      isFullArticlePlaying = false;
+      fullArticleSentenceIdx = 0;
+      stopAllAudio();
+      updateFullPlayButtonUI(false);
+    }
+
+    function updateFullPlayButtonUI(isPlaying) {
+      const btn = document.getElementById('fullArticlePlayBtn');
+      if (!btn) return;
+      if (isPlaying) {
+        btn.className = "px-3.5 py-1.5 rounded-full text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 transition flex items-center gap-1.5 shadow-sm animate-pulse";
+        btn.innerHTML = `<span>⏹</span> 전체 듣기 중지`;
+        btn.onclick = stopEntireArticle;
+      } else {
+        btn.className = "px-3.5 py-1.5 rounded-full text-xs font-bold text-[#e11d48] bg-rose-50 border border-rose-200 hover:bg-rose-100 transition flex items-center gap-1.5 shadow-2xs";
+        btn.innerHTML = `<span>▷</span> 기사 전체 본문 연속 듣기`;
+        btn.onclick = playEntireArticle;
+      }
+    }
+
+    let isVocabListPlaying = false;
+    let isVocabListPaused = false;
+    let vocabListCurrentIndex = 0;
+    let vocabListFilteredItems = [];
+    let vocabListTimeoutId = null;
+
+    function updateVocabPlaybackUI(isPlaying, isPaused) {
+      const playBtn = document.getElementById('vocabPlayAllBtn');
+      const playText = document.getElementById('vocabPlayAllText');
+      const pauseBtn = document.getElementById('vocabPauseBtn');
+      const pauseIcon = document.getElementById('vocabPauseIcon');
+      const pauseText = document.getElementById('vocabPauseText');
+
+      if (!playBtn || !pauseBtn) return;
+
+      if (isPlaying) {
+        if (isPaused) {
+          playBtn.className = "px-3.5 py-2 rounded-xl bg-slate-900 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-sm opacity-90";
+          if (playText) playText.textContent = `순차 듣기 (${vocabListCurrentIndex + 1}/${vocabListFilteredItems.length})`;
+
+          pauseBtn.className = "px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-sm ring-2 ring-amber-300";
+          if (pauseIcon) pauseIcon.textContent = "▶";
+          if (pauseText) pauseText.textContent = "이어듣기";
+        } else {
+          playBtn.className = "px-3.5 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-sm animate-pulse";
+          if (playText) playText.textContent = `재생 중... (${vocabListCurrentIndex + 1}/${vocabListFilteredItems.length})`;
+
+          pauseBtn.className = "px-3.5 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold transition flex items-center gap-1.5 shadow-2xs";
+          if (pauseIcon) pauseIcon.textContent = "⏸";
+          if (pauseText) pauseText.textContent = "일시정지";
+        }
+      } else {
+        playBtn.className = "px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95";
+        if (playText) playText.textContent = "현재 목록 순차 듣기";
+
+        pauseBtn.className = "px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-bold transition flex items-center gap-1.5 shadow-2xs";
+        if (pauseIcon) pauseIcon.textContent = "⏸";
+        if (pauseText) pauseText.textContent = "일시정지";
+      }
+    }
+
+    function stopVocabListPlayback() {
+      if (vocabListTimeoutId) {
+        clearTimeout(vocabListTimeoutId);
+        vocabListTimeoutId = null;
+      }
+      isVocabListPlaying = false;
+      isVocabListPaused = false;
+      vocabListCurrentIndex = 0;
+      updateVocabPlaybackUI(false, false);
+    }
+
+    function playAllVocabAudio() {
+      stopAllAudio();
+
+      const searchKeyword = (document.getElementById('vocabSearchInput')?.value || '').trim().toLowerCase();
+      vocabListFilteredItems = VOCABULARY_LIST.filter(v => {
+        const matchesCategory = (selectedVocabCategory === 'all' || v.cat === selectedVocabCategory);
+        const matchesSearch = !searchKeyword || 
+          v.word.toLowerCase().includes(searchKeyword) ||
+          v.pinyin.toLowerCase().includes(searchKeyword) ||
+          v.mean.toLowerCase().includes(searchKeyword);
+        return matchesCategory && matchesSearch;
+      });
+
+      if (!vocabListFilteredItems.length) {
+        showToast("⚠️", "재생할 단어가 검색 결과에 없습니다.");
+        return;
+      }
+
+      isVocabListPlaying = true;
+      isVocabListPaused = false;
+      vocabListCurrentIndex = 0;
+
+      updateVocabPlaybackUI(true, false);
+      showToast("🔊", `단어장 목록 (${vocabListFilteredItems.length}개) 순차 청취를 시작합니다.`);
+
+      function speakNextWord() {
+        if (!isVocabListPlaying || isVocabListPaused) return;
+
+        if (vocabListCurrentIndex >= vocabListFilteredItems.length) {
+          stopVocabListPlayback();
+          showToast("✓", "전체 단어 목록 청취가 완료되었습니다.");
+          return;
+        }
+
+        updateVocabPlaybackUI(true, false);
+        const item = vocabListFilteredItems[vocabListCurrentIndex];
+
+        speakChinese(item.word, () => {
+          if (!isVocabListPlaying || isVocabListPaused) return;
+          vocabListCurrentIndex++;
+          vocabListTimeoutId = setTimeout(speakNextWord, 450);
+        });
+      }
+
+      speakNextWord();
+    }
+
+    function togglePauseResumeVocabList() {
+      if (!('speechSynthesis' in window)) return;
+
+      if (!isVocabListPlaying) {
+        playAllVocabAudio();
+        return;
+      }
+
+      if (!isVocabListPaused) {
+        if (vocabListTimeoutId) {
+          clearTimeout(vocabListTimeoutId);
+          vocabListTimeoutId = null;
+        }
+        if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
+          window.speechSynthesis.pause();
+        }
+        isVocabListPaused = true;
+        updateVocabPlaybackUI(true, true);
+        showToast("⏸", `순차 청취가 일시정지되었습니다. (${vocabListCurrentIndex + 1}/${vocabListFilteredItems.length})`);
+      } else {
+        isVocabListPaused = false;
+        updateVocabPlaybackUI(true, false);
+        showToast("▶", `단어 청취를 이어서 진행합니다. (${vocabListCurrentIndex + 1}/${vocabListFilteredItems.length})`);
+
+        if (window.speechSynthesis.paused) {
+          window.speechSynthesis.resume();
+        } else {
+          function resumeNextWord() {
+            if (!isVocabListPlaying || isVocabListPaused) return;
+            if (vocabListCurrentIndex >= vocabListFilteredItems.length) {
+              stopVocabListPlayback();
+              showToast("✓", "단어 목록 청취가 완료되었습니다.");
+              return;
+            }
+
+            updateVocabPlaybackUI(true, false);
+            const item = vocabListFilteredItems[vocabListCurrentIndex];
+
+            speakChinese(item.word, () => {
+              if (!isVocabListPlaying || isVocabListPaused) return;
+              vocabListCurrentIndex++;
+              vocabListTimeoutId = setTimeout(resumeNextWord, 450);
+            });
+          }
+
+          resumeNextWord();
+        }
+      }
+    }
+
+    function setVocabCategory(cat) {
+      selectedVocabCategory = cat;
+      const cats = ['all', '사회/IT', '경제/산업', '성어/숙어'];
+      cats.forEach(c => {
+        const btn = document.getElementById(`vcat-${c}`);
+        if (!btn) return;
+        if (c === cat) {
+          btn.className = "vcat-btn px-3 py-1.5 rounded-xl text-xs font-bold border transition bg-rose-600 text-white border-rose-600 shadow-2xs";
+        } else {
+          btn.className = "vcat-btn px-3 py-1.5 rounded-xl text-xs font-bold border transition bg-white text-slate-600 border-slate-200 hover:bg-slate-50";
+        }
+      });
+      renderVocabGrid();
+    }
+
+    function filterVocabList() {
+      renderVocabGrid();
+    }
+
+    function renderVocabGrid() {
+      const grid = document.getElementById('vocabGrid');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      const searchKeyword = (document.getElementById('vocabSearchInput')?.value || '').trim().toLowerCase();
+      const filtered = VOCABULARY_LIST.filter(v => {
+        const matchesCategory = (selectedVocabCategory === 'all' || v.cat === selectedVocabCategory);
+        const matchesSearch = !searchKeyword || 
+          v.word.toLowerCase().includes(searchKeyword) ||
+          v.pinyin.toLowerCase().includes(searchKeyword) ||
+          v.mean.toLowerCase().includes(searchKeyword);
+        return matchesCategory && matchesSearch;
+      });
+
+      if (!filtered.length) {
+        grid.innerHTML = `
+          <div class="col-span-full py-12 text-center text-slate-400 text-sm bg-white rounded-3xl border border-slate-200">
+            검색 결과가 없습니다. 다른 검색어를 입력해보세요.
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach(v => {
+        const card = document.createElement('div');
+        card.className = "bg-white p-5 rounded-2xl border border-slate-200/90 shadow-2xs hover:border-rose-300 hover:shadow-md transition flex flex-col justify-between space-y-3 group";
+        card.innerHTML = `
+          <div>
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+              <div class="flex items-center gap-2">
+                <span class="text-[11px] font-mono font-bold text-slate-400">NO. ${String(v.id).padStart(2, '0')}</span>
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-600">${v.cat || '시사'}</span>
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-50 text-rose-600">${v.pos || '어휘'}</span>
+              </div>
+              <div class="flex items-center gap-1">
+                <button onclick="speakChinese('${escapeQuotes(v.word)}')" class="p-1 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition" title="발음 듣기">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
+                </button>
+                <button onclick="toggleVocabStar(this)" class="p-1 text-slate-300 hover:text-amber-500 transition text-base" title="단어 보관">
+                  ☆
+                </button>
+              </div>
+            </div>
+
+            <div class="pt-2">
+              <div class="text-xl sm:text-2xl font-black chinese-text text-slate-900 group-hover:text-rose-600 transition">
+                ${v.word}
+              </div>
+              <div class="text-xs font-mono font-bold text-rose-600 mt-0.5">
+                ${v.pinyin}
+              </div>
+            </div>
+
+            <div class="pt-2 text-xs font-bold text-slate-800 leading-snug">
+              ${v.mean}
+            </div>
+
+            <div class="text-[11px] text-slate-500 leading-relaxed font-medium mt-1">
+              ${v.tip || ''}
+            </div>
+          </div>
+
+          ${v.ex ? `
+            <div class="pt-2 border-t border-slate-100 flex items-start justify-between gap-1 text-[11px] text-slate-600">
+              <div class="chinese-text font-medium text-slate-700">
+                <span class="text-rose-500 font-bold">예:</span> ${v.ex}
+              </div>
+              <button onclick="speakChinese('${escapeQuotes(v.ex)}')" class="text-slate-400 hover:text-rose-600 flex-shrink-0 ml-1 p-0.5" title="예문 발음 듣기">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
+              </button>
+            </div>
+          ` : ''}
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function switchMainTab(tabId) {
+      stopAllAudio();
+      const tabs = ['dashboard', 'articles', 'vocabulary', 'quiz', 'links'];
+      tabs.forEach(t => {
+        const view = document.getElementById(`view-${t}`);
+        const btn = document.getElementById(`nav-btn-${t}`);
+        if (!view || !btn) return;
+        if (t === tabId) {
+          view.classList.remove('hidden');
+          btn.className = "main-tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold border transition whitespace-nowrap bg-slate-900 text-white border-slate-900 shadow-sm";
+        } else {
+          view.classList.add('hidden');
+          btn.className = "main-tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold border transition whitespace-nowrap bg-white text-slate-600 border-slate-200 hover:bg-slate-50";
+        }
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function jumpToArticle(artIndex) {
+      switchMainTab('articles');
+      selectArticle(artIndex);
+    }
+
+    function selectArticle(index) {
+      stopAllAudio();
+      currentArticleIndex = index;
+      for (let i = 0; i < 5; i++) {
+        const tabBtn = document.getElementById(`article-tab-${i}`);
+        if (!tabBtn) continue;
+        if (i === index) {
+          tabBtn.className = "article-tab-btn flex-1 min-w-[110px] py-2.5 px-4 rounded-xl font-extrabold text-sm transition text-center shadow-xs bg-[#e11d48] text-white";
+        } else {
+          tabBtn.className = "article-tab-btn flex-1 min-w-[110px] py-2.5 px-4 rounded-xl font-bold text-sm transition text-center text-slate-600 hover:bg-slate-100";
+        }
+      }
+      renderArticleDetail(index);
+    }
+
+    function renderArticleDetail(index) {
+      const art = ARTICLES_DATA[index];
+      if (!art) return;
+
+      document.getElementById('articleBadgeNumber').textContent = art.badge;
+      document.getElementById('articleCategory').textContent = art.category;
+      const vocabBadge = document.getElementById('vocabTableBadge');
+      if (vocabBadge) vocabBadge.textContent = art.badge;
+
+      // 출처 언론사 원문 링크 렌더링
+      const sourcesContainer = document.getElementById('articleSourcesContainer');
+      sourcesContainer.innerHTML = '';
+      if (art.sources && art.sources.length) {
+        art.sources.forEach((source, idx) => {
+          const linkElem = document.createElement('a');
+          linkElem.href = source.url;
+          linkElem.target = "_blank";
+          linkElem.rel = "noopener noreferrer";
+          linkElem.className = "text-[#e11d48] hover:underline font-bold inline-flex items-center gap-0.5 transition";
+          linkElem.innerHTML = `
+            <span>${source.name}</span>
+            <svg class="w-3 h-3 text-[#e11d48]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+          `;
+          sourcesContainer.appendChild(linkElem);
+          if (idx < art.sources.length - 1) {
+            const sep = document.createElement('span');
+            sep.textContent = " / ";
+            sep.className = "text-slate-300 font-normal";
+            sourcesContainer.appendChild(sep);
+          }
+        });
+      }
+      if (art.date) {
+        const dateSpan = document.createElement('span');
+        dateSpan.className = "text-slate-400 font-normal ml-1";
+        dateSpan.textContent = `(${art.date})`;
+        sourcesContainer.appendChild(dateSpan);
+      }
+
+      // 헤드라인
+      document.getElementById('articleHeadlineZh').textContent = art.headlineZh || '';
+      document.getElementById('articleHeadlinePinyin').textContent = art.headlinePinyin || '';
+      const headlineKoEl = document.getElementById('articleHeadlineKo');
+      if (headlineKoEl) headlineKoEl.textContent = art.headlineKo || '';
+      document.getElementById('articleSummaryKo').textContent = art.summaryKo || '';
+
+      // 본문 문장 리스트 렌더링
