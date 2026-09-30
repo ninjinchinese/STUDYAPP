@@ -1,0 +1,2405 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>닌진중국어 학습 대시보드 (제43기)</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=M+PLUS+Rounded+1c:wght@700;800;900&family=Noto+Sans+KR:wght@400;500;700;800;900&family=Noto+Sans+SC:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    body {
+      font-family: 'Noto Sans KR', 'Noto Sans SC', 'Inter', sans-serif;
+      background-color: #f1f5f9;
+      color: #1e293b;
+    }
+    .font-cute {
+      font-family: 'M PLUS Rounded 1c', 'Noto Sans KR', sans-serif;
+    }
+    .chinese-text {
+      font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    .perspective-1000 {
+      perspective: 1000px;
+    }
+    .transform-style-3d {
+      transform-style: preserve-3d;
+    }
+    .backface-hidden {
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    .rotate-y-180 {
+      transform: rotateY(180deg);
+    }
+    .blind-mode .vocab-meaning-text {
+      filter: blur(5px);
+      user-select: none;
+      transition: filter 0.2s;
+    }
+    .blind-mode .vocab-meaning-text:hover {
+      filter: blur(0);
+    }
+    .match-tile-selected {
+      border-color: #6366f1 !important;
+      background-color: #e0e7ff !important;
+      color: #4338ca !important;
+      transform: scale(1.02);
+    }
+    .match-tile-matched {
+      border-color: #10b981 !important;
+      background-color: #ecfdf5 !important;
+      color: #059669 !important;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-rose-100 selection:text-rose-600">
+
+  <!-- Header: Issue 43 Navigation & Audio Controls -->
+  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-200 px-4 lg:px-8 py-2.5 shadow-sm">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      
+      <!-- Brand & Issue Badge -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-rose-600 to-amber-500 flex items-center justify-center text-white shadow-md shadow-rose-200 font-black text-lg">
+          恁
+        </div>
+        <span class="text-xl font-extrabold text-slate-800 tracking-tight">닌진중국어</span>
+        
+        <!-- 제 43기 Badge -->
+        <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#e11d48] text-white shadow-sm">
+          제 <span id="currentIssueNumber">43</span>기
+        </span>
+
+        <!-- Carrot Mascot Badge -->
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-900 shadow-sm select-none">
+          <svg class="w-4 h-4 text-orange-500 flex-shrink-0 animate-bounce" style="animation-duration: 2.2s;" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M14.5 2.5C14.5 2.5 13.5 5 11 5.5C10.5 4 11 2 12.5 1.5C14 1 14.5 2.5 14.5 2.5Z" fill="#22c55e"/>
+            <path d="M12 4C12 4 10 3.5 9 1.5C8 3 9 5 10.5 5.5C11.5 5.8 12 4 12 4Z" fill="#16a34a"/>
+            <path d="M15.8 7.2C17.2 8.6 17.1 10.9 15.6 12.3L9.5 22C9.1 22.6 8.2 22.6 7.8 22L5.8 18.8C3.8 15.6 4.6 11.4 7.6 9.1L10.7 6.8C12.2 5.6 14.4 5.8 15.8 7.2Z" fill="#f97316"/>
+            <path d="M10 10L13 11" stroke="#ea580c" stroke-width="1.2" stroke-linecap="round"/>
+            <path d="M8 14L11 15" stroke="#ea580c" stroke-width="1.2" stroke-linecap="round"/>
+            <path d="M7 18L9 18.6" stroke="#ea580c" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+          <span class="font-cute text-xs font-black tracking-wide text-orange-600">ニンジン<span class="text-[11px] font-medium text-amber-700 ml-0.5">(닌진)</span></span>
+        </div>
+      </div>
+
+      <!-- Audio Stop & Playback Speed Controls -->
+      <div class="flex items-center gap-2 sm:gap-3 text-xs">
+        <button onclick="globalStopAudio()" class="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-rose-600 text-white font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95" title="재생 중인 모든 음성을 즉각 멈춥니다">
+          <svg class="w-3.5 h-3.5 text-rose-400" fill="currentColor" viewBox="0 0 24 24">
+            <rect x="6" y="6" width="12" height="12" rx="2"></rect>
+          </svg>
+          <span>음성 멈춤</span>
+        </button>
+
+        <div class="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-[11px] font-bold text-slate-600">
+          <span class="px-1.5 text-slate-400 text-[10px] hidden sm:inline">속도</span>
+          <button onclick="setGlobalPlaybackRate(0.5, this)" class="rate-btn px-2 py-1 rounded-lg transition hover:text-slate-900">0.5배</button>
+          <button onclick="setGlobalPlaybackRate(0.75, this)" class="rate-btn px-2 py-1 rounded-lg transition hover:text-slate-900">0.75배</button>
+          <button onclick="setGlobalPlaybackRate(1.0, this)" class="rate-btn px-2 py-1 rounded-lg transition bg-white text-rose-600 shadow-sm font-black">1배</button>
+          <button onclick="setGlobalPlaybackRate(1.2, this)" class="rate-btn px-2 py-1 rounded-lg transition hover:text-slate-900">1.2배</button>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Navigation Bar -->
+  <nav class="bg-white border-b border-slate-200 px-4 lg:px-8">
+    <div class="max-w-7xl mx-auto flex items-center gap-2 overflow-x-auto py-2.5 no-scrollbar">
+      
+      <button onclick="switchMainTab('dashboard')" id="nav-btn-dashboard" class="main-tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold border transition whitespace-nowrap bg-slate-900 text-white border-slate-900 shadow-sm">
+        <i class="fa-solid fa-chart-pie"></i>
+        <span>대시보드</span>
+      </button>
+
+      <button onclick="switchMainTab('articles')" id="nav-btn-articles" class="main-tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold border transition whitespace-nowrap bg-white text-slate-600 border-slate-200 hover:bg-slate-50">
+        <i class="fa-solid fa-newspaper"></i>
+        <span>기사 심층해설 (5大)</span>
+      </button>
+
+      <button onclick="switchMainTab('vocabulary')" id="nav-btn-vocabulary" class="main-tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold border transition whitespace-nowrap bg-white text-slate-600 border-slate-200 hover:bg-slate-50">
+        <i class="fa-solid fa-book-open"></i>
+        <span>100개 핵심 단어장</span>
+        <span class="bg-rose-100 text-rose-700 text-[10px] px-1.5 py-0.5 rounded-full font-extrabold">3D 카드·게임</span>
+      </button>
+
+      <button onclick="switchMainTab('quiz')" id="nav-btn-quiz" class="main-tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold border transition whitespace-nowrap bg-white text-slate-600 border-slate-200 hover:bg-slate-50">
+        <i class="fa-solid fa-graduation-cap"></i>
+        <span>HSK 실전 테스트 (10题)</span>
+      </button>
+
+      <button onclick="switchMainTab('links')" id="nav-btn-links" class="main-tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold border transition whitespace-nowrap bg-white text-slate-600 border-slate-200 hover:bg-slate-50">
+        <i class="fa-solid fa-link"></i>
+        <span>공식 링크 허브</span>
+      </button>
+
+    </div>
+  </nav>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+
+    <!-- TAB 1: 대시보드 (DASHBOARD) - 제43기 -->
+    <section id="view-dashboard" class="space-y-6">
+      
+      <!-- Hero Banner -->
+      <div class="bg-gradient-to-r from-rose-600 via-rose-500 to-amber-500 rounded-3xl p-6 sm:p-8 text-white shadow-lg relative overflow-hidden">
+        <div class="max-w-3xl relative z-10 space-y-2.5">
+          <div class="flex items-center gap-2">
+            <span class="inline-block px-3 py-1 bg-white/20 backdrop-blur rounded-full text-xs font-extrabold tracking-wide uppercase">
+              Today's Briefing &bull; 2026.09.30 (수)
+            </span>
+            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-400 text-amber-950">
+              뉴스레터 제 43기 완벽 해설
+            </span>
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-black leading-tight tracking-tight">
+            닌진중국어 시사 핫이슈 & 원문 완벽 독해 대시보드
+          </h1>
+          <p class="text-rose-100 text-sm sm:text-base font-medium leading-relaxed">
+            드라마 팬덤의 전자상거래 '반품 없는 환불' 악용 사태부터 전세기 띄워 유럽 간 모터사이클팀의 황당한 차량 털이·도난 피해, 음료 뚜껑 미세 누출 결함 잡는 신국가표준 입법예고, 통신 3사 '0원 공짜폰·금융 할부' 기만 영업 전격 중단, 그리고 우옌니 아시안게임 100m 허들 동메달과 감동의 100점 자평까지! 공신력 있는 현지 언론 보도로 실전 중국어를 마스터하세요!
+          </p>
+          <div class="pt-2 flex flex-wrap gap-3">
+            <button onclick="switchMainTab('articles')" class="px-4 py-2 bg-white text-rose-600 font-extrabold rounded-xl shadow-md hover:bg-rose-50 transition text-sm flex items-center gap-1.5">
+              <span>오늘의 5대 기사 강독</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </button>
+            <button onclick="switchMainTab('vocabulary')" class="px-4 py-2 bg-rose-700/60 hover:bg-rose-700 text-white font-bold rounded-xl backdrop-blur transition text-sm">
+              핵심 단어 100선 암기
+            </button>
+            <button onclick="switchMainTab('quiz')" class="px-4 py-2 bg-amber-400 hover:bg-amber-300 text-amber-950 font-extrabold rounded-xl transition text-sm">
+              HSK 실전 퀴즈 10문항
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- 1. 오늘의 歇后语 (9/30 제43기: 黄鼠狼给鸡拜年 —— 没安好心) [7/12] -->
+        <div class="lg:col-span-7 bg-white p-6 rounded-3xl border border-slate-200/90 shadow-sm space-y-4 flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+              <div class="flex items-center gap-2">
+                <span class="w-7 h-7 rounded-xl bg-amber-100 text-amber-700 font-black text-sm flex items-center justify-center">歇</span>
+                <h2 class="font-extrabold text-slate-800 text-base sm:text-lg">오늘의 歇后语 <span class="text-xs font-semibold text-amber-600 ml-1">중국인 애용 필수 해후어</span></h2>
+              </div>
+              <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200">HSK 6급 빈출 언어유희</span>
+            </div>
+
+            <!-- 해후어 표현 박스 -->
+            <div class="p-4 rounded-2xl bg-gradient-to-br from-amber-50/70 to-rose-50/40 border border-amber-200/80 space-y-2">
+              <div class="flex items-start justify-between gap-2">
+                <div>
+                  <div class="text-xl sm:text-2xl font-black chinese-text text-slate-900 tracking-tight flex items-center gap-2">
+                    <span>黄鼠狼给鸡拜年</span>
+                    <span class="text-rose-500 font-mono text-sm">——</span>
+                    <span class="text-[#e11d48]">没安好心</span>
+                  </div>
+                  <div class="text-xs sm:text-sm font-semibold text-rose-600 font-mono mt-0.5">
+                    huáng shǔ láng gěi jī bài nián —— méi ān hǎo xīn
+                  </div>
+                </div>
+                <button onclick="speakChinese('黄鼠狼给鸡拜年，没安好心')" class="p-2 rounded-xl bg-white shadow-sm border border-amber-200 text-amber-700 hover:text-rose-600 hover:bg-rose-50 transition" title="발음 듣기">
+                  <i class="fa-solid fa-volume-high"></i>
+                </button>
+              </div>
+
+              <div class="pt-2 border-t border-amber-200/50 space-y-1">
+                <div class="text-xs sm:text-sm font-bold text-slate-800">
+                  <span class="text-amber-700 mr-1.5">[한국어 의미]</span> 족제비(黄鼠狼)가 닭에게 설날 새해 복 많이 받으라며 정중하게 세배하러 가는 꼴로, 겉으로는 온갖 예의와 혜택을 베푸는 척하지만 속으로는 닭을 잡아먹을 흉계를 꾸미고 있어 <strong>"겉 다르고 속 다른 위선적 호의나 사기성 흑심"</strong>을 날카롭게 비유합니다.
+                </div>
+                <p class="text-xs text-slate-600 leading-relaxed font-medium">
+                  '0원 공짜폰'을 미끼로 고객 몰래 고금리 소액 금융 대출을 묶어 연체 피해를 안긴 통신 대리점들의 기만 상술(모듈 04), '국가 기준 통과'라는 핑계 뒤에 숨어 새는 불량 뚜껑을 납품해 온 음료 부자재 업체의 기만(모듈 03)을 통렬하게 꼬집습니다.
+                </p>
+              </div>
+            </div>
+
+            <!-- 실전 회화 예문 -->
+            <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-1.5">
+              <div class="font-bold text-slate-700 flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+                <span>현지 실전 대화 응용 (제43기 시사 매칭):</span>
+              </div>
+              <div class="chinese-text text-slate-800 font-bold">
+                甲: “路边营业厅拉横幅说‘预存话费免费送最新款顶配手机’，这等好事我也想去办一台！”<br>
+                乙: “天下哪有免费的午餐！那都是悄悄绑定的消费贷款，简直是‘<span class="text-rose-600 underline">黄鼠狼给鸡拜年 —— 没安好心</span>’，一旦逾期就毁了征信，千万别上当！”
+              </div>
+              <div class="text-slate-500">
+                (갑: 대리점에서 '요금 충전 시 최신 풀옵션 폰 무료 증정'이라던데, 이런 횡재가 어디 있어 나도 갈까 봐! / 을: 세상에 공짜 점심이 어딨어! 몰래 묶어둔 소비 대출이라 그야말로 '닭에게 세배하는 족제비(음흉한 흑심)' 꼴인데, 연체되면 신용 날아가니 절대 속지 마!)
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-2 flex items-center justify-between text-xs text-slate-400">
+            <span>💡 歇后语 Tip: 상대방이 파격적인 공짜 혜택이나 과도한 친절을 베풀며 다가올 때 경계심을 일깨우는 대표 해후어</span>
+          </div>
+        </div>
+
+        <!-- 2. 웨이보 실시간 검색어 TOP 5 (9/30 제43기) [5/12] -->
+        <div class="lg:col-span-5 bg-white p-6 rounded-3xl border border-slate-200/90 shadow-sm space-y-3.5 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+              <div class="flex items-center gap-2">
+                <span class="w-7 h-7 rounded-xl bg-red-100 text-red-600 font-black text-sm flex items-center justify-center">热</span>
+                <h2 class="font-extrabold text-slate-800 text-base sm:text-lg">웨이보 실시간 검색어 TOP 5</h2>
+              </div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-red-50 text-red-600 border border-red-200 animate-pulse">LIVE 实时热搜</span>
+            </div>
+
+            <p class="text-xs text-slate-500 mt-2 mb-3">
+              오늘자 뉴스레터 5대 기사와 직결된 현지 SNS 핫이슈 실시간 검색어입니다. 클릭 시 해당 기사로 바로 이동합니다.
+            </p>
+
+            <!-- 실검 1~5위 리스트 -->
+            <div class="space-y-2">
+              <div onclick="jumpToArticle(0)" class="p-3 rounded-2xl border border-rose-200 bg-rose-50/50 hover:bg-rose-100/70 cursor-pointer transition flex items-center justify-between group">
+                <div class="flex items-start gap-2.5 truncate min-w-0 pr-2">
+                  <span class="w-5 h-5 rounded-md bg-red-600 text-white font-black text-xs flex items-center justify-center flex-shrink-0 mt-0.5">1</span>
+                  <div class="truncate">
+                    <div class="font-bold chinese-text text-xs sm:text-sm text-slate-900 group-hover:text-rose-600 truncate">#早春晴朗剧粉仅退款#</div>
+                    <div class="text-[11px] text-slate-500 group-hover:text-slate-700 font-medium truncate mt-0.5">드라마 팬덤 18위안 굿즈 패키지 환불 집단행동</div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-1.5 flex-shrink-0 ml-1">
+                  <span class="text-[10px] font-extrabold px-2 py-0.5 rounded bg-red-500 text-white shadow-xs">爆 980만</span>
+                  <span class="text-xs text-slate-400 group-hover:text-rose-600">&rarr;</span>
+                </div>
+              </div>
+
+              <div onclick="jumpToArticle(1)" class="p-3 rounded-2xl border border-slate-200 hover:border-rose-300 hover:bg-slate-50 cursor-pointer transition flex items-center justify-between group">
+                <div class="flex items-start gap-2.5 truncate min-w-0 pr-2">
+                  <span class="w-5 h-5 rounded-md bg-orange-500 text-white font-black text-xs flex items-center justify-center flex-shrink-0 mt-0.5">2</span>
+                  <div class="truncate">
+                    <div class="font-bold chinese-text text-xs sm:text-sm text-slate-800 group-hover:text-rose-600 truncate">#张雪机车米兰遭破窗洗劫#</div>
+                    <div class="text-[11px] text-slate-500 group-hover:text-slate-700 font-medium truncate mt-0.5">전세기 200명 원정대 밀라노 차량 털이 피해</div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-1.5 flex-shrink-0 ml-1">
+                  <span class="text-[10px] font-extrabold px-2 py-0.5 rounded bg-orange-100 text-orange-700">热 890만</span>
+                  <span class="text-xs text-slate-400 group-hover:text-rose-600">&rarr;</span>
+                </div>
+              </div>
+
+              <div onclick="jumpToArticle(2)" class="p-3 rounded-2xl border border-slate-200 hover:border-rose-300 hover:bg-slate-50 cursor-pointer transition flex items-center justify-between group">
+                <div class="flex items-start gap-2.5 truncate min-w-0 pr-2">
+                  <span class="w-5 h-5 rounded-md bg-amber-500 text-white font-black text-xs flex items-center justify-center flex-shrink-0 mt-0.5">3</span>
+                  <div class="truncate">
+                    <div class="font-bold chinese-text text-xs sm:text-sm text-slate-800 group-hover:text-rose-600 truncate">#大头瓶盖新国标征求意见#</div>
+                    <div class="text-[11px] text-slate-500 group-hover:text-slate-700 font-medium truncate mt-0.5">음료 뚜껑 미세 누출 결함 차단 신표준 고시</div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-1.5 flex-shrink-0 ml-1">
+                  <span class="text-[10px] font-extrabold px-2 py-0.5 rounded bg-amber-100 text-amber-700">热 820만</span>
+                  <span class="text-xs text-slate-400 group-hover:text-rose-600">&rarr;</span>
+                </div>
+              </div>
+
+              <div onclick="jumpToArticle(3)" class="p-3 rounded-2xl border border-slate-200 hover:border-rose-300 hover:bg-slate-50 cursor-pointer transition flex items-center justify-between group">
+                <div class="flex items-start gap-2.5 truncate min-w-0 pr-2">
+                  <span class="w-5 h-5 rounded-md bg-slate-400 text-white font-black text-xs flex items-center justify-center flex-shrink-0 mt-0.5">4</span>
+                  <div class="truncate">
+                    <div class="font-bold chinese-text text-xs sm:text-sm text-slate-800 group-hover:text-rose-600 truncate">#三大运营商叫停0元购机#</div>
+                    <div class="text-[11px] text-slate-500 group-hover:text-slate-700 font-medium truncate mt-0.5">소비자 신용 옭아맨 0원 공짜폰 할부 전면 중단</div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-1.5 flex-shrink-0 ml-1">
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-600">新 750만</span>
+                  <span class="text-xs text-slate-400 group-hover:text-rose-600">&rarr;</span>
+                </div>
+              </div>
+
+              <div onclick="jumpToArticle(4)" class="p-3 rounded-2xl border border-slate-200 hover:border-rose-300 hover:bg-slate-50 cursor-pointer transition flex items-center justify-between group">
+                <div class="flex items-start gap-2.5 truncate min-w-0 pr-2">
+                  <span class="w-5 h-5 rounded-md bg-slate-400 text-white font-black text-xs flex items-center justify-center flex-shrink-0 mt-0.5">5</span>
+                  <div class="truncate">
+                    <div class="font-bold chinese-text text-xs sm:text-sm text-slate-800 group-hover:text-rose-600 truncate">#吴艳妮亚运摘铜给自己打满分#</div>
+                    <div class="text-[11px] text-slate-500 group-hover:text-slate-700 font-medium truncate mt-0.5">3년 전 부정 출발 트라우마 딛고 감동의 동메달</div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-1.5 flex-shrink-0 ml-1">
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-600">沸 710만</span>
+                  <span class="text-xs text-slate-400 group-hover:text-rose-600">&rarr;</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-2 text-[11px] text-slate-400 flex items-center justify-between border-t border-slate-100">
+            <span>출처: 微博热搜榜 / 제43기 시사 키워드 연동</span>
+            <span class="font-mono text-[10px] text-slate-400">Update: 2026.09.30</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- 3. 今日最火金句 명사 정독 명언 [6/12] -->
+        <div class="lg:col-span-6 bg-white p-6 rounded-3xl border border-slate-200/90 shadow-sm space-y-4 flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+              <div class="flex items-center gap-2">
+                <span class="w-7 h-7 rounded-xl bg-purple-100 text-purple-700 font-black text-sm flex items-center justify-center">金</span>
+                <h2 class="font-extrabold text-slate-800 text-base sm:text-lg">今日最火金句 <span class="text-xs font-semibold text-purple-600 ml-1">명사 정독 명언</span></h2>
+              </div>
+              <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-purple-50 text-purple-700 border border-purple-200">인생 회복탄력성 철학</span>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-gradient-to-br from-purple-50/50 via-white to-rose-50/30 border-2 border-purple-200/80 relative space-y-3">
+              <div class="text-3xl font-serif text-purple-300 leading-none">“</div>
+              <p id="goldenQuoteZh" class="chinese-text font-black text-base sm:text-lg text-slate-900 leading-relaxed -mt-4">
+                人生难免经历坎坷与至暗时刻，不必畏惧；只要跨过坎坷、战胜过去的自己，你就是自己的满分英雄。
+              </p>
+              <p id="goldenQuotePinyin" class="text-xs font-mono font-semibold text-purple-600 leading-snug">
+                Rénshēng nánmiǎn jīnglì kǎnkě yǔ zhì'àn shíkè, bú bì wèijù; zhǐyào kuàguò kǎnkě, zhànshèng guòqù de zìjǐ, nǐ jiù shì zìjǐ de mǎnfēn yīngxióng.
+              </p>
+              
+              <div class="pt-3 border-t border-purple-100/80 space-y-1.5">
+                <div class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                  <span class="px-1.5 py-0.2 rounded bg-purple-100 text-purple-700 text-[10px]">정밀 번역</span>
+                  <span>인생을 살다 보면 누구나 험난한 역경과 칠흑 같은 암흑기를 겪기 마련이니, 결코 두려워할 필요가 없습니다. 시련을 당당히 뛰어넘고 과거의 나 자신을 이겨낼 때, 그 순간 당신은 이미 스스로에게 만점짜리 영웅입니다.</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs space-y-1">
+              <div class="font-bold text-slate-700 flex items-center gap-1">
+                <span>📌</span> 고급 작문 핵심 틀 (HSK 6급 구문):
+              </div>
+              <p class="text-slate-600">
+                <code class="bg-purple-100 text-purple-800 px-1.5 py-0.5 rounded font-mono font-bold">……难免经历……，不必畏惧；只要……、战胜……，你就是……</code> (…은 피하기 어려우니 두려워할 필요가 없다; 오직 …하고 ~을 극복할 때 비로소 …이다)
+              </p>
+            </div>
+          </div>
+
+          <div class="pt-2 flex items-center justify-between">
+            <button onclick="speakChinese(document.getElementById('goldenQuoteZh').textContent)" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-purple-50 text-purple-700 hover:bg-purple-100 transition flex items-center gap-1.5 border border-purple-200">
+              <i class="fa-solid fa-volume-high"></i>
+              <span>명언 원음 듣기</span>
+            </button>
+            <button onclick="copyQuoteText()" class="text-xs font-bold text-slate-500 hover:text-purple-600 transition flex items-center gap-1">
+              <span>📋 본문 복사</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 4. 今日实战打卡任务 오늘의 미션 작문 과제 [6/12] -->
+        <div class="lg:col-span-6 bg-white p-6 rounded-3xl border border-slate-200/90 shadow-sm space-y-4 flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+              <div class="flex items-center gap-2">
+                <span class="w-7 h-7 rounded-xl bg-emerald-100 text-emerald-700 font-black text-sm flex items-center justify-center">练</span>
+                <h2 class="font-extrabold text-slate-800 text-base sm:text-lg">今日实战打卡任务 <span class="text-xs font-semibold text-emerald-600 ml-1">오늘의 미션 작문 과제</span></h2>
+              </div>
+              <span id="missionStatusBadge" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">
+                미완료 ⏳
+              </span>
+            </div>
+
+            <div class="p-3.5 rounded-2xl bg-emerald-50/50 border border-emerald-200 text-xs space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-emerald-800">🎯 오늘의 작문 챌린지 (HSK 5~6급 쓰기 실전)</span>
+                <span class="text-slate-400 font-medium">권장 분량: 80~120자</span>
+              </div>
+              <p class="text-slate-700 leading-relaxed">
+                오늘 학습한 핵심 어휘(<strong>‘契约精神’, ‘漏洞’, ‘噱头’, ‘斗志’, ‘涅槃重生’</strong>) 중 3개 이상을 활용하여, 상거래 질서 준수 또는 역경을 극복하는 투지에 대해 중국어로 논평을 작성해 보세요.
+              </p>
+            </div>
+
+            <div class="space-y-1.5">
+              <div class="relative">
+                <textarea id="userMissionInput" rows="3" placeholder="여기에 중국어로 문장을 입력해보세요..." class="w-full p-3 rounded-2xl border border-slate-200 focus:ring-2 focus:ring-emerald-500 focus:outline-none text-xs sm:text-sm chinese-text bg-slate-50/70"></textarea>
+                <div class="absolute right-3 bottom-3 text-[11px] text-slate-400 font-mono" id="missionCharCount">0 자</div>
+              </div>
+            </div>
+
+            <div id="missionFeedbackBox" class="hidden p-3.5 rounded-2xl bg-white border border-emerald-300 text-xs space-y-2">
+              <div class="flex items-center justify-between font-bold">
+                <span class="text-emerald-700 flex items-center gap-1">
+                  <span>🎉</span> 미션 인증 완료 & 피드백
+                </span>
+                <span id="missionScoreTag" class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px]">100점 탁월</span>
+              </div>
+              <div id="missionFeedbackText" class="text-slate-600 leading-relaxed"></div>
+              <div class="p-2.5 rounded-xl bg-slate-50 text-[11px] text-slate-600 space-y-0.5">
+                <div class="font-bold text-slate-700">⭐ 원어민 추천 모범 문장:</div>
+                <div class="chinese-text font-bold text-slate-800">“无论是面对商家以虚假噱头诱导消费的制度漏洞，还是身处人生低谷面临重重坎坷，我们都需要秉持契约精神与坚韧斗志。唯有敢于直面挑战、战胜内心的恐惧，才能在风雨洗礼中完成自我救赎与涅槃重生。”</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-2 flex items-center justify-between border-t border-slate-100">
+            <span class="text-xs text-slate-400">매일 1문장 작문이 HSK 고득점의 지름길입니다.</span>
+            <div class="flex gap-2">
+              <button onclick="loadMissionSample()" class="px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 transition border border-slate-200">
+                예문 불러오기
+              </button>
+              <button onclick="submitMissionTask()" class="px-4 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition">
+                작문 제출 & 실전 타카
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Quick Links row -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 pt-2">
+        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-4 cursor-pointer hover:border-rose-300 transition" onclick="switchMainTab('articles')">
+          <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center font-bold text-xl">📰</div>
+          <div>
+            <div class="text-xs font-semibold text-slate-500">엄선된 실시간 기사</div>
+            <div class="text-xl font-extrabold text-slate-800">5편 완벽 해설</div>
+          </div>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-4 cursor-pointer hover:border-amber-300 transition" onclick="switchMainTab('vocabulary')">
+          <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold text-xl">🥕</div>
+          <div>
+            <div class="text-xs font-semibold text-slate-500">핵심 단어장 & 발음</div>
+            <div class="text-xl font-extrabold text-slate-800">100개 고급어휘</div>
+          </div>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-4 cursor-pointer hover:border-blue-300 transition" onclick="switchMainTab('quiz')">
+          <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-xl">🎯</div>
+          <div>
+            <div class="text-xs font-semibold text-slate-500">실전 평가 퀴즈</div>
+            <div class="text-xl font-extrabold text-slate-800">HSK 5~6급 10문항</div>
+          </div>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center gap-4 cursor-pointer hover:border-emerald-300 transition" onclick="switchMainTab('links')">
+          <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-xl">🔗</div>
+          <div>
+            <div class="text-xs font-semibold text-slate-500">원문 출처 직통 링크</div>
+            <div class="text-xl font-extrabold text-slate-800">100% 공신력 검증</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Compact Standalone HTML Download Bar -->
+      <div class="pt-4 pb-2 flex flex-col sm:flex-row items-center justify-between gap-3 p-4 rounded-2xl bg-white border border-slate-200 text-xs shadow-sm">
+        <div class="flex items-center gap-2 text-slate-600 font-medium">
+          <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+          <span>현재 제 43기 대시보드(기사 5편, 100단어, 실검, HSK 10문항)를 오프라인용 단일 HTML 파일로 영구 소장하세요.</span>
+        </div>
+        <button onclick="exportStandaloneHtml()" class="px-3.5 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95 text-xs whitespace-nowrap" title="현재 학습 대시보드를 오프라인 영구 보관용 HTML 파일로 저장합니다">
+          <i class="fa-solid fa-download"></i>
+          <span>소장본(HTML) 저장</span>
+        </button>
+      </div>
+
+    </section>
+
+    <!-- TAB 2: 기사 심층해설 (ARTICLES) - 제43기 -->
+    <section id="view-articles" class="hidden space-y-6">
+
+      <!-- 서브 탭: 기사 01 ~ 기사 05 (제43기 토픽) -->
+      <div class="bg-white p-2 rounded-2xl border border-slate-200/90 shadow-sm flex items-center gap-2 overflow-x-auto no-scrollbar">
+        <button onclick="selectArticle(0)" id="article-tab-0" class="article-tab-btn flex-1 min-w-[120px] py-2.5 px-4 rounded-xl font-extrabold text-sm transition text-center shadow-xs bg-[#e11d48] text-white">
+          기사 <span class="font-black">01</span> (드라마 仅退款)
+        </button>
+        <button onclick="selectArticle(1)" id="article-tab-1" class="article-tab-btn flex-1 min-w-[120px] py-2.5 px-4 rounded-xl font-bold text-sm transition text-center text-slate-600 hover:bg-slate-100">
+          기사 <span class="font-black">02</span> (밀라노 차량 도난)
+        </button>
+        <button onclick="selectArticle(2)" id="article-tab-2" class="article-tab-btn flex-1 min-w-[120px] py-2.5 px-4 rounded-xl font-bold text-sm transition text-center text-slate-600 hover:bg-slate-100">
+          기사 <span class="font-black">03</span> (음료뚜껑 신국가표준)
+        </button>
+        <button onclick="selectArticle(3)" id="article-tab-3" class="article-tab-btn flex-1 min-w-[120px] py-2.5 px-4 rounded-xl font-bold text-sm transition text-center text-slate-600 hover:bg-slate-100">
+          기사 <span class="font-black">04</span> (통신 0원폰 중단)
+        </button>
+        <button onclick="selectArticle(4)" id="article-tab-4" class="article-tab-btn flex-1 min-w-[120px] py-2.5 px-4 rounded-xl font-bold text-sm transition text-center text-slate-600 hover:bg-slate-100">
+          기사 <span class="font-black">05</span> (우옌니 아시안게임 동)
+        </button>
+      </div>
+
+      <!-- 기사 본문 상세 카드 -->
+      <article class="bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-8 lg:p-10 shadow-sm space-y-6">
+
+        <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-100">
+          <div class="flex flex-wrap items-center gap-2.5">
+            <span id="articleBadgeNumber" class="px-3 py-1 rounded-md text-xs font-black bg-[#e11d48] text-white">
+              기사 01
+            </span>
+            <span id="articleCategory" class="px-3 py-1 rounded-md text-xs font-extrabold bg-slate-100 text-slate-700">
+              SNS 실검 1위 & 핫이슈
+            </span>
+          </div>
+
+          <div class="flex items-center gap-1.5 text-xs text-slate-600 font-medium bg-slate-50 px-3.5 py-1.5 rounded-xl border border-slate-200/80 shadow-sm">
+            <span class="text-slate-400 font-normal">공식 원문 출처:</span>
+            <span id="articleSourcesContainer" class="flex items-center gap-1.5"></span>
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          <div class="flex items-start justify-between gap-4">
+            <h2 id="articleHeadlineZh" class="text-2xl sm:text-3xl font-black chinese-text text-slate-900 tracking-tight leading-snug"></h2>
+            <button onclick="playArticleHeadlineVoice()" class="flex-shrink-0 p-2.5 rounded-2xl bg-rose-50 text-rose-600 hover:bg-rose-100 transition shadow-xs" title="헤드라인 중국어 발음 듣기">
+              <i class="fa-solid fa-volume-high text-lg"></i>
+            </button>
+          </div>
+          <div id="articleHeadlinePinyin" class="text-xs sm:text-sm font-semibold text-rose-600 font-mono tracking-wide"></div>
+          <div class="pt-2 border-t border-slate-100">
+            <div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-slate-100 text-slate-600 text-[11px] font-bold">
+              <span>🇰🇷 한국어 제목:</span>
+            </div>
+            <p id="articleHeadlineKo" class="text-sm sm:text-base font-bold text-slate-800 mt-1 leading-snug"></p>
+          </div>
+        </div>
+
+        <div class="border-l-4 border-[#e11d48] bg-rose-50/40 p-4 sm:p-5 rounded-r-2xl">
+          <div class="flex items-start gap-2.5">
+            <span class="text-base flex-shrink-0">⭐</span>
+            <div>
+              <span class="font-extrabold text-sm sm:text-base text-slate-900 mr-1">명사 한마디 핵심 포인트:</span>
+              <span id="articleSummaryKo" class="text-sm sm:text-base text-slate-700 font-medium leading-relaxed"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 본문 문장별 중국어/병음/한국어 번역 및 음성 제어 박스 -->
+        <div class="space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <h3 class="font-extrabold text-slate-800 text-lg flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-slate-700"></span>
+              심층 강독 및 문장 단위 정밀 해설 (전체 본문 수록)
+            </h3>
+            <div class="flex items-center gap-2">
+              <button id="fullArticlePlayBtn" onclick="playEntireArticle()" class="px-3.5 py-1.5 rounded-full text-xs font-bold text-[#e11d48] bg-rose-50 border border-rose-200 hover:bg-rose-100 transition flex items-center gap-1.5 shadow-sm" title="1번 문장부터 마지막 문장까지 순차적으로 청취합니다">
+                <span>▷</span> 기사 전체 본문 연속 듣기
+              </button>
+              <span class="text-xs text-slate-400 font-medium hidden sm:inline">문장을 누르면 원어민 발음과 함께 하이라이트됩니다</span>
+            </div>
+          </div>
+
+          <div id="articleSentencesList" class="space-y-4"></div>
+        </div>
+
+        <!-- 본 기사 출현 핵심 20대 어휘 암기장 -->
+        <div class="pt-6 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-2.5">
+              <span id="vocabTableBadge" class="px-2.5 py-0.5 rounded-full text-xs font-black bg-[#e11d48] text-white">
+                기사 01
+              </span>
+              <h3 class="text-base sm:text-lg font-black text-slate-800 tracking-tight">
+                본 기사 출현 핵심 <span class="text-[#e11d48]">20대 어휘</span> 암기장 <span class="text-xs font-semibold text-slate-400 font-normal">(출현도 100% 검증)</span>
+              </h3>
+            </div>
+            <button onclick="playAllArticleVocab()" class="px-3 py-1.5 rounded-full text-xs font-bold text-[#e11d48] bg-rose-50 border border-rose-200 hover:bg-rose-100 transition flex items-center gap-1.5 shadow-sm">
+              <span>▷</span> 이 기사 20단어 연속 청취
+            </button>
+          </div>
+
+          <!-- 어휘 표 -->
+          <div class="overflow-x-auto border border-slate-200/90 rounded-2xl shadow-sm bg-white">
+            <table class="w-full text-left text-xs border-collapse min-w-[780px]">
+              <thead>
+                <tr class="bg-[#f0f4f9] text-slate-600 font-bold border-b border-slate-200">
+                  <th class="py-3 px-3 text-center w-12">NO</th>
+                  <th class="py-3 px-4 w-28">어휘</th>
+                  <th class="py-3 px-4 w-32">병음</th>
+                  <th class="py-3 px-4 w-32">품사</th>
+                  <th class="py-3 px-5">규범 한국어 해석</th>
+                  <th class="py-3 px-5">어맥 실전 팁</th>
+                  <th class="py-3 px-4 text-center w-24">발음</th>
+                </tr>
+              </thead>
+              <tbody id="articleVocabTableBody" class="divide-y divide-slate-100"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </article>
+    </section>
+
+    <!-- TAB 3: 100대 핵심 단어장 (VOCABULARY) -->
+    <section id="view-vocabulary" class="hidden space-y-6">
+
+      <div class="bg-white p-6 rounded-3xl border border-slate-200/90 shadow-sm space-y-5">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-xl">📖</span>
+              <h2 class="text-xl font-black text-slate-800">뉴스레터 100개 핵심 단어장</h2>
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-100 text-rose-700">제 43기 완벽 수록</span>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-500 mt-1">
+              오늘자 시사 뉴스레터에 등장한 100대 핵심 단어(2201~2300번)를 3D 플래시카드, 스피드 매칭 게임, 가리기 테스트로 정복하세요.
+            </p>
+          </div>
+
+          <div class="flex items-center bg-slate-100 p-1.5 rounded-2xl border border-slate-200 text-xs font-bold">
+            <button onclick="switchVocabMode('flashcards')" id="vocab-mode-flashcards" class="vocab-mode-btn px-4 py-2 rounded-xl transition bg-white text-rose-600 shadow-sm flex items-center gap-1.5">
+              <span>🃏 3D 플래시카드</span>
+            </button>
+            <button onclick="switchVocabMode('list')" id="vocab-mode-list" class="vocab-mode-btn px-4 py-2 rounded-xl transition text-slate-600 hover:text-slate-900 flex items-center gap-1.5">
+              <span>📋 100선 전체 단어장</span>
+            </button>
+            <button onclick="switchVocabMode('match')" id="vocab-mode-match" class="vocab-mode-btn px-4 py-2 rounded-xl transition text-slate-600 hover:text-slate-900 flex items-center gap-1.5">
+              <span>🎮 스피드 짝맞추기</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-100 text-xs">
+          <div class="flex items-center gap-3">
+            <span class="font-bold text-slate-700">전체 학습 진도율:</span>
+            <div class="w-36 sm:w-48 h-2.5 rounded-full bg-slate-100 overflow-hidden">
+              <div id="vocabProgressBar" class="h-full bg-gradient-to-r from-rose-500 to-amber-500 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+            <span id="vocabProgressText" class="font-mono font-bold text-rose-600">0 / 100</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="resetVocabProgress()" class="text-slate-400 hover:text-rose-600 transition text-[11px] font-medium">진도 초기화</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 모드 1: 🃏 3D 플래시카드 영역 -->
+      <div id="vocab-view-flashcards" class="space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3 bg-white p-4 rounded-2xl border border-slate-200 text-xs">
+          <div class="flex items-center gap-1.5 overflow-x-auto">
+            <span class="text-slate-400 font-bold mr-1">기사 범위:</span>
+            <button onclick="filterFlashcards('all')" id="fc-filter-all" class="fc-filter-btn px-3 py-1.5 rounded-xl font-bold transition bg-rose-600 text-white">전체 (100개)</button>
+            <button onclick="filterFlashcards(0)" id="fc-filter-0" class="fc-filter-btn px-3 py-1.5 rounded-xl font-bold transition bg-slate-100 text-slate-600 hover:bg-slate-200">기사 01 (20개)</button>
+            <button onclick="filterFlashcards(1)" id="fc-filter-1" class="fc-filter-btn px-3 py-1.5 rounded-xl font-bold transition bg-slate-100 text-slate-600 hover:bg-slate-200">기사 02 (20개)</button>
+            <button onclick="filterFlashcards(2)" id="fc-filter-2" class="fc-filter-btn px-3 py-1.5 rounded-xl font-bold transition bg-slate-100 text-slate-600 hover:bg-slate-200">기사 03 (20개)</button>
+            <button onclick="filterFlashcards(3)" id="fc-filter-3" class="fc-filter-btn px-3 py-1.5 rounded-xl font-bold transition bg-slate-100 text-slate-600 hover:bg-slate-200">기사 04 (20개)</button>
+            <button onclick="filterFlashcards(4)" id="fc-filter-4" class="fc-filter-btn px-3 py-1.5 rounded-xl font-bold transition bg-slate-100 text-slate-600 hover:bg-slate-200">기사 05 (20개)</button>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="shuffleFlashcards()" class="px-3 py-1.5 rounded-xl border border-slate-200 hover:bg-slate-100 font-bold text-slate-700 transition flex items-center gap-1">
+              <span>🔀 무작위 섞기</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="max-w-xl mx-auto py-4">
+          <div class="perspective-1000 w-full h-80 sm:h-96 cursor-pointer select-none" onclick="flipFlashcard()">
+            <div id="flashcardInner" class="transform-style-3d relative w-full h-full duration-500 transition-transform">
+              
+              <!-- 카드 앞면 -->
+              <div class="backface-hidden absolute inset-0 bg-gradient-to-br from-white via-slate-50 to-rose-50/30 rounded-3xl border-2 border-rose-200/80 shadow-lg p-6 sm:p-8 flex flex-col justify-between">
+                <div class="flex items-center justify-between text-xs">
+                  <span id="fcNumberBadge" class="px-2.5 py-0.5 rounded-full font-mono font-bold bg-rose-100 text-rose-700">NO. 01 / 100</span>
+                  <span id="fcArticleBadge" class="px-2 py-0.5 rounded bg-slate-100 text-slate-600 font-bold">기사 01</span>
+                </div>
+
+                <div class="text-center space-y-3 my-auto">
+                  <div id="fcWord" class="chinese-text font-black text-4xl sm:text-5xl text-slate-900 tracking-tight">--</div>
+                  <div id="fcPinyin" class="font-mono text-base sm:text-lg font-bold text-rose-600">--</div>
+                  <div class="pt-2">
+                    <button onclick="event.stopPropagation(); playCurrentFlashcardVoice()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 font-bold text-xs shadow-xs transition">
+                      <i class="fa-solid fa-volume-high"></i>
+                      <span>발음 듣기</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="text-center text-xs text-slate-400 font-medium">
+                  👆 카드를 누르면 뜻과 상세 해설이 뒤집힙니다
+                </div>
+              </div>
+
+              <!-- 카드 뒷면 -->
+              <div class="backface-hidden rotate-y-180 absolute inset-0 bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-3xl border-2 border-slate-700 shadow-lg p-6 sm:p-8 flex flex-col justify-between">
+                <div class="flex items-center justify-between text-xs">
+                  <span id="fcBackPos" class="px-2.5 py-0.5 rounded-full bg-rose-500/30 text-rose-300 font-bold border border-rose-500/40">어휘</span>
+                  <span class="text-slate-400">뒷면 상세 풀이</span>
+                </div>
+
+                <div class="space-y-3 my-auto">
+                  <div class="space-y-1">
+                    <span class="text-[11px] font-bold text-rose-400">규범 한국어 해석</span>
+                    <div id="fcMean" class="font-bold text-lg sm:text-xl text-white leading-snug">--</div>
+                  </div>
+
+                  <div class="p-3 rounded-2xl bg-white/10 text-xs space-y-1 text-slate-200">
+                    <div class="font-bold text-amber-300">💡 어맥 실전 팁:</div>
+                    <div id="fcTip" class="leading-relaxed text-slate-300">--</div>
+                  </div>
+
+                  <div id="fcExBox" class="text-xs text-slate-300 border-t border-white/10 pt-2">
+                    <span class="text-rose-400 font-bold">분류:</span> <span id="fcEx" class="chinese-text">--</span>
+                  </div>
+                </div>
+
+                <div class="text-center text-xs text-slate-400 font-medium">
+                  👆 다시 누르면 앞면으로 회전합니다
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between gap-3 mt-4">
+            <button onclick="prevFlashcard()" class="px-4 py-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-100 font-bold text-slate-700 text-xs transition flex items-center gap-1">
+              <span>&larr; 이전 단어</span>
+            </button>
+            <button onclick="markFlashcardLearned()" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition shadow-sm flex items-center gap-1.5">
+              <span>✓ 외웠어요!</span>
+            </button>
+            <button onclick="nextFlashcard()" class="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs transition flex items-center gap-1">
+              <span>다음 단어 &rarr;</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 모드 2: 📋 100선 전체 단어장 목록 영역 -->
+      <div id="vocab-view-list" class="hidden space-y-4">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-3 bg-white p-4 rounded-2xl border border-slate-200">
+          <div class="flex items-center gap-2">
+            <button id="vocabPlayAllBtn" onclick="playAllVocabAudio()" class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95">
+              <i class="fa-solid fa-play text-rose-400"></i>
+              <span id="vocabPlayAllText">현재 목록 순차 듣기</span>
+            </button>
+
+            <button id="vocabPauseBtn" onclick="togglePauseResumeVocabList()" class="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
+              <span id="vocabPauseIcon">⏸</span>
+              <span id="vocabPauseText">일시정지</span>
+            </button>
+          </div>
+
+          <div class="flex items-center gap-2 text-xs font-bold text-slate-700">
+            <span>🙈 한국어 뜻 가리기 (셀프 시험):</span>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" id="toggleHideMeanings" onchange="toggleMeaningVisibility()" class="sr-only peer">
+              <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-rose-600"></div>
+            </label>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center gap-3">
+          <div class="relative w-full sm:flex-1">
+            <input type="text" id="vocabSearchInput" oninput="filterVocabList()" placeholder="한자, 병음, 한국어 뜻 검색..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 bg-white">
+            <i class="fa-solid fa-magnifying-glass text-slate-400 absolute left-3.5 top-3.5"></i>
+          </div>
+          <div class="flex items-center gap-1.5 w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0">
+            <button onclick="setVocabCategory('all')" id="vcat-all" class="vcat-btn px-3 py-1.5 rounded-xl text-xs font-bold border transition bg-rose-600 text-white border-rose-600">전체보기</button>
+            <button onclick="setVocabCategory('전자상거래/문화')" id="vcat-전자상거래/문화" class="vcat-btn px-3 py-1.5 rounded-xl text-xs font-bold border transition bg-white text-slate-600 border-slate-200 hover:bg-slate-50">전자상거래/문화</button>
+            <button onclick="setVocabCategory('스포츠/해외치안')" id="vcat-스포츠/해외치안" class="vcat-btn px-3 py-1.5 rounded-xl text-xs font-bold border transition bg-white text-slate-600 border-slate-200 hover:bg-slate-50">스포츠/해외치안</button>
+            <button onclick="setVocabCategory('식품안전/기술표준')" id="vcat-식품안전/기술표준" class="vcat-btn px-3 py-1.5 rounded-xl text-xs font-bold border transition bg-white text-slate-600 border-slate-200 hover:bg-slate-50">식품안전/기술표준</button>
+            <button onclick="setVocabCategory('통신소비/금융규제')" id="vcat-통신소비/금융규제" class="vcat-btn px-3 py-1.5 rounded-xl text-xs font-bold border transition bg-white text-slate-600 border-slate-200 hover:bg-slate-50">통신소비/금융규제</button>
+            <button onclick="setVocabCategory('육상휴먼/감동부활')" id="vcat-육상휴먼/감동부활" class="vcat-btn px-3 py-1.5 rounded-xl text-xs font-bold border transition bg-white text-slate-600 border-slate-200 hover:bg-slate-50">육상휴먼/감동부활</button>
+          </div>
+        </div>
+
+        <div id="vocabGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+      </div>
+
+      <!-- 모드 3: 🎮 스피드 단어 짝맞추기 게임 영역 -->
+      <div id="vocab-view-match" class="hidden space-y-4">
+        <div class="bg-white p-6 rounded-3xl border border-slate-200 space-y-4 text-center max-w-2xl mx-auto">
+          <div class="space-y-1">
+            <h3 class="text-lg font-black text-slate-800">🎮 스피드 한자-의미 짝맞추기 챌린지</h3>
+            <p class="text-xs text-slate-500">한자 카드와 올바른 한국어 뜻 카드를 연속해서 선택하여 짝을 맞춰보세요!</p>
+          </div>
+
+          <div class="flex items-center justify-center gap-6 text-xs font-bold text-slate-700 py-1 border-y border-slate-100">
+            <div>맞춘 개수: <span id="matchScore" class="text-rose-600 font-mono text-sm">0</span> / 6</div>
+            <div>남은 시간: <span id="matchTimer" class="text-amber-600 font-mono text-sm">60</span>초</div>
+            <button onclick="startMatchGame()" class="px-3 py-1 bg-slate-900 text-white rounded-lg hover:bg-rose-600 transition">새 게임 시작</button>
+          </div>
+
+          <div id="matchGameGrid" class="grid grid-cols-3 sm:grid-cols-4 gap-2.5 pt-2"></div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- TAB 4: HSK 실전 테스트 (QUIZ) - 제43기 -->
+    <section id="view-quiz" class="hidden space-y-6">
+      <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/90 shadow-sm space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-100">
+          <div>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800">
+              뉴스레터 제 43기 연계 실전 평가
+            </span>
+            <h2 class="text-xl font-extrabold text-slate-800 mt-1">HSK 5~6급 실전 독해·어휘 모의 테스트 (全中文 10题)</h2>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold text-slate-500">현재 점수:</span>
+            <span id="quizScoreText" class="text-lg font-black text-rose-600 font-mono">0 / 10</span>
+          </div>
+        </div>
+
+        <div id="quizContainer" class="space-y-8"></div>
+
+        <div class="pt-4 flex justify-end">
+          <button onclick="resetQuiz()" class="px-4 py-2 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-600 text-xs font-bold transition">
+            다시 풀기
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: 공식 링크 허브 (LINKS) - 제43기 -->
+    <section id="view-links" class="hidden space-y-6">
+      <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/90 shadow-sm space-y-6">
+        <div>
+          <h2 class="text-xl font-extrabold text-slate-800 flex items-center gap-2">
+            <span>🔗</span> 중국 주요 언론사 및 제43기 공식 링크 허브
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-500 mt-1">
+            닌진중국어 제43기 뉴스레터에 인용된 공식 중국 언론 매체 원문 바로가기입니다.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <a href="https://www.thepaper.cn/" target="_blank" rel="noopener noreferrer" class="p-5 rounded-2xl border border-slate-200 hover:border-rose-300 hover:shadow-md transition bg-gradient-to-br from-white to-slate-50 group flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-blue-100 text-blue-700">기사 01~05 종합 보도</span>
+                <i class="fa-solid fa-arrow-up-right-from-square text-slate-400 group-hover:text-rose-600 transition"></i>
+              </div>
+              <h3 class="chinese-text font-black text-lg text-slate-800 mt-3 group-hover:text-rose-600 transition">澎湃新闻 (The Paper)</h3>
+              <p class="text-xs text-slate-500 mt-1">드라마 팬덤 仅退款 사태 / 밀라노 차량 털이 / 뚜껑 신국가표준 / 0원폰 금융할부 중단 / 우옌니 허들 동메달</p>
+            </div>
+            <div class="text-[11px] font-mono text-slate-400 mt-4">thepaper.cn &rarr;</div>
+          </a>
+
+          <a href="https://www.cctv.com/" target="_blank" rel="noopener noreferrer" class="p-5 rounded-2xl border border-rose-200 bg-rose-50/40 hover:border-rose-400 hover:shadow-md transition group flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-rose-600 text-white">기사 03·05 공영 보도</span>
+                <i class="fa-solid fa-arrow-up-right-from-square text-rose-500 group-hover:translate-x-0.5 transition"></i>
+              </div>
+              <h3 class="chinese-text font-black text-lg text-slate-900 mt-3 group-hover:text-rose-600 transition">央视网 (CCTV.com)</h3>
+              <p class="text-xs text-slate-600 mt-1">국가시장감독관리총국 표준화 공고 및 아시안게임 육상 결승 감동 실황</p>
+            </div>
+            <div class="text-[11px] font-mono text-rose-600 font-bold mt-4">cctv.com &rarr;</div>
+          </a>
+
+          <a href="https://www.kankanews.com/" target="_blank" rel="noopener noreferrer" class="p-5 rounded-2xl border border-slate-200 hover:border-rose-300 hover:shadow-md transition bg-gradient-to-br from-white to-slate-50 group flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between">
+                <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-emerald-100 text-emerald-700">기사 02 해외 시사</span>
+                <i class="fa-solid fa-arrow-up-right-from-square text-slate-400 group-hover:text-rose-600 transition"></i>
+              </div>
+              <h3 class="chinese-text font-black text-lg text-slate-800 mt-3 group-hover:text-rose-600 transition">看看新闻 (Kankan News)</h3>
+              <p class="text-xs text-slate-500 mt-1">장쉐기차 200명 전세기 유럽 출전 직후 이탈리아 밀라노 차량 도난 사건 단독 보도</p>
+            </div>
+            <div class="text-[11px] font-mono text-slate-400 mt-4">kankanews.com &rarr;</div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Toast Notification (Replaces window.alert) -->
+  <div id="toastNotification" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 pointer-events-none transition-all duration-300 bg-slate-900/95 text-white text-xs font-semibold px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-2.5 border border-slate-700 backdrop-blur">
+    <span class="text-base" id="toastIcon">📥</span>
+    <span id="toastMessage">알림 내용</span>
+  </div>
+
+  <footer class="bg-white border-t border-slate-200 py-6 px-4 text-center text-xs text-slate-400">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div class="flex items-center gap-2">
+        <span class="font-cute font-bold text-orange-500">ニンジン 닌진중국어</span>
+        <span>&copy; 2026 스마트 뉴스레터 학습 플랫폼 (제43기). All rights reserved.</span>
+      </div>
+      <div class="flex items-center gap-4 font-medium text-slate-500">
+        <span>Web Speech TTS 실시간 발음 지원</span>
+        <span>공신력 있는 현지 언론사 원문 100% 매핑</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* 제43기 (2026.09.30) 5대 기사 완벽 데이터베이스 */
+    const ARTICLES_DATA = [
+      {
+        id: 0,
+        badge: "기사 01",
+        category: "SNS 실검 1위 & 핫이슈",
+        sources: [
+          { name: "澎湃新闻 · 澎湃号", url: "https://www.thepaper.cn" },
+          { name: "中国蓝新闻", url: "https://www.thepaper.cn" }
+        ],
+        date: "2026-09-30",
+        headlineZh: "“仅退款的风终于吹到了影视界”冲上微博热搜第一！电商售后机制被挪作饭圈施压工具，引发全网契约精神大讨论",
+        headlinePinyin: "“Jǐn tuìkuǎn de fēng zhōngyú chuī dào le yǐngshìjiè” chōng shàng Wēibó rèsōu dì-yī! Diànshāng shòuhòu jīzhì bèi nuózuò fànquān shīyā gōngjù, yǐnfā quánwǎng qìyuē jīngshén dà tǎolùn",
+        headlineKo: "‘반품 없는 환불 바람이 영상업계까지 불어닥쳤다’ 실검 1위! 전자상거래 제도가 팬덤의 보복 압박 무기로 악용되며 계약 윤리 논쟁 촉발",
+        summaryKo: "소비자 보호를 위해 도입된 전자상거래의 '반품 없는 환불(仅退款)' 제도가 드라마 팬덤의 배우 사생활 불만 표출과 제작사 압박 무기로 악용되어 실검 1위에 오르며 상거래 계약 윤리 논쟁을 촉발했습니다.",
+        sentences: [
+          {
+            num: 1,
+            zh: "近日，“仅退款的风终于吹到了影视界”与“早春晴朗剧粉仅退款”话题以极高热度冲上微博热搜榜首。",
+            pinyin: "Jìnrì, “jǐn tuìkuǎn de fēng zhōngyú chuī dào le yǐngshìjiè” yǔ “zǎochūn qínglǎng jùfěn jǐn tuìkuǎn” huàtí yǐ jí gāo rèdù chōng shàng Wēibó rèsōu bǎngshǒu.",
+            ko: "최근 '전자상거래의 반품 없는 환불(仅退款) 바람이 마침내 영상 엔터테인먼트업계까지 불어닥쳤다'는 소식과 '드라마 조춘청랑 팬들의 단체 환불 사태' 이슈가 웨이보 실시간 검색어 1위에 올랐습니다."
+          },
+          {
+            num: 2,
+            zh: "事件起因于部分剧粉因对主演现实私人生活产生落差与不满，竟抱团针对售价十八元的剧集收官数字化商品礼包发起集体无理由退款申请。",
+            pinyin: "Shìjiàn qǐyīn yú bùfen jùfěn yīn duì zhǔyǎn xiànshí sīrén shēnghuó chǎnshēng luòchā yǔ bùmǎn, jìng bàotuán zhènduì shòujià shíbā yuán de jùjí shōuguān shùzìhuà shāngpǐn lǐbāo fāqǐ jítǐ wú lǐyóu tuìkuǎn shēnqǐng.",
+            ko: "사건은 일부 드라마 팬들이 주연 배우의 실제 사생활에 실망과 불만을 품고, 18위안에 판매된 드라마 최종화 디지털 굿즈 패키지에 대해 집단으로 '단순 변심 무조건 환불'을 요구하면서 촉발되었습니다."
+          },
+          {
+            num: 3,
+            zh: "这一原本用于保护消费者合法权益、应对质量瑕疵与货不对板的售后机制，被挪作饭圈情绪绑架与恶意施压的泄愤工具，在全网引发关于契约精神与理性消费的激烈争议。",
+            pinyin: "Zhè yì yuánběn yòngyú bǎohù xiāofèizhě héfǎ quányì, yìngduì zhìliàng xiácī yǔ huò bú duì bǎn de shòuhòu jīzhì, bèi nuózuò fànquān qíngxù bǎngjià yǔ èyì shīyā de xièfèn gōngjù, zài quánwǎng yǐnfā guānyú qìyuē jīngshén yǔ lǐxìng xiāofèi de jīliè zhēngyì.",
+            ko: "본래 제품 품질 하자나 불량 배송에 대응해 소비자를 보호하기 위해 마련된 사후 구제 제도가, 팬덤의 사적 감정 풀이와 보복성 압박 무기로 악용되면서 시장 계약 정신과 성숙한 소비 윤리를 둘러싼 거센 논란이 일고 있습니다."
+          },
+          {
+            num: 4,
+            zh: "法律专家与行业评论员明确指出，数字影视内容在下载与播放完成后即属于已履约的精神文化产品，剧集本身并无瑕疵，越过规则红线的惩罚式维权不仅违背诚信底线，更是在滥用规则，严重冲击了健康有序的文化消费生态。",
+            pinyin: "Fǎlǜ zhuānjiā yǔ hángyè pínglùnyuán míngquè zhǐchū, shùzì yǐngshì nèiróng zài xiàzǎi yǔ bōfàng wánchéng hòu jí shǔyú yǐ lǚyuē de jīngshén wénhuà chǎnpǐn, jùjí běnshēn bìng wú xiácī, yuèguò guīzé hóngxiàn de chéngfáshì wéiquán bùjǐn wéibèi chéngxìn dǐxiàn, gèng shì zài lànyòng guīzé, yánzhòng chōngjī le jiànkāng yǒuxù de wénhuà xiāofèi shēngtài.",
+            ko: "전문가들은 이미 감상이 끝난 디지털 콘텐츠는 계약이 정상 이행된 무형의 문화 상품이며, 규칙의 한계선을 넘어선 징벌적 환불 요구는 상거래의 기본 신뢰를 짓밟고 문화 생태계를 위협하는 위험한 행태라고 일침을 가했습니다."
+          }
+        ],
+        vocab20: [
+          { no: "01", word: "仅退款", pinyin: "jǐn tuìkuǎn", pos: "电商售后名词", mean: "물건을 반품하지 않고 결제 대금만 환불받는 전자상거래 보호 제도", tip: "소비자 권익 보호 장치였으나 팬덤의 감정적 무기로 변질됨" },
+          { no: "02", word: "影视界", pinyin: "yǐngshìjiè", pos: "文化行业名词", mean: "영화와 드라마를 비롯한 영상 콘텐츠 제작 및 엔터테인먼트 산업계", tip: "온라인 쇼핑몰의 악성 환불 관행이 상륙하여 큰 충격을 받은 영역" },
+          { no: "03", word: "热搜", pinyin: "rèsōu", pos: "网络传播名词", mean: "포털이나 SNS에서 실시간으로 대중의 검색량과 클릭이 폭발한 화제어", tip: "팬덤의 집단행동이 순식간에 차트 최상단을 장악하며 공론화됨" },
+          { no: "04", word: "剧粉", pinyin: "jùfěn", pos: "文娱受众名词", mean: "특정 드라마의 스토리와 등장인물에 깊이 몰입하고 애정을 쏟는 시청자 팬덤", tip: "배우의 사생활 이슈에 실망하여 집단 반발에 나선 주체들" },
+          { no: "05", word: "落差", pinyin: "luòchā", pos: "心理认知名词", mean: "기대했던 가상 속 환상과 마주한 냉혹한 현실 사이의 커다란 괴리감", tip: "드라마 속 달콤한 로맨스와 실제 배우의 열애설 사이에서 느낀 배신감" },
+          { no: "06", word: "抱团", pinyin: "bàotuán", pos: "群体行为动词", mean: "특정 목적을 달성하기 위해 집단으로 뭉쳐 세력을 결성하고 단체 행동하다", tip: "SNS 팬카페를 중심으로 환불 좌표를 찍고 일제히 결집한 팬덤의 모양새" },
+          { no: "07", word: "数字化", pinyin: "shùzìhuà", pos: "科技形态定语", mean: "물리적 실체가 아닌 인터넷 데이터 형태로 제작·유통되는 디지털 형태의", tip: "시청 권한이 즉시 부여되어 감상이 완료되는 온라인 전용 상품" },
+          { no: "08", word: "礼包", pinyin: "lǐbāo", pos: "商业捆绑名词", mean: "특별 영상이나 미공개 에필로그 등을 묶어 유료로 판매하는 패키지 상품", tip: "18위안이라는 소액 결제로 팬들의 수집욕을 자극했던 피날레 굿즈" },
+          { no: "09", word: "无理由", pinyin: "wú lǐyóu", pos: "售后条款状语", mean: "판매자의 특별한 귀책사유나 하자가 없음에도 구매자의 단순 변심으로", tip: "전자상거래법상 디지털 상품에는 적용되지 않는 조건 없는 환불 규정" },
+          { no: "10", word: "瑕疵", pinyin: "xiácī", pos: "质量缺陷名词", mean: "제품이나 서비스에 원래 갖추어야 할 규격이나 품질이 미달하여 생긴 흠", tip: "영상이나 음향 오류 등 계약상 객관적인 하자가 전혀 없었음을 강조" },
+          { no: "11", word: "货不对板", pinyin: "huò bù duì bǎn", pos: "商业维权成语", mean: "실제로 배송받은 물건이 광고나 견본으로 제시된 스펙과 전혀 일치하지 않다", tip: "불량 배송에 대응해야 할 제도를 사적 불만 해소에 끌어다 쓴 오류" },
+          { no: "12", word: "机制", pinyin: "jīzhì", pos: "制度结构名词", mean: "특정 목적이나 공정한 거래 질서를 유지하기 위해 유기적으로 작동하는 시스템", tip: "소비자 보호를 위해 고안된 유용한 규칙이 엉뚱한 목적으로 오용됨" },
+          { no: "13", word: "情绪绑架", pinyin: "qíngxù bǎngjià", pos: "社会心理术语", mean: "자신의 주관적 불만과 뒤틀린 감정을 무기로 삼아 상대방에게 억지 굴복을 강요함", tip: "배우의 사생활을 빌미로 플랫폼과 제작진의 팔을 비튼 비이성적 행태" },
+          { no: "14", word: "施压", pinyin: "shīyā", pos: "行为动词", mean: "상대방이 자신의 부당한 요구를 받아들이도록 집단적 영향력으로 압박을 가하다", tip: "대규모 환불 러시를 일으켜 제작사와 방송사에 타격을 주려 한 위협" },
+          { no: "15", word: "契约精神", pinyin: "qìyuē jīngshén", pos: "法治现代文明", mean: "약속과 거래 규범을 성실히 이행하고 법적 구속력을 상호 존중하는 태도", tip: "기분대로 환불을 요구하며 시장의 기본 룰을 내팽개친 태도에 대한 비판" },
+          { no: "16", word: "理性消费", pinyin: "lǐxìng xiāofèi", pos: "经济道德规范", mean: "순간적인 충동이나 맹목적 팬심에 휘둘리지 않고 신중하게 구매를 결정함", tip: "문화 콘텐츠 시장의 건전한 발전을 위해 시청자에게 요구되는 성숙한 시민의식" },
+          { no: "17", word: "精神文化", pinyin: "jīngshén wénhuà", pos: "非物质产品属性", mean: "물질적 생필품이 아닌 인간의 정서와 지적 만족을 위해 소비되는 예술·오락 영역", tip: "한 번 소비하고 나면 원상태로 반환할 수 없는 무형의 콘텐츠" },
+          { no: "18", word: "红线", pinyin: "hóngxiàn", pos: "规则警示比喻", mean: "결코 넘어서는 안 될 법률과 사회 통념상의 엄격한 한계선이자 금지선", tip: "정당한 권리 구제를 벗어나 영업 방해 수준으로 치달은 위험한 월경" },
+          { no: "19", word: "诚信", pinyin: "chéngxìn", pos: "商业伦理核心", mean: "거짓이 없이 성실하고 당사자 간에 맺은 신뢰를 끝까지 저버리지 않음", tip: "소비자 권익 제도의 선의를 악용하지 않는 최소한의 도덕적 양심" },
+          { no: "20", word: "生态", pinyin: "shēngtài", pos: "产业环境比喻", mean: "창작자, 플랫폼, 수용자가 상호 작용하며 공존하는 지속 가능한 시장 환경", tip: "비합리적인 집단 압박으로 인해 양질의 창작 의욕이 꺾일 수 있는 위기" }
+        ]
+      },
+      {
+        id: 1,
+        badge: "기사 02",
+        category: "기이한 사건사고 & 사회 화제",
+        sources: [
+          { name: "澎湃新闻", url: "https://www.thepaper.cn" },
+          { name: "看看新闻", url: "https://www.kankanews.com" }
+        ],
+        date: "2026-09-30",
+        headlineZh: "豪掷包机带200人赴意观赛，却遭遇“两车被砸、6包被偷、信用卡被盗刷”！张雪机车海外遭遇荒诞洗劫引全网热议",
+        headlinePinyin: "Háozhì bāojī dài èrbǎi rén fù Yì guānsài, què zāoyù “liǎng chē bèi zá, liù bāo bèi tōu, xìnyòngkǎ bèi dàoshuā”! Zhāng Xuě jīchē hǎiwài zāoyù huāngdàn xǐjié yǐn quánwǎng rèyì",
+        headlineKo: "전세기 띄워 200명 데리고 이탈리아 응원 갔다가 차 2대 박살, 가방 6개 도난, 카드 부정 결제 날벼락! 장쉐기차 밀라노 도난 사건",
+        summaryKo: "중국 국산 바이크 창업자가 약속을 지키려 200명 원정대를 전세기에 태워 이탈리아 밀라노에 갔다가, 차량 2대가 털려 여권·신분증·가방 6개를 도난당하고 카드 부정 결제까지 당하는 황당한 사건이 벌어졌습니다.",
+        sentences: [
+          {
+            num: 1,
+            zh: "国产摩托车品牌“张雪机车”创始人张雪此前为激励车队兑现承诺，自掏腰包豪掷包机带领近两百人团队远赴欧洲，奔赴意大利米兰现场观摩世界超级摩托车锦标赛。",
+            pinyin: "Guóchǎn mótuōchē pǐnpái “Zhāng Xuě jīchē” chuàngshǐrén Zhāng Xuě cǐqián wèi jīlì chēduì duìxiàn chéngnuò, zì tāo yāobāo háozhì bāojī dàilǐng jìn liǎngbǎi rén tuánduì yuǎnfù Ōuzhōu, bēnfù Yìdàlì Mǐlán xiànchǎng guānmó shìjiè chāojí mótuōchē jǐnbiāosài.",
+            ko: "중국 국산 모터사이클 브랜드 '장쉐 기차(张雪机车)'의 창업자 장쉐가 팀원들과의 약속을 지키기 위해 사비를 들여 전세기를 띄우고, 200명에 달하는 대규모 인원을 이끌고 유럽 이탈리아 밀라노의 슈퍼바이크 세계선수권(WSBK) 현장 응원에 나섰습니다."
+          },
+          {
+            num: 2,
+            zh: "正当车手在国际赛道上奋勇拼搏并斩获佳绩、全员沉浸在喜悦中时，场外却遭遇极其荒诞的洗劫风波：停放在米兰街头的两辆保障车惨遭窃贼破窗砸烂，车内六个随身背包被洗劫一空，大量相机、护照、证件及现金被盗，其中一名随行人员的信用卡更在短时间内遭盗刷数百欧元。",
+            pinyin: "Zhèng dāng chēshǒu zài guójì sàidào shàng fènyǒng pīnbó bìng zhǎnhuò jiājì, quányuán chénjìn zài xǐyuè zhōng shí, chǎngwài què zāoyù jíqí huāngdàn de xǐjié fēngbō: Tíngfàng zài Mǐlán jiētóu de liǎng liàng bǎozhàngchē cǎnzāo qièzéi pòchuāng zálàn, chēnèi liù gè suíshēn bèibāo bèi xǐjié yì kōng, dàliàng xiàngjī, hùzhào, zhèngjiàn jí xiànjīn bèi dào, qízhōng yì míng suíxíng rényuán de xìnyòngkǎ gèng zài duǎn shíjiān nèi zāo dàoshuā shù bǎi Ōuyuán.",
+            ko: "소속 라이더들이 국제 서킷에서 눈부신 역주를 펼치며 훌륭한 성적을 거두고 전원이 축제 분위기에 젖어 있던 바로 그 순간, 밀라노 시내에 주차해 둔 지원 차량 2대의 유리창이 박살 난 채, 차량 내부 가방 6개가 털리고 카메라, 여권, 신분증, 현금이 몽땅 털렸으며 신용카드가 수백 유로 부정 결제되는 피해가 발생했습니다."
+          },
+          {
+            num: 3,
+            zh: "尽管受害者第一时间向当地警方报警立案，但治安部门办案拖沓且毫无实质进展。这起海外跨国失窃事件曝光后引发全网热议，网友在惊叹国产赛车亮眼崛起的同时，也纷纷吐槽境外治安隐患，并呼吁出境团队务必提高安全防范意识。",
+            pinyin: "Jǐnguǎn shòuhàizhě dì-yī shíjiān xiàng dāngdì jǐngfāng bàojǐng lì'àn, dàn zhì'ān bùmén bàn'àn tuōtà qiě háowú shízhì jìnzhǎn. Zhè qǐ hǎiwài kuàguó shīqiè shìjiàn bàoguāng hòu yǐnfā quánwǎng rèyì, wǎngyǒu zài jīngtàn guóchǎn sàichē liàngyǎn juéqǐ de tóngshí, yě fēnfēn tǔcáo jìngwài zhì'ān yǐnhuàn, bìng hūyù chūjìng tuánduì wùbì tígāo ānquán fángfàn yìshí.",
+            ko: "현지 경찰에 즉시 피해 신고를 하고 정식 입건했으나 수사는 지지부진하기만 합니다. 이 소식에 네티즌들은 국산 바이크의 쾌거에 박수를 보내면서도, 유럽 대도시의 열악한 치안 현실에 혀를 차며 해외 방문 시 소지품 보안에 만전을 기할 것을 당부했습니다."
+          }
+        ],
+        vocab20: [
+          { no: "01", word: "机车", pinyin: "jīchē", pos: "交通工具行业词", mean: "고성능 엔진과 바퀴 두 개를 장착한 모터사이클 및 오토바이", tip: "국내외 레이싱 서킷을 누비는 중국 토종 모터스포츠 브랜드" },
+          { no: "02", word: "创始人", pinyin: "chuàngshǐrén", pos: "企业角色名词", mean: "기업이나 프로젝트를 처음으로 기획하고 세운 창업주", tip: "팀원들과 한 약속을 지키기 위해 사비를 털어 전세기를 띄운 대표" },
+          { no: "03", word: "承诺", pinyin: "chéngnuò", pos: "契约公德名词/动词", mean: "상대방에게 특정한 성과를 달성했을 때 보상하겠다고 맺은 굳은 약속", tip: "대회 성적이 좋으면 유럽 현장 응원을 보내주겠다던 공약" },
+          { no: "04", word: "包机", pinyin: "bāojī", pos: "高端航空出行", mean: "특정 단체나 인원의 단독 이동을 위해 여객기 한 대를 통째로 임차함", tip: "200명에 달하는 대규모 원정대를 한 번에 이탈리아로 실어 나른 통 큰 결단" },
+          { no: "05", word: "远赴", pinyin: "yuǎnfù", pos: "距离位移动词", mean: "먼 거리와 바다를 건너 아득히 먼 외국의 목적지로 향해 가다", tip: "세계 최정상급 모터사이클 대회가 열리는 유럽 본토로 날아감" },
+          { no: "06", word: "观摩", pinyin: "guānmó", pos: "学习交流动词", mean: "현장에 직접 가서 수준 높은 기술과 시합을 깊이 관찰하고 배움을 얻다", tip: "세계 정상급 라이더들의 코너링과 정비 기술을 눈앞에서 직접 체감함" },
+          { no: "07", word: "锦标赛", pinyin: "jǐnbiāosài", pos: "体育竞技顶级", mean: "각국의 최고 기량 선수들이 총출동하여 우승을 다투는 권위 있는 선수권 대회", tip: "세계 모터스포츠계의 이목이 집중된 밀라노 서킷 빅매치" },
+          { no: "08", word: "佳绩", pinyin: "jiājì", pos: "竞技成果名词", mean: "치열한 승부 끝에 거두어들인 탁월하고 눈부신 시합 성적", tip: "첫 출전에도 불구하고 5위와 8위에 오르는 쾌거를 달성함" },
+          { no: "09", word: "洗劫", pinyin: "xǐjié", pos: "恶性侵财动词", mean: "보관되어 있던 귀중품과 물건을 하나도 남김없이 싹 털어 훔쳐 달아나다", tip: "축제 분위기 속에서 차량 내부를 완전히 털려버린 황당한 도난 사고" },
+          { no: "10", word: "窃贼", pinyin: "qièzéi", pos: "犯罪分子称谓", mean: "타인의 재물을 은밀하게 훔치거나 파손하여 가로채는 도둑", tip: "외국인 관광객 차량의 유리창을 노리고 계획적으로 접근한 범죄자들" },
+          { no: "11", word: "破窗", pinyin: "pòchuāng", pos: "作案手段动宾", mean: "차량 내부의 물건을 훔치기 위해 망치나 돌로 차 유리창을 부수다", tip: "밀라노 길거리에 주차된 차량의 창문을 박살 내고 침입한 범행 수법" },
+          { no: "12", word: "一空", pinyin: "yìkōng", pos: "程度结果副词", mean: "남김없이 모조리 비워져 흔적조차 찾아볼 수 없는 상태", tip: "단 몇 분 사이에 여섯 개의 가방이 통째로 증발해 버림" },
+          { no: "13", word: "随身", pinyin: "suíshēn", pos: "物品属性定语", mean: "몸에 늘 지니고 다니며 항상 관리해야 하는 개인 소지품", tip: "이동 중 방심하고 차 안에 두고 내렸다가 도난당한 핵심 물품들" },
+          { no: "14", word: "护照", pinyin: "hùzhào", pos: "法定国际证件", mean: "해외 체류 시 자신의 국적과 신원을 공식 증명하는 국가 발급 여권", tip: "해외 미아 위기에 처하게 만든 가장 뼈아픈 분실물" },
+          { no: "15", word: "盗刷", pinyin: "dàoshuā", pos: "非法侵财金融", mean: "분실되거나 복제된 타인의 신용카드를 무단으로 결제하여 긁다", tip: "도난 직후 불과 수십 분 만에 수백 유로가 결제된 범죄 피해" },
+          { no: "16", word: "立案", pinyin: "lì'àn", pos: "刑事司法动词", mean: "수사기관이 피해 신고를 정식으로 접수하여 공식 사건으로 등록함", tip: "현지 경찰서를 찾아가 조사를 요구하며 형사 절차를 밟음" },
+          { no: "17", word: "拖沓", pinyin: "tuōtà", pos: "行政作风形容词", mean: "일 처리가 빠릿빠릿하지 못하고 미적거리며 늑장을 부리다", tip: "CCTV 확인이나 범인 추적에 소극적인 현지 치안 시스템의 민낯" },
+          { no: "18", word: "实质", pinyin: "shízhì", pos: "真实内容名词", mean: "형식적인 겉치레가 아닌 실제로 알맹이가 있고 손에 잡히는 결과", tip: "신고서만 받고 아무런 범인 검거 성과가 없는 답답한 현지 현실" },
+          { no: "19", word: "隐患", pinyin: "yǐnhuàn", pos: "潜在危机名词", mean: "눈에 쉽게 띄지 않으나 언제든 재난이나 사고로 이어질 수 있는 화근", tip: "유럽 주요 관광 도시 곳곳에 도사린 심각한 차량 털이 위험" },
+          { no: "20", word: "防范", pinyin: "fángfàn", pos: "安全戒备动词", mean: "불의의 위험이나 범죄 피해를 입지 않도록 사전에 경계하고 대비하다", tip: "해외 출장이나 여행 시 귀중품을 분산 보관해야 하는 뼈아픈 교훈" }
+        ]
+      },
+      {
+        id: 2,
+        badge: "기사 03",
+        category: "식품안전/환경/소비자 이슈",
+        sources: [
+          { name: "澎湃新闻 · 质量观察", url: "https://www.thepaper.cn" },
+          { name: "央视网", url: "https://www.cctv.com" }
+        ],
+        date: "2026-09-30",
+        headlineZh: "“防盗环完好≠饮料没被动过”！瓶盖新国标征求意见直击“大头瓶盖漏液”缺陷：首设B-L角≤40°量化红线，全链条筑牢安全防线",
+        headlinePinyin: "“Fángdàohuán wánhǎo ≠ yǐnliào méi bèi dòng guò”! Pínggài xīn guóbiāo zhēngqiú yìjiàn zhíjī “dàtóu pínggài lòuyè” quēxiàn: Shǒu shè B-L jiǎo ≤ 40° liànghuà hóngxiàn, quán liàntiáo zhùláo ānquán fángxiàn",
+        headlineKo: "‘안전링 멀쩡하다고 안 뜯은 음료 아니다’! 뚜껑 새는 결함 잡는 신국가표준 입법예고: B-L각 40도 이하 기준 신설",
+        summaryKo: "음료 뚜껑을 살짝 돌려도 내용물이 새어 나오는데 안전링은 멀쩡했던 '대두형 뚜껑 결함' 논란에 대해, 국가 표준 당국이 누출각과 파괴각 차이를 40도 이내로 묶는 신국가표준 입법예고를 단행했습니다.",
+        sentences: [
+          {
+            num: 1,
+            zh: "针对此前市面上多款饮料“大头瓶盖存在设计缺陷、轻轻拧动即漏液但防盗环却完好无损”引发广泛舆论质疑的食品安全风波，国家标准化管理部门近日正式发布塑料防盗瓶盖新国标征求意见稿，以前瞻性技术指标重拳填补行业监管空白。",
+            pinyin: "Zhènduì cǐqián shìmiàn shàng duō kuǎn yǐnliào “dàtóu pínggài cúnzài shèjì quēxiàn, qīngqīng nǐngdòng jí lòuyè dàn fángdàohuán què wánhǎo-wúsǔn” yǐnfā guǎnfàn yúlùn zhìyí de shípǐn ānquán fēngbō, guójiā biāozhǔnhuà guǎnlǐ bùmén jìnrì zhèngshì fābù sùliào fángdào pínggài xīn guóbiāo zhēngqiú yìjiàngǎo, yǐ qiánzhānxìng jìshù zhǐbiāo zhòngquán tiánbǔ hángyè jiānguǎn kòngbái.",
+            ko: "시중 음료에서 '병마개 설계 결함으로 살짝만 돌려도 액체가 새어 나오는데, 하단 안전링은 조금도 깨지지 않고 온전하다'는 지적이 쏟아지며 불거진 위생 논란에 대해, 국가 표준화 관리당국이 플라스틱 음료 마개 신국가표준(개정안)을 공식 입법예고했습니다."
+          },
+          {
+            num: 2,
+            zh: "此次新规最受瞩目的核心突破，在于针对适用非碳酸饮料的塑料瓶盖首次设立了严苛的“B-L角小于等于四十度”量化约束红线。",
+            pinyin: "Cǐcì xīnguī zuì shòu zhǔmù de héxīn tūpò, zàiyú zhènduì shìyòng fēi tànsuān yǐnliào de sùliào pínggài shǒucì shèlì le yánkē de “B-L jiǎo xiǎoyú děngyú sìshí dù” liànghuà yuēshù hóngxiàn.",
+            ko: "이번 개정안의 핵심은 탄산이 없는 일반 음료 병마개에 대해 '누출각과 파괴각의 차이(B-L각)를 40도 이하로 제한'하는 정량적 레드라인을 최초로 신설한 점입니다."
+          },
+          {
+            num: 3,
+            zh: "该指标要求瓶盖在旋松至发生气体泄漏与液体渗出时，防盗环连接桥必须在极短旋转区间内发生明显断裂或不可逆形变，从技术源头彻底终结了“防盗环看似完整无缺、内部饮品却已遭外界空气污染甚至人为投毒拆封”的隐形漏洞。",
+            pinyin: "Gāi zhǐbiāo yāoqiú pínggài zài xuánsōng zhì fāshēng qìtǐ xièlòu yǔ yètǐ shènchū shí, fángdàohuán liánjiēqiáo bìxū zài jí duǎn xuánzhuǎn qūjiān nèi fāshēng míngxiǎn duànliè huò bùkěnì xíngbiàn, cóng jìshù yuántóu chèdǐ zhōngjié le “fángdàohuán kànsì wánzhěng-wúquē, nèibù yǐnpǐn què yǐ zāo wàijiè kōngqì wūrǎn shènzhì rénwéi tóudú chāifēng” de yǐnxíng lòudòng.",
+            ko: "이 기준은 병마개를 살짝 돌려 기체가 새거나 액체가 스며 나오는 순간, 연결된 안전고리가 지체 없이 부러지거나 복원 불가능한 변형을 일으키도록 강제하여, '겉보기엔 미개봉 새 상품인데 속은 이미 공기에 노출되어 변질되었을 위험'을 기술적으로 원천 차단합니다."
+          },
+          {
+            num: 4,
+            zh: "专家强调，新国标不仅全链条守护了消费者舌尖上的安全防线，更为饮料制造企业的包材合规生产提供了科学权威的技术标尺。",
+            pinyin: "Zhuānjiā qiángdiào, xīn guóbiāo bùjǐn quán liàntiáo shǒuhù le xiāofèizhě shéjiān shàng de ānquán fángxiàn, gèng wèi yǐnliào zhìzào qǐyè de bāocái héguī shēngchǎn tígōng le kēxué quánwēi de jìshù biāochǐ.",
+            ko: "전문가들은 이 기준이 국민의 식탁 안전을 지킬 뿐 아니라 음료 제조사의 엄격한 품질 관리 잣대가 될 것이라고 평가했습니다."
+          }
+        ],
+        vocab20: [
+          { no: "01", word: "瓶盖", pinyin: "pínggài", pos: "日用包装名词", mean: "음료수나 생수 병의 입구를 틀어막아 밀봉하는 플라스틱 마개", tip: "식품 안전 논란의 중심에 서서 표준 개정을 촉발한 핵심 부자재" },
+          { no: "02", word: "缺陷", pinyin: "quēxiàn", pos: "工程质量名词", mean: "설계나 제작 과정에서 발생하여 본래 기능에 미치지 못하는 결함", tip: "밀봉이 풀렸는데도 마개의 안전고리가 끊어지지 않는 구조적 결점" },
+          { no: "03", word: "防盗环", pinyin: "fángdàohuán", pos: "包装安全术语", mean: "병마개 하단에 연결되어 개봉 여부를 육안으로 확인해 주는 안전 고리", tip: "고리가 온전하면 새 제품이라는 상식을 뒤흔들었던 취약 지점" },
+          { no: "04", word: "完好", pinyin: "wánhǎo", pos: "状态形容词", mean: "외부 충격이나 파손 없이 흠집 하나 없이 온전하게 보존된 상태", tip: "속은 이미 열려 내용물이 새는데 겉은 멀쩡해 보이던 위험한 착시" },
+          { no: "05", word: "征求意见", pinyin: "zhēngqiú yìjiàn", pos: "法定立法程序", mean: "새로운 국가 표준을 공포하기 전 업계와 국민의 의견을 수렴하는 단계", tip: "음료 패키징 산업 전반에 일대 지각변동을 예고한 행정 절차" },
+          { no: "06", word: "空白", pinyin: "kòngbái", pos: "法规漏洞比喻", mean: "기존 법령이나 안전 기준에 규정이 없어 방치되어 있던 사각지대", tip: "마개가 돌아가며 새는 각도에 대한 명확한 한계 규정이 없었던 공백" },
+          { no: "07", word: "非碳酸", pinyin: "fēi tànsuān", pos: "食品工艺分类", mean: "탄산가스가 주입되지 않은 과채 주스, 우유, 혼합 차 및 생수 음료", tip: "내부 고압 분출 위험이 없어 안전 각도 규제가 우선 적용되는 대상" },
+          { no: "08", word: "约束", pinyin: "yuēshù", pos: "制度规范动词", mean: "원칙과 규정을 정하여 행동이나 제품 규격이 한도를 넘지 못하게 옭아매다", tip: "제조사들이 원가 절감을 이유로 느슨하게 만들던 관행을 규제함" },
+          { no: "09", word: "红线", pinyin: "hóngxiàn", pos: "安全基准比喻", mean: "식품 안전과 소비자 생명을 지키기 위해 설정된 절대적 기준선", tip: "각도 40도를 초과하면 전량 불합격 처리되는 엄격한 기술 잣대" },
+          { no: "10", word: "旋松", pinyin: "xuánsōng", pos: "机械物理动词", mean: "시계 반대 방향으로 뚜껑을 돌려 나사산의 결합을 헐겁게 풀다", tip: "손가락으로 살짝만 돌려도 내부 밀폐가 해제되던 조작 과정" },
+          { no: "11", word: "泄漏", pinyin: "xièlòu", pos: "物理安全动词", mean: "용기 내부에 밀폐되어 있던 기체나 액체가 틈새를 통해 밖으로 새어 나가다", tip: "산소가 유입되어 유통기한 내 음료가 상하게 만드는 치명적 누출" },
+          { no: "12", word: "渗出", pinyin: "shènchū", pos: "流体动作动词", mean: "뚜껑 틈바구니 사이로 내부 액체가 방울방울 스며 나와 흘러내리다", tip: "병을 살짝 쥐기만 해도 우유와 물이 삐져나오던 하자 현상" },
+          { no: "13", word: "不可逆", pinyin: "bùkěnì", pos: "物理属性定语", mean: "한 번 변형되거나 부서지면 원래의 처음 상태로 되돌릴 수 없는", tip: "손을 댄 흔적이 영구적으로 남아 속임수를 원천 차단하는 특성" },
+          { no: "14", word: "形变", pinyin: "xíngbiàn", pos: "材料力学术语", mean: "외력을 받아 물체의 본래 형상이나 치수가 비틀어지거나 늘어나다", tip: "플라스틱 브릿지가 늘어나 하얗게 변색되며 개봉을 알리는 상태" },
+          { no: "15", word: "漏洞", pinyin: "lòudòng", pos: "系统隐患名词", mean: "법망이나 기술 체계의 허점으로 인해 위험이 파고들 수 있는 틈", tip: "누군가 병을 열어 이물질을 넣어도 알 수 없었던 치명적 위험" },
+          { no: "16", word: "污染", pinyin: "wūrǎn", pos: "公共卫生名词", mean: "세균이나 유해 화학물질이 깨끗한 식음료에 침투하여 부패시키는 현상", tip: "공기 중 곰팡이 포자가 유입되어 어린이 음료가 변질될 뻔한 위험" },
+          { no: "17", word: "拆封", pinyin: "chāifēng", pos: "包装开启动宾", mean: "물건의 밀봉 포장을 뜯어 개봉하거나 열린 상태로 전환하다", tip: "소비자에게 도달하기 전에 중간 유통 단계에서 손을 대는 행위" },
+          { no: "18", word: "全链条", pinyin: "quán liàntiáo", pos: "现代监管战略", mean: "원료 수급, 용기 제조, 충전 포장, 마트 진열에 이르는 유통 전 과정", tip: "어느 한구석도 소홀함 없이 촘촘하게 감시하는 빈틈없는 방역망" },
+          { no: "19", word: "防线", pinyin: "fángxiàn", pos: "公共安全比喻", mean: "국민의 생명과 건강을 위협하는 위험 요소를 막아내는 최종 방어 보루", tip: "식탁의 위생과 안전을 지키기 위해 타협할 수 없는 마지막 보루" },
+          { no: "20", word: "标尺", pinyin: "biāochǐ", pos: "衡量准绳比喻", mean: "시비와 품질을 과학적으로 가려내는 명확하고 공정한 판단 기준", tip: "모든 음료 기업이 제품 출하 전 의무적으로 준수해야 하는 나침반" }
+        ]
+      },
+      {
+        id: 3,
+        badge: "기사 04",
+        category: "직장 갑질/황당 논란",
+        sources: [
+          { name: "澎湃新闻 · 10%公司", url: "https://www.thepaper.cn" },
+          { name: "澎湃漫评", url: "https://www.thepaper.cn" }
+        ],
+        date: "2026-09-30",
+        headlineZh: "“0元购机”竟成金融套路？三大电信运营商紧急叫停“金融分期购机”业务背后：个人信用遭话费绑定引发公众反弹与合规风暴",
+        headlinePinyin: "“Líng yuán gòujī” jìng chéng jīnróng tàolù? Sān dà diànxìn yùnyíngshāng jǐnjí jiàotíng “jīnróng fēnqī gòujī” yèwù bèihòu: Gèrén xìnyòng zāo huàfèi bǎngdìng yǐnfā gōngzhòng fǎntán yǔ héguī fēngbào",
+        headlineKo: "‘0원 공짜폰’이 금융 사기 덫? 통신 3사 ‘금융 할부 폰 개통’ 전격 중단: 요금 미납이 은행 신용 연체로 둔갑해 국민적 공분",
+        summaryKo: "일선 통신 대리점에서 '공짜 최신폰'을 미끼로 고객 몰래 소액 대출에 서명하게 만든 뒤, 요금 미납 시 은행 연체자로 만들어버리던 기만적 금융 할부 영업을 3대 통신사가 전면 중단했습니다.",
+        sentences: [
+          {
+            num: 1,
+            zh: "近日，国内三大电信运营商相继在全国多地营业厅全面紧急叫停并全面下架“金融分期购机”与“零元购机”业务，将长期以来饱受社会诟病的通信营销乱象推上舆论风口。",
+            pinyin: "Jìnrì, guónèi sān dà diànxìn yùnyíngshāng xiāngjì zài quánguó duō dì yíngyètīng quánmiàn jǐnjí jiàotíng bìng quánmiàn xiàjià “jīnróng fēnqī gòujī” yǔ “líng yuán gòujī” yèwù, jiāng chángqī yǐlái bǎoshòu shèhuì gòubìng de tōngxìn yíngxiāo luànxiàng tuī shàng yúlùn fēngkǒu.",
+            ko: "최근 중국의 3대 국영 통신사가 전국 각지 대리점에서 '금융 할부 스마트폰 개통' 및 '0원 공짜폰' 판매 영업을 전격 중단하고 관련 상품을 전면 회수하면서, 그간 횡행하던 통신 업계의 변칙 영업이 여론의 심판대에 올랐습니다."
+          },
+          {
+            num: 2,
+            zh: "此前，不少基层线下门店打着“充话费免费赠送高端旗舰手机”或“预存话费抵扣购机款”等诱人噱头，暗中诱导防范意识薄弱的消费者签署冗长晦涩的电子消费金融借款合同，将原本单纯的月度电信资费套餐与商业小额信贷深度绑定。",
+            pinyin: "Cǐqián, bùshǎo jīcéng xiànxià méndiàn dǎ zhe “chōng huàfèi miǎnfèi zèngsòng gāoduān qíjiàn shǒujī” huò “yùcún huàfèi dǐkòu gòujīkuǎn” děng yòurén xuétou, ànzhōng yòudǎo fángfàn yìshí bóruò de xiāofèizhě qiānshǔ rǒngcháng huìsè de diànzǐ xiāofèi jīnróng jièkuǎn hétong, jiāng yuánběn dānchún de yuèdù diànxìn zīfèi tàocān yǔ shāngyè xiǎo'é xìndài shēndù bǎngdìng.",
+            ko: "그동안 일선 매장들은 '요금제만 유지하면 최신 플래그십 폰을 공짜로 준다'는 달콤한 미끼를 내걸고, 소비자가 영문도 모른 채 복잡한 소액 신용대출 계약서에 전자 서명하도록 유도해 왔습니다."
+          },
+          {
+            num: 3,
+            zh: "一旦用户在合同期内因套餐价格过高、号码停机或突发经济困难而延误缴纳话费，便会立即触发违约责任，直接导致个人央行征信报告产生逾期不良记录，引发海量消费者维权投诉与强烈反弹。",
+            pinyin: "Yídàn yònghù zài hétong qī nèi yīn tàocān jiàgé guò gāo, hàomǎ tíngjī huò tūfā jīngjì kùnnan ér yánwù jiǎonà huàfèi, biàn huì lìjí chùfā wéiyuē zérèn, zhíjiē dǎozhì gèrén yāngháng zhēngxìn bàogào chǎnshēng yúqī bùliáng jìlù, yǐnfā hǎiliàng xiāofèizhě wéiquán tóusù yǔ qiángliè fǎntán.",
+            ko: "이로 인해 소비자가 요금제를 변경하거나 일시적으로 요금 납부가 며칠만 지체되어도 은행 대출 연체로 처리되어 개인 신용평가 점수가 깎이고 연체 기록이 등재되는 끔찍한 피해가 속출했습니다."
+          },
+          {
+            num: 4,
+            zh: "业内专家深刻指出，通信企业绝不能将营业额增长建立在误导欺诈消费者的灰色金融陷阱之上，必须严守法律合规底线，切实维护消费者合法知情权与公平交易权。",
+            pinyin: "Yènèi zhuānjiā shēnkè zhǐchū, tōngxìn qǐyè jué bù néng jiāng yíngyè'é zēngzhǎng jiànlì zài wùdǎo qīzhà xiāofèizhě de huìsè jīnróng xiànjǐng zhī shàng, bìxū yánshǒu fǎlǜ héguī dǐxiàn, qièshí wéihù xiāofèizhě héfǎ zhīqíngquán yǔ gōngpíng jiāoyìquán.",
+            ko: "전문가들은 대기업이 서민의 신용을 볼모로 부당 이득을 취하는 기만적 덫을 놓아서는 결코 안 되며, 투명한 정보 제공과 공정 거래의 원칙을 철저히 준수해야 한다고 지적했습니다."
+          }
+        ],
+        vocab20: [
+          { no: "01", word: "运营商", pinyin: "yùnyíngshāng", pos: "通信企业主体", mean: "통신망 인프라를 구축하고 무선 데이터 및 전화 서비스를 제공하는 통신사", tip: "서민들의 필수 생활 서비스를 독점하면서 무리한 금융 영업을 벌인 주체" },
+          { no: "02", word: "叫停", pinyin: "jiàotíng", pos: "行政干预动词", mean: "위법 소지나 부작용이 큰 영업 행위를 중단하도록 명령을 내려 멈추다", tip: "여론의 거센 비판과 금융당국의 경고에 밀려 판매를 전면 중단함" },
+          { no: "03", word: "分期", pinyin: "fēnqī", pos: "金融信贷方式", mean: "목돈이 들어가는 대금을 한 번에 내지 않고 일정 기간 매달 나누어 갚음", tip: "고가 스마트폰을 공짜인 양 포장하여 서민들을 옭아맨 미끼" },
+          { no: "04", word: "噱头", pinyin: "xuétou", pos: "营销套路名词", mean: "소비자의 눈길을 끌기 위해 그럴싸하게 꾸며낸 기만적인 광고 수법", tip: "공짜폰이라는 달콤한 거짓말로 소비자의 경계심을 무너뜨린 술수" },
+          { no: "05", word: "诱导", pinyin: "yòudǎo", pos: "欺诈行为动词", mean: "감언이설로 교묘하게 꾀어 자신들이 원하는 방향으로 서명하도록 이끌다", tip: "단순 요금제 가입인 척 속여 은행 대출 서류에 서명하게 만든 수법" },
+          { no: "06", word: "合同", pinyin: "hétong", pos: "法律契约文书", mean: "당사자 간의 권리와 의무를 규정하고 법적 구속력을 부여하는 공식 합의서", tip: "깨알 같은 작은 글씨 속에 고리대금성 독소조항을 숨겨둔 문서" },
+          { no: "07", word: "资费", pinyin: "zīfèi", pos: "电信收费名词", mean: "전화 통화, 문자, 무선 데이터 등 통신 서비스를 이용하고 지불하는 요금", tip: "매달 고정적으로 지출해야 하는 통신비 요금제" },
+          { no: "08", word: "绑定", pinyin: "bǎngdìng", pos: "商业捆绑动词", mean: "별개의 서비스나 금융 상품을 하나로 엮어 떼려야 뗄 수 없게 묶어버리다", tip: "통신 요금 미납이 곧바로 금융 대출 연체로 직결되도록 얽어맨 사슬" },
+          { no: "09", word: "延误", pinyin: "yánwù", pos: "时限失责动词", mean: "정해진 기한을 맞추지 못하고 때를 놓쳐 지체하거나 늦어지다", tip: "깜빡 잊고 며칠 늦게 요금을 냈다가 벼락을 맞은 소비자들의 억울함" },
+          { no: "10", word: "违约", pinyin: "wéiyuē", pos: "法律责任动词", mean: "계약서에 명시된 의무 사항이나 기한을 지키지 않아 약속을 어기다", tip: "통신비 몇천 원 미납을 이유로 거액의 위약금 폭탄을 터뜨림" },
+          { no: "11", word: "征信", pinyin: "zhēngxìn", pos: "金融信用记录", mean: "개인의 대출 상환 이력과 신용 상태를 국가 및 은행 전산에 기록한 지표", tip: "평생의 금융 거래와 주택 대출에 치명상을 입힌 무서운 족쇄" },
+          { no: "12", word: "逾期", pinyin: "yúqī", pos: "偿还违约名词/动词", mean: "약속된 상환 기일을 넘겨 돈을 갚지 않고 연체된 상태에 빠지다", tip: "순식간에 신용불량자로 전락하게 만든 대리점의 파렴치한 영업" },
+          { no: "13", word: "维权", pinyin: "wéiquán", pos: "正当抗争动宾", mean: "침해당한 자신의 정당한 법적 권리와 경제적 이익을 되찾기 위해 싸우다", tip: "소비자보호원과 방송통신 당국에 빗발친 억울한 피해자들의 고발" },
+          { no: "14", word: "反弹", pinyin: "fǎntán", pos: "社会舆情动词", mean: "부당한 처우나 횡포에 대해 대중과 소비자가 강력하게 반발하여 들고일어나다", tip: "독점 통신 대기업의 탐욕스러운 횡포에 쏟아진 국민적 공분" },
+          { no: "15", word: "欺诈", pinyin: "qīzhà", pos: "违法侵权行为", mean: "진실을 고의로 은폐하거나 거짓말을 하여 타인의 재산상 손해를 유발함", tip: "휴대폰을 공짜로 준다고 속이고 뒤로는 대출을 일으킨 범죄적 상술" },
+          { no: "16", word: "灰色", pinyin: "huìsè", pos: "法律边界比喻", mean: "합법과 불법의 경계선에 걸쳐 있어 법망을 교묘하게 피하는 탈법적인", tip: "소비자 모르게 수수료를 챙기던 통신사와 대부업체의 음성적 야합" },
+          { no: "17", word: "陷阱", pinyin: "xiànjǐng", pos: "危险圈套比喻", mean: "빠져나오기 어렵도록 깊게 파놓아 사람을 곤경에 빠뜨리는 함정", tip: "눈앞의 작은 공짜 혜택 뒤에 숨겨진 인생을 망치는 금융의 덫" },
+          { no: "18", word: "底线", pinyin: "dǐxiàn", pos: "道德法治底线", mean: "기업이 사회적 책임을 다하기 위해 마땅히 지켜야 할 최소한의 한계선", tip: "이윤 추구에 눈이 멀어 고객의 신용을 볼모로 잡은 비윤리성 지적" },
+          { no: "19", word: "知情权", pinyin: "zhīqíngquán", pos: "核心法定权益", mean: "자신이 구매하는 상품과 체결하는 계약의 실체를 정확히 알 권리", tip: "대출 상품이라는 핵심 정보를 은폐당한 소비자의 알 권리 침해" },
+          { no: "20", word: "公平交易", pinyin: "gōngpíng jiāoyì", pos: "市场经济基石", mean: "우월적 지위를 남용하지 않고 대등한 입장에서 성실하게 거래하는 원칙", tip: "독점 통신사의 일방적 갑질로부터 서민을 보호해야 할 헌법적 가치" }
+        ]
+      },
+      {
+        id: 4,
+        badge: "기사 05",
+        category: "기적의 생환 실화 & 감동 휴먼",
+        sources: [
+          { name: "澎湃新闻 · 运动家", url: "https://www.thepaper.cn" },
+          { name: "央视体育", url: "https://www.cctv.com" }
+        ],
+        date: "2026-09-30",
+        headlineZh: "走出抢跑阴影站上领奖台！吴艳妮名古屋亚运会摘铜泪洒赛场：“我战胜了3年前的自己，今天给自己打100分！”",
+        headlinePinyin: "Zǒuchū qiǎngpǎo yīnyǐng zhànshàng lǐngjiǎngtái! Wú Yànnī Mínggǔwū Yàyùnhuì zhāi tóng lèi sǎ sàichǎng: “Wǒ zhànshèng le sān nián qián de zìjǐ, jīntiān gěi zìjǐ dǎ yībǎi fēn!”",
+        headlineKo: "부정 출발 트라우마 딛고 시상대에 서다! 우옌니 나고야 아시안게임 동메달 쾌거: ‘3년 전의 나를 이겼다, 스스로에게 100점 만점!’",
+        summaryKo: "3년 전 항저우 부정 출발 실격의 악몽과 1000일간의 트라우마를 딛고, 우옌니가 나고야 아시안게임 100m 허들에서 최하위 출발의 불리를 뒤집으며 값진 동메달을 따내고 감동의 눈물을 흘렸습니다.",
+        sentences: [
+          {
+            num: 1,
+            zh: "在爱知·名古屋亚运会田径女子一百米栏万众瞩目的决赛赛场上，备受争议的中国名将吴艳妮顶住巨大心理压力，奋力拼搏斩获一枚弥足珍贵的铜牌。",
+            pinyin: "Zài Àizhī · Mínggǔwū Yàyùnhuì tiánjìng nǚzǐ yībǎi mǐ lán wànzhòng-zhǔmù de juésài sàichǎng shàng, bèishòu zhēngyì de Zhōngguó míngjiàng Wú Yànnī dǐngzhù jùdà xīnlǐ yālì, fènlì pīnbó zhǎnhuò yì méi mízú-zhēnguì de tóngpái.",
+            ko: "아이치·나고야 아시안게임 여자 육상 100m 허들 결승전에서, 숱한 논란과 관심의 중심에 섰던 중국의 간판스타 우옌니가 극심한 압박감을 이겨내고 값진 동메달을 목에 걸었습니다."
+          },
+          {
+            num: 2,
+            zh: "回望三年前杭州亚运会因抢跑被取消成绩并遭遇舆论风暴的至暗时刻，长达一千多天的日日夜夜里，巨大的心理阴影曾如影随形。",
+            pinyin: "Huíwàng sān nián qián Hángzhōu Yàyùnhuì yīn qiǎngpǎo bèi qǔxiāo chéngjì bìng zāoyù yúlùn fēngbào de zhì'àn shíkè, chángdá yìqiān duō tiān de rìrì-yèyè lǐ, jùdà de xīnlǐ yīnyǐng céng rúyǐngsuíxíng.",
+            ko: "3년 전 항저우 아시안게임 당시 부정 출발로 실격당하며 온갖 악플과 여론의 뭇매를 맞았던 암흑기 이후, 1000일이 넘는 시간 동안 실패의 트라우마는 그림자처럼 그녀를 괴롭혔습니다."
+          },
+          {
+            num: 3,
+            zh: "当晚决赛发令枪响，因为内心深处对抢跑的敬畏与防备，吴艳妮起跑反应时间在全场选手中位列末位，陷入极大被动；然而在飞奔的赛道上，她没有丝毫退缩与怯懦，凭借极强的爆发力与顽强坚韧的斗志一路加速追赶，连续跨越十个栏架，终于第三个强势撞线，没有让昔日遗憾再度重演。",
+            pinyin: "Dāngwǎn juésài fālìngqiāng xiǎng, yīnwèi nèixīn shēnchù duì qiǎngpǎo de jìngwèi yǔ fángbèi, Wú Yànnī qǐpǎo fǎnyìng shíjiān zài quánchǎng xuǎnshǒu zhōng wèiliè mòwèi, xiànrù jídà bèidòng; rán'ér zài fēibēn de sàidào shàng, tā méiyǒu sīháo tuìsuō yǔ qiènuò, píngjiè jí qiáng de bàofālì yǔ wánqiáng jiānrèn de dòuzhì yílù jiāsù zhuīgǎn, liánxù kuàyuè shí gè lánjià, zhōngyú dì-sān gè qiángshì zhuàngxiàn, méiyǒu ràng xīrì yíhàn zàidù chóngyǎn.",
+            ko: "이날 결승전에서도 트라우마 탓에 출발 반응 속도가 8명 중 꼴찌로 처지며 불리하게 레이스를 시작했으나, 포기하지 않고 폭발적인 스피드와 강철 같은 투지로 10개의 허들을 거침없이 넘으며 앞선 주자들을 맹렬히 추격한 끝에 3위로 결승선을 통과했습니다."
+          },
+          {
+            num: 4,
+            zh: "赛后身披五星红旗的吴艳妮难掩激动、泪洒赛场，哽咽着向镜头表示“今天战胜了当年的自己，给自己打满分一百分”，用不屈的竞技精神完成了荡气回肠的自我救赎与涅槃重生。",
+            pinyin: "Sàihòu shēnpī wǔxīng-hóngqí de Wú Yànnī nán yǎn jīdòng, lèi sǎ sàichǎng, gěngyè zhe xiàng jìngtóu biǎoshì “jīntiān zhànshèng le dāngnián de zìjǐ, gěi zìjǐ dǎ mǎnfēn yībǎi fēn”, yòng bùqū de jìngjì jīngshén wánchéng le dàngqì-huícháng de zìwǒ jiùshú yǔ nièpán chóngshēng.",
+            ko: "경기 후 오성홍기를 두른 채 눈물을 쏟아낸 우옌니는 '오늘 드디어 과거의 나 자신을 이겨냈고, 스스로에게 100점 만점을 주고 싶다'고 밝히며 감동적인 부활의 드라마를 완성했습니다."
+          }
+        ],
+        vocab20: [
+          { no: "01", word: "田径", pinyin: "tiánjìng", pos: "体育基础大项", mean: "트랙과 필드 육상 종목의 총칭", tip: "스피드와 도약의 미학이 펼쳐진 아시안게임 주경기장" },
+          { no: "02", word: "万众瞩目", pinyin: "wàn zhòng zhǔ mù", pos: "盛大聚焦成语", mean: "수많은 사람들의 모든 시선과 관심이 한곳으로 집중되는 모양", tip: "전 아시아 스포츠 팬들의 이목이 쏠린 여자 허들 결승전" },
+          { no: "03", word: "名将", pinyin: "míngjiàng", pos: "体坛精英称号", mean: "뛰어난 기량과 명성으로 기대를 한 몸에 받는 정상급 선수", tip: "시련과 논란을 딛고 다시 트랙 위에 선 중국 육상의 간판스타" },
+          { no: "04", word: "珍贵", pinyin: "zhēnguì", pos: "极高价值形容词", mean: "돈으로 환산할 수 없을 만큼 소중하고 뜻깊은 가치를 지니다", tip: "금메달보다 더 값진 피땀과 눈물로 빚어낸 영광의 동메달" },
+          { no: "05", word: "抢跑", pinyin: "qiǎngpǎo", pos: "田径违规术语", mean: "출발 총성이 울리기 전에 신체 반응이 먼저 튀어나간 부정 출발", tip: "3년 전 뼈아픈 실격의 아픔을 안겼던 트라우마의 근원" },
+          { no: "06", word: "阴影", pinyin: "yīnyǐng", pos: "心理创伤比喻", mean: "과거의 뼈아픈 실패나 상처로 인해 마음속에 드리워진 어두운 불안감", tip: "1000일이 넘는 긴 세월 동안 끈질기게 따라다녔던 내면의 공포" },
+          { no: "07", word: "发令枪", pinyin: "fālìngqiāng", pos: "田径起跑器材", mean: "트랙 경기에서 선수들에게 정식 출발 신호를 알리는 화약총", tip: "긴장감이 최고조에 달한 순간 경기장에 울려 퍼진 시작의 총성" },
+          { no: "08", word: "末位", pinyin: "mòwèi", pos: "排位排序名词", mean: "경쟁 대열에서 가장 뒤처져 마지막 꼴찌 자리에 머물러 있는 순위", tip: "부정 출발을 극도로 조심하느라 8명 중 가장 늦게 출발한 상황" },
+          { no: "09", word: "被动", pinyin: "bèidòng", pos: "局势劣势形容词", mean: "초반 주도권을 빼앗겨 상대방의 페이스에 밀리고 수세에 처하다", tip: "출발 반응 속도 0.192초로 최하위에서 레이스를 시작한 불리한 국면" },
+          { no: "10", word: "飞奔", pinyin: "fēibēn", pos: "极限速度动词", mean: "마치 바람처럼 허공을 날아가듯 맹렬하고 거침없는 속도로 질주하다", tip: "모든 잡념을 떨쳐버리고 결승선을 향해 전력으로 내달리는 순간" },
+          { no: "11", word: "退缩", pinyin: "tuìsuō", pos: "畏惧退避动词", mean: "어려움이나 두려움 앞에서 용기를 잃고 뒤로 물러서거나 주저하다", tip: "과거의 트라우마에 굴복하지 않고 끝까지 정면 승부를 택한 용기" },
+          { no: "12", word: "坚韧", pinyin: "jiānrèn", pos: "坚毅顽强品质", mean: "모진 시련과 고난 속에서도 꺾이거나 굽히지 않고 꿋꿋하게 버팀", tip: "포기하지 않고 한 발 한 발 격차를 좁혀나간 강철 같은 멘탈" },
+          { no: "13", word: "斗志", pinyin: "dòuzhì", pos: "奋战精神名词", mean: "어떠한 난관 앞에서도 반드시 이겨내겠다는 뜨거운 승부욕과 투지", tip: "경기장 전체를 숨죽이게 만든 폭발적인 라스트 스퍼트의 원동력" },
+          { no: "14", word: "栏架", pinyin: "lánjià", pos: "跨栏项目器械", mean: "허들 경기 트랙 위에 일정한 간격으로 설치된 나무와 금속 장애물", tip: "10개의 허들을 한 치의 오차도 없이 리드미컬하게 넘어섬" },
+          { no: "15", word: "撞线", pinyin: "zhuàngxiàn", pos: "冲过终点动宾", mean: "가슴으로 결승선 테이프를 강하게 밀어젖히며 레이스를 마치다", tip: "3위로 결승선을 통과하며 감격스러운 메달 획득을 확정 짓는 순간" },
+          { no: "16", word: "重演", pinyin: "chóngyǎn", pos: "历史复现动词", mean: "과거에 겪었던 뼈아픈 실수나 비극적인 상황이 다시 반복되어 일어나다", tip: "실격 없이 당당하게 자신의 완주 기록을 남겨 아쉬움을 털어냄" },
+          { no: "17", word: "泪洒", pinyin: "lèisǎ", pos: "真情流露动词", mean: "가슴 깊은 곳에서 북받쳐 오르는 감격을 주체하지 못하고 눈물을 쏟다", tip: "오성홍기를 어깨에 두르고 참아왔던 서러움과 환희를 터뜨린 명장면" },
+          { no: "18", word: "救赎", pinyin: "jiùshú", pos: "精神洗礼终结", mean: "과거의 죄책감이나 과오를 뼈를 깎는 노력으로 씻어내고 온전해짐", tip: "실패자라는 낙인을 스스로의 두 다리로 극복해낸 진정한 인간 승리" },
+          { no: "19", word: "涅槃", pinyin: "nièpán", pos: "浴火重生比喻", mean: "모진 불길과 고통 속에서 불순물을 태워버리고 완전히 새롭게 태어남", tip: "좌절을 딛고 한층 더 성숙하고 당당한 챔피언으로 다시 일어선 모습" },
+          { no: "20", word: "重生", pinyin: "chóngshēng", pos: "生命重启奇迹", mean: "죽음과 같은 절망의 밑바닥을 딛고 다시 힘차게 숨 쉬며 일어서다", tip: "모든 의심과 악플을 보란 듯이 잠재운 감동적인 부활의 드라마" }
+        ]
+      }
+    ];
+
+    /* 100개 핵심 단어장 데이터베이스 (제43기 2201~2300번) */
+    const VOCABULARY_LIST = [];
+    const categoryMapping = ['전자상거래/문화', '스포츠/해외치안', '식품안전/기술표준', '통신소비/금융규제', '육상휴먼/감동부활'];
+
+    ARTICLES_DATA.forEach((art, artIdx) => {
+      (art.vocab20 || []).forEach(v => {
+        VOCABULARY_LIST.push({
+          id: VOCABULARY_LIST.length + 1,
+          word: v.word,
+          pinyin: v.pinyin,
+          mean: v.mean,
+          pos: v.pos,
+          tip: v.tip,
+          cat: categoryMapping[artIdx] || '종합시사',
+          article: art.id
+        });
+      });
+    });
+
+    /* HSK 실전 퀴즈 제43기 데이터 (全中文 10题) */
+    const QUIZ_DATA = [
+      {
+        type: "选词填空 · 成语运用",
+        question: "1. 请根据文意选出最恰当的成语填入括号内：\n某些剧粉因对主演私人生活不满，竟（  ）发起集体退款，将售后机制挪作情绪宣泄工具。",
+        options: [
+          "A. 抱团",
+          "B. 孤立",
+          "C. 推诿",
+          "D. 犹豫"
+        ],
+        answer: 0,
+        explanation: "【정답: A】 기사 01 본문에서 특정 목적을 위해 집단으로 뭉쳐 단체 행동에 나섰다는 맥락이므로 '抱团(패를 짓다, 뭉치다)'이 정답입니다."
+      },
+      {
+        type: "阅读理解 · 细节事实",
+        question: "2. 关于电视剧收官数字化商品被“仅退款”事件，法律专家的明确看法是：",
+        options: [
+          "A. 数字商品属于实物消费，完全支持七天无理由退款",
+          "B. 只要消费者主观心理体验不佳，平台就应当全额退款",
+          "C. 数字化文化产品下载播放后即属履约完毕，惩罚式退款违背诚信且滥用规则",
+          "D. 影视公司应向退款剧粉书面公开道歉"
+        ],
+        answer: 2,
+        explanation: "【정답: C】 기사 01 본문 제4단락에 '数字影视内容在下载与播放完成后即属于已履约的精神文化产品……越过规则红线的惩罚式维权不仅违背诚信底线，更是在滥用规则'라고 명시되어 있습니다."
+      },
+      {
+        type: "歇后语推断 · 语境理解",
+        question: "3. 今日时事歇后语“黄鼠狼给鸡拜年 —— 没安好心”最适合用来形容下列哪一行为？",
+        options: [
+          "A. 饭店老板自掏腰包奖励优秀员工小轿车",
+          "B. 营业厅打着“0元免费送高端手机”幌子，暗中诱导消费者绑定消费借款合同",
+          "C. 运动员在起跑落后的绝境中顽强拼搏夺得奖牌",
+          "D. 市场监管部门对食品安全漏洞开展专项整改"
+        ],
+        answer: 1,
+        explanation: "【정답: B】 '黄鼠狼给鸡拜年 —— 没安好心'는 겉으로는 달콤한 혜택이나 호의를 베푸는 척하지만 속으로는 부당한 이익을 취하려는 음흉한 수법을 뜻하므로 B가 정확합니다."
+      },
+      {
+        type: "阅读理解 · 因果推断",
+        question: "4. “张雪机车”团队在米兰遭遇严重失窃后，引发国内网民吐槽讨论的主要原因是：",
+        options: [
+          "A. 车队在世界锦标赛上未能取得任何比赛名次",
+          "B. 境外部分大城市存在严重治安隐患且当地警方办案拖沓缺乏实质进展",
+          "C. 赞助商拒绝报销往返欧洲的包机费用",
+          "D. 赛车机械故障导致中途退赛"
+        ],
+        answer: 1,
+        explanation: "【정답: B】 기사 02 본문에서 대낮 도심 주차 차량의 유리창이 깨져 여권과 소지품을 털리고 신용카드가 도용되었음에도 현지 경찰이 늑장 수사로 일관한 점이 공분을 샀습니다."
+      },
+      {
+        type: "选词填空 · 语境搭配",
+        question: "5. 塑料瓶盖新国标规定：瓶盖在（  ）至发生气体泄漏与液体渗出时，防盗环连接桥必须在极短区间内发生（  ）形变。",
+        options: [
+          "A. 旋紧 …… 可逆",
+          "B. 旋松 …… 不可逆",
+          "C. 拆除 …… 周期性",
+          "D. 压铸 …… 弹性"
+        ],
+        answer: 1,
+        explanation: "【정답: B】 기사 03 본문 제3단락 원문의 '在旋松至发生气体泄漏与液体渗出时，防盗环连接桥必须在极短旋转区间内发生明显断裂或不可逆形变' 구문과 완벽히 일치합니다."
+      },
+      {
+        type: "细节理解 · 技术标准",
+        question: "6. 针对非碳酸饮料塑料防盗瓶盖设立的新国标核心指标是：",
+        options: [
+          "A. 瓶盖重量必须小于10克",
+          "B. B-L角（泄漏角与断裂角之差）小于等于40度",
+          "C. 瓶身必须采用全降解环保纸质包装",
+          "D. 瓶盖内部必须涂抹食用级植物油"
+        ],
+        answer: 1,
+        explanation: "【정답: B】 기사 03 본문 제2단락에서 비탄산음료 병마개에 대해 'B-L각 ≤ 40°'라는 정량적 레드라인을 최초로 신설했다고 기술되어 있습니다."
+      },
+      {
+        type: "病句辨析 · HSK 6级经典考题",
+        question: "7. 下列各句中，没有语病且表意明确的一项是：",
+        options: [
+          "A. 随着三大运营商紧急叫停相关业务，使线下门店的虚假营销乱象得到了有效遏制。",
+          "B. 能否从源头堵截产品设计缺陷，是保障广大消费者“舌尖上的安全”的关键所在。",
+          "C. 这位女选手不仅顶住了巨大的心理压力，而且甚至在比赛中跑出了全场最好成绩。",
+          "D. 监管部门广泛听取并搜集了有关包装新国标的各方面合理化建议意见。"
+        ],
+        answer: 1,
+        explanation: "【정답: B】 A는 '随着……使……'로 주어 결여, C는 '不仅/甚至' 부사 중복 부자연스러움, D는 '建议意见' 어휘 중복입니다. B는 '能否(양면) ↔ 关键(판단)'이 완벽히 호응하는 올바른 문장입니다."
+      },
+      {
+        type: "深度理解 · 商业合规",
+        question: "8. 电信运营商全面叫停“0元购机”与“金融分期”业务的深层动因是：",
+        options: [
+          "A. 手机生产厂商全面停产高端旗舰智能机",
+          "B. 该模式暗中捆绑消费信贷，用户一旦延误缴费便导致征信逾期，侵犯知情权与公平交易权",
+          "C. 5G网络资费套餐全面实行免费开放政策",
+          "D. 线下营业厅已经全面转型为线上无人零售"
+        ],
+        answer: 1,
+        explanation: "【정답: B】 기사 04 본문에서 통신 요금과 대출을 묶어 연체 시 은행 신용불량자로 전락시키는 기만적 영업으로 거센 민원과 규제 조치를 맞았다고 명시되어 있습니다."
+      },
+      {
+        type: "成语辨析 · 逻辑矛盾",
+        question: "9. 下列各句中，成语使用不恰当的一项是：",
+        options: [
+          "A. 面对激烈的国际赛场竞争，中国健儿奋勇拼搏，屡创佳绩。",
+          "B. 商家打着免费的噱头设下金融陷阱，这种行径简直令人大快人心。",
+          "C. 三年前的失利阴影曾如影随形，但她从未选择退缩与逃避。",
+          "D. 经过顽强拼搏强势撞线，她终于完成了震撼人心的涅槃重生。"
+        ],
+        answer: 1,
+        explanation: "【정답: B】 '大快人心(모두의 마음을 통쾌하게 하다)'은 정의가 구현되거나 악인이 처벌받았을 때 쓰는 말이므로, 소비자를 울린 금융 사기 상술에 쓰는 것은 어휘 오용입니다."
+      },
+      {
+        type: "主旨归纳 · 今日金句",
+        question: "10. 结合吴艳妮赛后所言及“今日最火金句”，作者认为真正的“满分英雄”是指：",
+        options: [
+          "A. 依靠投机取巧在短时间内博得巨大网络流量的人",
+          "B. 只要在国际重大赛事中夺得金牌就无需在乎道德争议的人",
+          "C. 能够直面坎坷与至暗时刻，战胜昔日失败与内心恐惧、实现自我超越的人",
+          "D. 在职场竞争中善于规避一切风险、明哲保身的人"
+        ],
+        answer: 2,
+        explanation: "【정답: C】 오늘의 명언은 시련과 암흑기를 두려워하지 않고 과거의 나 자신을 이겨내며 일어서는 자가 진정한 영웅임을 예찬하고 있습니다."
+      }
+    ];
+
+    let currentArticleIndex = 0;
+    let selectedVocabCategory = 'all';
+    let userQuizAnswers = {};
+    let globalPlaybackRate = 1.0;
+    let cachedChineseVoice = null;
+    let isFullArticlePlaying = false;
+    let fullArticleSentenceIdx = 0;
+    let currentPlayingSentenceIdx = null;
+    let sentenceLoopIdx = null;
+    let isSentencePaused = false;
+
+    let currentFlashcardIdx = 0;
+    let flashcardFilteredList = [...VOCABULARY_LIST];
+    let isCardFlipped = false;
+    let learnedCardSet = new Set();
+    let currentVocabMode = 'flashcards';
+
+    let isVocabListPlaying = false;
+    let isVocabListPaused = false;
+    let vocabListCurrentIndex = 0;
+    let vocabListFilteredItems = [];
+    let vocabListTimeoutId = null;
+
+    /* Web Speech API 음성 엔진 초기화 */
+    function initVoices() {
+      if (!('speechSynthesis' in window)) return;
+      const voices = window.speechSynthesis.getVoices();
+      cachedChineseVoice = voices.find(v => v.lang === 'zh-CN' || v.lang === 'zh_CN' || v.lang.startsWith('zh-Hans')) ||
+                           voices.find(v => v.lang.startsWith('zh')) || null;
+    }
+
+    if ('speechSynthesis' in window) {
+      initVoices();
+      window.speechSynthesis.onvoiceschanged = initVoices;
+    }
+
+    function setGlobalPlaybackRate(rate, btnEl) {
+      globalPlaybackRate = rate;
+      document.querySelectorAll('.rate-btn').forEach(b => {
+        b.className = "rate-btn px-2 py-1 rounded-lg transition hover:text-slate-900";
+      });
+      if (btnEl) {
+        btnEl.className = "rate-btn px-2 py-1 rounded-lg transition bg-white text-rose-600 shadow-sm font-black";
+      }
+      showToast("⚡", "음성 속도가 " + rate + "배속으로 설정되었습니다.");
+    }
+
+    function globalStopAudio() {
+      stopAllAudio();
+      showToast("⏹", "모든 음성 재생이 정지되었습니다.");
+    }
+
+    function speakChinese(text, onEnd) {
+      if (!('speechSynthesis' in window)) {
+        showToast("⚠️", "현재 브라우저는 Web Speech 음성 재생을 지원하지 않습니다.");
+        if (onEnd) onEnd();
+        return;
+      }
+
+      window.speechSynthesis.cancel();
+      if (!text || !text.trim()) {
+        if (onEnd) onEnd();
+        return;
+      }
+
+      const cleanText = text.replace(/<[^>]*>/g, '').trim();
+      const utterance = new SpeechSynthesisUtterance(cleanText);
+      utterance.lang = 'zh-CN';
+      utterance.rate = globalPlaybackRate;
+      utterance.pitch = 1.0;
+
+      if (cachedChineseVoice) utterance.voice = cachedChineseVoice;
+
+      utterance.onend = () => {
+        if (onEnd) onEnd();
+      };
+      utterance.onerror = (e) => {
+        if (e.error !== 'canceled' && e.error !== 'interrupted') {
+          console.warn("TTS Error:", e);
+        }
+        if (onEnd) onEnd();
+      };
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function stopAllAudio() {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      if (currentPlayingSentenceIdx !== null) {
+        resetSentenceUI(currentPlayingSentenceIdx);
+      }
+      currentPlayingSentenceIdx = null;
+      isSentencePaused = false;
+      if (isFullArticlePlaying) {
+        isFullArticlePlaying = false;
+        updateFullPlayButtonUI(false);
+      }
+      stopVocabListPlayback();
+    }
+
+    function playArticleHeadlineVoice() {
+      const art = ARTICLES_DATA[currentArticleIndex];
+      if (!art || !art.headlineZh) return;
+      stopAllAudio();
+      showToast("🔊", "헤드라인 원어민 발음을 재생합니다.");
+      speakChinese(art.headlineZh);
+    }
+
+    function highlightSentenceUI(sIdx, state) {
+      const card = document.getElementById("sentence-card-" + sIdx);
+      const pill = document.getElementById("sentence-playing-pill-" + sIdx);
+      const pillText = document.getElementById("sentence-playing-text-" + sIdx);
+      const pauseBtn = document.getElementById("sentence-pause-btn-" + sIdx);
+      const loopBtn = document.getElementById("sentence-loop-btn-" + sIdx);
+      if (!card) return;
+
+      card.classList.remove('ring-4', 'ring-rose-200', 'border-[#e11d48]', 'bg-rose-50/20', 'ring-amber-200', 'border-amber-500', 'bg-amber-50/20', 'ring-purple-200', 'border-purple-500', 'bg-purple-50/20');
+
+      if (state === 'playing') {
+        card.classList.add('ring-4', 'ring-rose-200', 'border-[#e11d48]', 'bg-rose-50/20');
+        if (pill) {
+          pill.className = "flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#e11d48] text-white shadow-xs";
+          if (pillText) pillText.textContent = "재생 중 🎧";
+        }
+        if (pauseBtn) pauseBtn.innerHTML = "<span>⏸</span> 일시정지";
+      } else if (state === 'paused') {
+        card.classList.add('ring-4', 'ring-amber-200', 'border-amber-500', 'bg-amber-50/20');
+        if (pill) {
+          pill.className = "flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500 text-white shadow-xs";
+          if (pillText) pillText.textContent = "일시정지 중 ⏸";
+        }
+        if (pauseBtn) pauseBtn.innerHTML = "<span>▶</span> 이어듣기";
+      } else if (state === 'looping') {
+        card.classList.add('ring-4', 'ring-purple-200', 'border-purple-500', 'bg-purple-50/20');
+        if (pill) {
+          pill.className = "flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-purple-600 text-white shadow-xs";
+          if (pillText) pillText.textContent = "반복 재생 중 🔁";
+        }
+        if (loopBtn) loopBtn.classList.add('bg-purple-100', 'text-purple-700', 'border-purple-300');
+      }
+    }
+
+    function resetSentenceUI(sIdx) {
+      const card = document.getElementById("sentence-card-" + sIdx);
+      const pill = document.getElementById("sentence-playing-pill-" + sIdx);
+      const pauseBtn = document.getElementById("sentence-pause-btn-" + sIdx);
+      const loopBtn = document.getElementById("sentence-loop-btn-" + sIdx);
+
+      if (card) {
+        card.classList.remove('ring-4', 'ring-rose-200', 'border-[#e11d48]', 'bg-rose-50/20', 'ring-amber-200', 'border-amber-500', 'bg-amber-50/20', 'ring-purple-200', 'border-purple-500', 'bg-purple-50/20');
+        card.classList.add('border-slate-200/90', 'bg-white');
+      }
+      if (pill) pill.classList.add('hidden');
+      if (pauseBtn) pauseBtn.innerHTML = "<span>⏸</span> 일시정지";
+      if (loopBtn && sentenceLoopIdx !== sIdx) {
+        loopBtn.classList.remove('bg-purple-100', 'text-purple-700', 'border-purple-300');
+      }
+    }
+
+    function playSentenceVoice(sIdx, text) {
+      if (sentenceLoopIdx !== null && sentenceLoopIdx !== sIdx) sentenceLoopIdx = null;
+      stopAllAudio();
+
+      const cleanText = (text || '').replace(/<[^>]*>/g, '').trim();
+      if (!cleanText) return;
+
+      currentPlayingSentenceIdx = sIdx;
+      isSentencePaused = false;
+      highlightSentenceUI(sIdx, sentenceLoopIdx === sIdx ? 'looping' : 'playing');
+
+      speakChinese(cleanText, () => {
+        if (sentenceLoopIdx === sIdx) {
+          setTimeout(() => {
+            if (sentenceLoopIdx === sIdx) playSentenceVoice(sIdx, text);
+          }, 400);
+        } else {
+          resetSentenceUI(sIdx);
+          currentPlayingSentenceIdx = null;
+        }
+      });
+    }
+
+    function togglePauseResumeSentence(sIdx, text) {
+      if (!('speechSynthesis' in window)) return;
+      if (currentPlayingSentenceIdx === sIdx) {
+        if (window.speechSynthesis.speaking && !window.speechSynthesis.paused && !isSentencePaused) {
+          window.speechSynthesis.pause();
+          isSentencePaused = true;
+          highlightSentenceUI(sIdx, 'paused');
+        } else if (window.speechSynthesis.paused || isSentencePaused) {
+          window.speechSynthesis.resume();
+          isSentencePaused = false;
+          highlightSentenceUI(sIdx, sentenceLoopIdx === sIdx ? 'looping' : 'playing');
+        }
+      } else {
+        playSentenceVoice(sIdx, text);
+      }
+    }
+
+    function stopSentenceVoice(sIdx) {
+      if (sentenceLoopIdx === sIdx) sentenceLoopIdx = null;
+      stopAllAudio();
+      resetSentenceUI(sIdx);
+    }
+
+    function toggleSentenceLoop(sIdx, text) {
+      if (sentenceLoopIdx === sIdx) {
+        sentenceLoopIdx = null;
+        stopAllAudio();
+        showToast("🔁", "제 " + (sIdx + 1) + "문장 반복 청취가 해제되었습니다.");
+      } else {
+        sentenceLoopIdx = sIdx;
+        showToast("🔁", "제 " + (sIdx + 1) + "문장 무한 반복 듣기를 시작합니다.");
+        playSentenceVoice(sIdx, text);
+      }
+    }
+
+    function playEntireArticle() {
+      const art = ARTICLES_DATA[currentArticleIndex];
+      if (!art || !art.sentences || !art.sentences.length) return;
+
+      stopAllAudio();
+      isFullArticlePlaying = true;
+      fullArticleSentenceIdx = 0;
+      updateFullPlayButtonUI(true);
+      showToast("🎧", art.badge + " 전체 본문 연속 청취를 시작합니다.");
+
+      function playNext() {
+        if (!isFullArticlePlaying) return;
+        if (fullArticleSentenceIdx >= art.sentences.length) {
+          stopEntireArticle();
+          showToast("✓", "기사 전체 청취가 완료되었습니다.");
+          return;
+        }
+
+        const s = art.sentences[fullArticleSentenceIdx];
+        const idx = fullArticleSentenceIdx;
+        const card = document.getElementById("sentence-card-" + idx);
+        if (card) card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+        currentPlayingSentenceIdx = idx;
+        highlightSentenceUI(idx, 'playing');
+
+        speakChinese(s.zh, () => {
+          resetSentenceUI(idx);
+          if (isFullArticlePlaying) {
+            fullArticleSentenceIdx++;
+            setTimeout(playNext, 500);
+          }
+        });
+      }
+      playNext();
+    }
+
+    function stopEntireArticle() {
+      isFullArticlePlaying = false;
+      fullArticleSentenceIdx = 0;
+      stopAllAudio();
+      updateFullPlayButtonUI(false);
+    }
+
+    function updateFullPlayButtonUI(isPlaying) {
+      const btn = document.getElementById('fullArticlePlayBtn');
+      if (!btn) return;
+      if (isPlaying) {
+        btn.className = "px-3.5 py-1.5 rounded-full text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 transition flex items-center gap-1.5 shadow-sm animate-pulse";
+        btn.innerHTML = "<span>⏹</span> 전체 듣기 중지";
+        btn.onclick = stopEntireArticle;
+      } else {
+        btn.className = "px-3.5 py-1.5 rounded-full text-xs font-bold text-[#e11d48] bg-rose-50 border border-rose-200 hover:bg-rose-100 transition flex items-center gap-1.5 shadow-sm";
+        btn.innerHTML = "<span>▷</span> 기사 전체 본문 연속 듣기";
+        btn.onclick = playEntireArticle;
+      }
+    }
+
+    function playAllArticleVocab() {
+      stopAllAudio();
+      const art = ARTICLES_DATA[currentArticleIndex];
+      const list = art.vocab20 || [];
+      if (!list.length) return;
+
+      showToast("🔊", art.badge + " 20대 어휘 순차 청취를 시작합니다.");
+      let idx = 0;
+      function speakNext() {
+        if (idx < list.length) {
+          speakChinese(list[idx].word, () => {
+            idx++;
+            setTimeout(speakNext, 450);
+          });
+        }
+      }
+      speakNext();
+    }
+
+    function switchVocabMode(mode) {
+      currentVocabMode = mode;
+      document.querySelectorAll('.vocab-mode-btn').forEach(btn => {
+        btn.className = "vocab-mode-btn px-4 py-2 rounded-xl transition text-slate-600 hover:text-slate-900 flex items-center gap-1.5";
+      });
+      const activeBtn = document.getElementById("vocab-mode-" + mode);
+      if (activeBtn) activeBtn.className = "vocab-mode-btn px-4 py-2 rounded-xl transition bg-white text-rose-600 shadow-sm flex items-center gap-1.5";
+
+      document.getElementById('vocab-view-flashcards').classList.toggle('hidden', mode !== 'flashcards');
+      document.getElementById('vocab-view-list').classList.toggle('hidden', mode !== 'list');
+      document.getElementById('vocab-view-match').classList.toggle('hidden', mode !== 'match');
+
+      if (mode === 'flashcards') renderCurrentFlashcard();
+      else if (mode === 'list') renderVocabGrid();
+      else if (mode === 'match') startMatchGame();
+    }
+
+    function renderCurrentFlashcard() {
+      if (!flashcardFilteredList.length) return;
+      if (currentFlashcardIdx >= flashcardFilteredList.length) currentFlashcardIdx = 0;
+      const v = flashcardFilteredList[currentFlashcardIdx];
+
+      isCardFlipped = false;
+      const inner = document.getElementById('flashcardInner');
+      if (inner) inner.classList.remove('rotate-y-180');
+
+      document.getElementById('fcNumberBadge').textContent = "NO. " + String(v.id).padStart(2, '0') + " / " + VOCABULARY_LIST.length;
+      document.getElementById('fcArticleBadge').textContent = "기사 0" + (v.article + 1);
+      document.getElementById('fcWord').textContent = v.word;
+      document.getElementById('fcPinyin').textContent = v.pinyin;
+      document.getElementById('fcBackPos').textContent = v.pos || '어휘';
+      document.getElementById('fcMean').textContent = v.mean;
+      document.getElementById('fcTip').textContent = v.tip || '본 기사 핵심 출현 어휘';
+      document.getElementById('fcEx').textContent = "제43기 " + (v.cat || '종합시사');
+
+      updateVocabProgressUI();
+    }
+
+    function flipFlashcard() {
+      isCardFlipped = !isCardFlipped;
+      const inner = document.getElementById('flashcardInner');
+      if (inner) inner.classList.toggle('rotate-y-180', isCardFlipped);
+    }
+
+    function nextFlashcard() {
+      if (!flashcardFilteredList.length) return;
+      currentFlashcardIdx = (currentFlashcardIdx + 1) % flashcardFilteredList.length;
+      renderCurrentFlashcard();
+    }
+
+    function prevFlashcard() {
+      if (!flashcardFilteredList.length) return;
+      currentFlashcardIdx = (currentFlashcardIdx - 1 + flashcardFilteredList.length) % flashcardFilteredList.length;
+      renderCurrentFlashcard();
+    }
+
+    function playCurrentFlashcardVoice() {
+      if (!flashcardFilteredList.length) return;
+      speakChinese(flashcardFilteredList[currentFlashcardIdx].word);
+    }
+
+    function markFlashcardLearned() {
+      if (!flashcardFilteredList.length) return;
+      const cur = flashcardFilteredList[currentFlashcardIdx];
+      learnedCardSet.add(cur.id);
+      showToast("✓", "‘" + cur.word + "’ 단어를 암기 완료 목록에 추가했습니다!");
+      updateVocabProgressUI();
+      nextFlashcard();
+    }
+
+    function filterFlashcards(articleIdx) {
+      document.querySelectorAll('.fc-filter-btn').forEach(b => {
+        b.className = "fc-filter-btn px-3 py-1.5 rounded-xl font-bold transition bg-slate-100 text-slate-600 hover:bg-slate-200";
+      });
+      const btn = document.getElementById(articleIdx === 'all' ? 'fc-filter-all' : "fc-filter-" + articleIdx);
+      if (btn) btn.className = "fc-filter-btn px-3 py-1.5 rounded-xl font-bold transition bg-rose-600 text-white";
+
+      if (articleIdx === 'all') {
+        flashcardFilteredList = [...VOCABULARY_LIST];
+      } else {
+        flashcardFilteredList = VOCABULARY_LIST.filter(v => v.article === articleIdx);
+      }
+      currentFlashcardIdx = 0;
+      renderCurrentFlashcard();
+    }
+
+    function shuffleFlashcards() {
+      for (let i = flashcardFilteredList.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const temp = flashcardFilteredList[i];
+        flashcardFilteredList[i] = flashcardFilteredList[j];
+        flashcardFilteredList[j] = temp;
+      }
+      currentFlashcardIdx = 0;
+      renderCurrentFlashcard();
+      showToast("🔀", "단어 카드를 무작위로 섞었습니다.");
+    }
+
+    function updateVocabProgressUI() {
+      const count = learnedCardSet.size;
+      const total = VOCABULARY_LIST.length;
+      const percent = Math.round((count / total) * 100);
+      const bar = document.getElementById('vocabProgressBar');
+      const text = document.getElementById('vocabProgressText');
+      if (bar) bar.style.width = percent + "%";
+      if (text) text.textContent = count + " / " + total + " (" + percent + "%)";
+    }
+
+    function resetVocabProgress() {
+      learnedCardSet.clear();
+      updateVocabProgressUI();
+      showToast("🔄", "학습 진도가 초기화되었습니다.");
+    }
+
+    /* 스피드 매칭 게임 */
+    let matchGameCards = [];
+    let matchFirstCard = null;
+    let matchSecondCard = null;
+    let matchTimerId = null;
+    let matchTimeLeft = 60;
+    let matchFoundCount = 0;
+
+    function startMatchGame() {
+      if (matchTimerId) clearInterval(matchTimerId);
+      matchTimeLeft = 60;
+      matchFoundCount = 0;
+      matchFirstCard = null;
+      matchSecondCard = null;
+      document.getElementById('matchScore').textContent = '0';
+      document.getElementById('matchTimer').textContent = '60';
+
+      const shuffledVocab = [...VOCABULARY_LIST].sort(() => 0.5 - Math.random()).slice(0, 6);
+      matchGameCards = [];
+      shuffledVocab.forEach(v => {
+        matchGameCards.push({ id: v.id, type: 'zh', text: v.word });
+        matchGameCards.push({ id: v.id, type: 'ko', text: v.mean });
+      });
+      matchGameCards.sort(() => 0.5 - Math.random());
+
+      const grid = document.getElementById('matchGameGrid');
+      grid.innerHTML = '';
+      matchGameCards.forEach((c, idx) => {
+        const tile = document.createElement('div');
+        tile.id = "match-tile-" + idx;
+        tile.className = "p-3 rounded-2xl border-2 border-slate-200 bg-slate-50 hover:bg-rose-50 hover:border-rose-300 font-bold text-xs sm:text-sm text-slate-800 flex items-center justify-center text-center cursor-pointer min-h-[70px] select-none transition active:scale-95";
+        tile.textContent = c.text;
+        tile.onclick = () => handleMatchTileClick(idx);
+        grid.appendChild(tile);
+      });
+
+      matchTimerId = setInterval(() => {
+        matchTimeLeft--;
+        const timerEl = document.getElementById('matchTimer');
+        if (timerEl) timerEl.textContent = matchTimeLeft;
+        if (matchTimeLeft <= 0) {
+          clearInterval(matchTimerId);
+          showToast("⏰", "시간 초과! 다시 도전해보세요.");
+        }
+      }, 1000);
+    }
+
+    function handleMatchTileClick(idx) {
+      const tile = document.getElementById("match-tile-" + idx);
+      if (!tile || tile.classList.contains('opacity-0')) return;
+
+      const card = matchGameCards[idx];
+      if (card.type === 'zh') speakChinese(card.text);
+
+      if (!matchFirstCard) {
+        matchFirstCard = { idx, card, tile };
+        tile.classList.add('border-rose-500', 'bg-rose-100', 'text-rose-700');
+      } else if (!matchSecondCard && matchFirstCard.idx !== idx) {
+        matchSecondCard = { idx, card, tile };
+        tile.classList.add('border-rose-500', 'bg-rose-100', 'text-rose-700');
+
+        if (matchFirstCard.card.id === matchSecondCard.card.id && matchFirstCard.card.type !== matchSecondCard.card.type) {
+          matchFoundCount++;
+          document.getElementById('matchScore').textContent = matchFoundCount;
+          setTimeout(() => {
+            matchFirstCard.tile.classList.add('opacity-0', 'pointer-events-none');
+            matchSecondCard.tile.classList.add('opacity-0', 'pointer-events-none');
+            matchFirstCard = null;
+            matchSecondCard = null;
+            if (matchFoundCount === 6) {
+              clearInterval(matchTimerId);
+              showToast("🎉", "축하합니다! 6쌍의 단어를 모두 완벽히 맞추셨습니다!");
+            }
+          }, 300);
+        } else {
+          setTimeout(() => {
+            matchFirstCard.tile.classList.remove('border-rose-500', 'bg-rose-100', 'text-rose-700');
+            matchSecondCard.tile.classList.remove('border-rose-500', 'bg-rose-100', 'text-rose-700');
+            matchFirstCard = null;
+            matchSecondCard = null;
+          }, 500);
+        }
+      }
+    }
+
+    function updateVocabPlaybackUI(isPlaying, isPaused) {
+      const playBtn = document.getElementById('vocabPlayAllBtn');
+      const playText = document.getElementById('vocabPlayAllText');
+      const pauseBtn = document.getElementById('vocabPauseBtn');
+      const pauseIcon = document.getElementById('vocabPauseIcon');
+      const pauseText = document.getElementById('vocabPauseText');
+      if (!playBtn || !pauseBtn) return;
+
+      if (isPlaying) {
+        if (isPaused) {
+          playBtn.className = "px-3.5 py-2 rounded-xl bg-slate-900 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-sm opacity-90";
+          if (playText) playText.textContent = "순차 듣기 (" + (vocabListCurrentIndex + 1) + "/" + vocabListFilteredItems.length + ")";
+          pauseBtn.className = "px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-sm ring-2 ring-amber-300";
+          if (pauseIcon) pauseIcon.textContent = "▶";
+          if (pauseText) pauseText.textContent = "이어듣기";
+        } else {
+          playBtn.className = "px-3.5 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-sm animate-pulse";
+          if (playText) playText.textContent = "재생 중... (" + (vocabListCurrentIndex + 1) + "/" + vocabListFilteredItems.length + ")";
+          pauseBtn.className = "px-3.5 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold transition flex items-center gap-1.5 shadow-sm";
+          if (pauseIcon) pauseIcon.textContent = "⏸";
+          if (pauseText) pauseText.textContent = "일시정지";
+        }
+      } else {
+        playBtn.className = "px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95";
+        if (playText) playText.textContent = "현재 목록 순차 듣기";
+        pauseBtn.className = "px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-bold transition flex items-center gap-1.5 shadow-sm";
+        if (pauseIcon) pauseIcon.textContent = "⏸";
+        if (pauseText) pauseText.textContent = "일시정지";
+      }
+    }
+
+    function stopVocabListPlayback() {
+      if (vocabListTimeoutId) {
+        clearTimeout(vocabListTimeoutId);
+        vocabListTimeoutId = null;
+      }
+      isVocabListPlaying = false;
+      isVocabListPaused = false;
+      vocabListCurrentIndex = 0;
+      updateVocabPlaybackUI(false, false);
+    }
+
+    function playAllVocabAudio() {
+      stopAllAudio();
+      const searchKeyword = (document.getElementById('vocabSearchInput')?.value || '').trim().toLowerCase();
+      vocabListFilteredItems = VOCABULARY_LIST.filter(v => {
+        const matchesCategory = (selectedVocabCategory === 'all' || v.cat === selectedVocabCategory);
+        const matchesSearch = !searchKeyword || 
+          v.word.toLowerCase().includes(searchKeyword) ||
+          v.pinyin.toLowerCase().includes(searchKeyword) ||
+          v.mean.toLowerCase().includes(searchKeyword);
+        return matchesCategory && matchesSearch;
+      });
+
+      if (!vocabListFilteredItems.length) {
+        showToast("⚠️", "재생할 어휘가 검색 결과에 없습니다.");
+        return;
+      }
+
+      isVocabListPlaying = true;
+      isVocabListPaused = false;
+      vocabListCurrentIndex = 0;
+      updateVocabPlaybackUI(true, false);
+      showToast("🔊", "어휘장 목록 (" + vocabListFilteredItems.length + "개) 순차 청취를 시작합니다.");
+
+      function speakNextWord() {
+        if (!isVocabListPlaying || isVocabListPaused) return;
+        if (vocabListCurrentIndex >= vocabListFilteredItems.length) {
+          stopVocabListPlayback();
+          showToast("✓", "전체 어휘 목록 청취가 완료되었습니다.");
+          return;
+        }
+
+        updateVocabPlaybackUI(true, false);
+        const item = vocabListFilteredItems[vocabListCurrentIndex];
+        speakChinese(item.word, () => {
+          if (!isVocabListPlaying || isVocabListPaused) return;
+          vocabListCurrentIndex++;
+          vocabListTimeoutId = setTimeout(speakNextWord, 450);
+        });
+      }
+      speakNextWord();
+    }
+
+    function togglePauseResumeVocabList() {
+      if (!('speechSynthesis' in window)) return;
+      if (!isVocabListPlaying) {
+        playAllVocabAudio();
+        return;
+      }
+
+      if (!isVocabListPaused) {
+        if (vocabListTimeoutId) {
+          clearTimeout(vocabListTimeoutId);
+          vocabListTimeoutId = null;
+        }
+        if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) window.speechSynthesis.pause();
+        isVocabListPaused = true;
+        updateVocabPlaybackUI(true, true);
+        showToast("⏸", "순차 청취가 일시정지되었습니다.");
+      } else {
+        isVocabListPaused = false;
+        updateVocabPlaybackUI(true, false);
+        showToast("▶", "어휘 청취를 이어서 진행합니다.");
+
+        if (window.speechSynthesis.paused) {
+          window.speechSynthesis.resume();
+        } else {
+          function resumeNext() {
+            if (!isVocabListPlaying || isVocabListPaused) return;
+            if (vocabListCurrentIndex >= vocabListFilteredItems.length) {
+              stopVocabListPlayback();
+              return;
+            }
+            updateVocabPlaybackUI(true, false);
+            speakChinese(vocabListFilteredItems[vocabListCurrentIndex].word, () => {
+              if (!isVocabListPlaying || isVocabListPaused) return;
+              vocabListCurrentIndex++;
+              vocabListTimeoutId = setTimeout(resumeNext, 450);
+            });
+          }
+          resumeNext();
+        }
+      }
+    }
+
+    function toggleMeaningVisibility() {
+      const isHidden = document.getElementById('toggleHideMeanings')?.checked;
+      const vocabViewList = document.getElementById('vocab-view-list');
+      if (vocabViewList) {
+        vocabViewList.classList.toggle('blind-mode', isHidden);
+      }
+    }
+
+    function setVocabCategory(cat) {
+      selectedVocabCategory = cat;
+      ['all', '전자상거래/문화', '스포츠/해외치안', '식품안전/기술표준', '통신소비/금융규제', '육상휴먼/감동부활'].forEach(c => {
+        const btn = document.getElementById("vcat-" + c);
+        if (!btn) return;
+        if (c === cat) btn.className = "vcat-btn px-3 py-1.5 rounded-xl text-xs font-bold border transition bg-rose-600 text-white border-rose-600 shadow-sm";
+        else btn.className = "vcat-btn px-3 py-1.5 rounded-xl text-xs font-bold border transition bg-white text-slate-600 border-slate-200 hover:bg-slate-50";
+      });
+      renderVocabGrid();
+    }
+
+    function filterVocabList() {
+      renderVocabGrid();
+    }
+
+    function renderVocabGrid() {
+      const grid = document.getElementById('vocabGrid');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      const searchKeyword = (document.getElementById('vocabSearchInput')?.value || '').trim().toLowerCase();
+      const filtered = VOCABULARY_LIST.filter(v => {
+        const matchesCategory = (selectedVocabCategory === 'all' || v.cat === selectedVocabCategory);
+        const matchesSearch = !searchKeyword || 
+          v.word.toLowerCase().includes(searchKeyword) ||
+          v.pinyin.toLowerCase().includes(searchKeyword) ||
+          v.mean.toLowerCase().includes(searchKeyword);
+        return matchesCategory && matchesSearch;
+      });
+
+      if (!filtered.length) {
+        grid.innerHTML = '<div class="col-span-full py-12 text-center text-slate-400 text-sm bg-white rounded-3xl border border-slate-200">검색 결과가 없습니다.</div>';
+        return;
+      }
+
+      filtered.forEach(v => {
+        const card = document.createElement('div');
+        card.className = "bg-white p-5 rounded-2xl border border-slate-200/90 shadow-sm hover:border-rose-300 hover:shadow-md transition flex flex-col justify-between space-y-3 group";
+
+        card.innerHTML = `
+          <div>
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+              <div class="flex items-center gap-2">
+                <span class="text-[11px] font-mono font-bold text-slate-400">NO. ${String(v.id).padStart(2, '0')}</span>
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-600">${v.cat}</span>
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-50 text-rose-600">${v.pos}</span>
+              </div>
+              <button onclick="speakChinese('${v.word}')" class="p-1 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition" title="발음 듣기">
+                <i class="fa-solid fa-volume-high"></i>
+              </button>
+            </div>
+
+            <div class="pt-2">
+              <div class="text-xl sm:text-2xl font-black chinese-text text-slate-900 group-hover:text-rose-600 transition">
+                ${v.word}
+              </div>
+              <div class="text-xs font-mono font-bold text-rose-600 mt-0.5">
+                ${v.pinyin}
+              </div>
+            </div>
+
+            <div class="vocab-meaning-text pt-2 text-xs font-bold text-slate-800 leading-snug">
+              ${v.mean}
+            </div>
+
+            <div class="text-[11px] text-slate-500 leading-relaxed font-medium mt-1">
+              ${v.tip || ''}
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function switchMainTab(tabId) {
+      stopAllAudio();
+      ['dashboard', 'articles', 'vocabulary', 'quiz', 'links'].forEach(t => {
+        const view = document.getElementById("view-" + t);
+        const btn = document.getElementById("nav-btn-" + t);
+        if (!view || !btn) return;
+        if (t === tabId) {
+          view.classList.remove('hidden');
+          btn.className = "main-tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold border transition whitespace-nowrap bg-slate-900 text-white border-slate-900 shadow-sm";
+        } else {
+          view.classList.add('hidden');
+          btn.className = "main-tab-btn flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold border transition whitespace-nowrap bg-white text-slate-600 border-slate-200 hover:bg-slate-50";
+        }
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function jumpToArticle(artIndex) {
+      switchMainTab('articles');
+      selectArticle(artIndex);
+    }
+
+    function selectArticle(index) {
+      stopAllAudio();
+      currentArticleIndex = index;
+      for (let i = 0; i < 5; i++) {
+        const tabBtn = document.getElementById("article-tab-" + i);
+        if (!tabBtn) continue;
+        if (i === index) tabBtn.className = "article-tab-btn flex-1 min-w-[120px] py-2.5 px-4 rounded-xl font-extrabold text-sm transition text-center shadow-xs bg-[#e11d48] text-white";
+        else tabBtn.className = "article-tab-btn flex-1 min-w-[120px] py-2.5 px-4 rounded-xl font-bold text-sm transition text-center text-slate-600 hover:bg-slate-100";
+      }
+      renderArticleDetail(index);
+    }
+
+    function renderArticleDetail(index) {
+      const art = ARTICLES_DATA[index];
+      if (!art) return;
+
+      document.getElementById('articleBadgeNumber').textContent = art.badge;
+      document.getElementById('articleCategory').textContent = art.category;
+      const vocabBadge = document.getElementById('vocabTableBadge');
+      if (vocabBadge) vocabBadge.textContent = art.badge;
+
+      const sourcesContainer = document.getElementById('articleSourcesContainer');
+      sourcesContainer.innerHTML = '';
+      (art.sources || []).forEach((source, idx) => {
+        const linkElem = document.createElement('a');
+        linkElem.href = source.url;
+        linkElem.target = "_blank";
+        linkElem.rel = "noopener noreferrer";
+        linkElem.className = "text-[#e11d48] hover:underline font-bold inline-flex items-center gap-0.5 transition";
+        linkElem.innerHTML = `<span>${source.name}</span><i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-0.5"></i>`;
+        sourcesContainer.appendChild(linkElem);
+        if (idx < art.sources.length - 1) {
+          const sep = document.createElement('span');
+          sep.textContent = " / ";
+          sep.className = "text-slate-300 font-normal";
+          sourcesContainer.appendChild(sep);
+        }
+      });
+
+      document.getElementById('articleHeadlineZh').textContent = art.headlineZh || '';
+      document.getElementById('articleHeadlinePinyin').textContent = art.headlinePinyin || '';
+      const headlineKoEl = document.getElementById('articleHeadlineKo');
+      if (headlineKoEl) headlineKoEl.textContent = art.headlineKo || '';
+      document.getElementById('articleSummaryKo').textContent = art.summaryKo || '';
+
+      const sentencesList = document.getElementById('articleSentencesList');
+      sentencesList.innerHTML = '';
+      (art.sentences || []).forEach((s, sIdx) => {
+        const sentenceNum = s.num || (sIdx + 1);
+        const card = document.createElement('div');
+        card.id = "sentence-card-" + sIdx;
+        card.className = "p-5 sm:p-6 rounded-2xl bg-white border border-slate-200/90 hover:border-slate-300 transition-all duration-200 space-y-3.5 cursor-pointer shadow-sm";
+        card.onclick = (e) => {
+          if (!e.target.closest('button')) playSentenceVoice(sIdx, s.zh);
+        };
+
+        card.innerHTML = `
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <span class="w-5 h-5 rounded-full bg-slate-800 text-white text-[11px] font-black flex items-center justify-center flex-shrink-0">${sentenceNum}</span>
+              <span class="text-xs font-bold text-slate-700">제 ${sentenceNum}문장</span>
+            </div>
+            
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <div id="sentence-playing-pill-${sIdx}" class="hidden flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#e11d48] text-white shadow-xs">
+                <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
+                <span id="sentence-playing-text-${sIdx}">재생 중 🎧</span>
+              </div>
+              <button onclick="playSentenceVoice(${sIdx}, '${s.zh.replace(/'/g, "\\'")}')" class="px-2.5 py-1 text-xs font-semibold text-slate-700 hover:text-[#e11d48] hover:bg-rose-50 rounded-lg transition border border-slate-200 flex items-center gap-1 shadow-sm bg-white"><span>▷</span> 듣기</button>
+              <button id="sentence-pause-btn-${sIdx}" onclick="togglePauseResumeSentence(${sIdx}, '${s.zh.replace(/'/g, "\\'")}')" class="px-2.5 py-1 text-xs font-semibold text-slate-700 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition border border-slate-200 flex items-center gap-1 shadow-sm bg-white"><span>⏸</span> 일시정지</button>
+              <button onclick="stopSentenceVoice(${sIdx})" class="px-2.5 py-1 text-xs font-semibold text-slate-700 hover:text-red-600 hover:bg-red-50 rounded-lg transition border border-slate-200 flex items-center gap-1 shadow-sm bg-white"><span>⏹</span> 정지</button>
+              <button id="sentence-loop-btn-${sIdx}" onclick="toggleSentenceLoop(${sIdx}, '${s.zh.replace(/'/g, "\\'")}')" class="px-2.5 py-1 text-xs font-semibold text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition border border-slate-200 flex items-center gap-1 shadow-sm bg-white"><span>🔁</span> 반복 듣기</button>
+            </div>
+          </div>
+
+          <div class="chinese-text text-base sm:text-lg font-bold text-slate-800 leading-relaxed">${s.zh}</div>
+          ${s.pinyin ? `<div class="text-xs sm:text-sm font-semibold text-rose-600 font-mono tracking-wide leading-snug">${s.pinyin}</div>` : ''}
+
+          <div class="pt-2 border-t border-slate-100 flex items-start gap-2">
+            <span class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 text-[10px] font-extrabold flex-shrink-0 mt-0.5">번역</span>
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">${s.ko || ''}</p>
+          </div>
+        `;
+        sentencesList.appendChild(card);
+      });
+
+      renderArticleVocabTable(art);
+    }
+
+    function renderArticleVocabTable(art) {
+      const tbody = document.getElementById('articleVocabTableBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      (art.vocab20 || []).forEach((v, idx) => {
+        const no = v.no || String(idx + 1).padStart(2, '0');
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-slate-50/80 transition border-b border-slate-100";
+        tr.innerHTML = `
+          <td class="py-3 px-3 text-center font-bold text-slate-400 font-mono">${no}</td>
+          <td class="py-3 px-4 font-black chinese-text text-slate-900 text-sm sm:text-base">${v.word}</td>
+          <td class="py-3 px-4 font-mono font-bold text-[#e11d48] text-xs">${v.pinyin}</td>
+          <td class="py-3 px-4 text-xs font-semibold text-slate-500">${v.pos || '어휘'}</td>
+          <td class="py-3 px-5 text-slate-800 font-medium leading-relaxed">${v.mean}</td>
+          <td class="py-3 px-5 text-slate-500 text-xs leading-relaxed">${v.tip}</td>
+          <td class="py-3 px-4 text-center">
+            <button onclick="speakChinese('${v.word}')" class="text-slate-400 hover:text-[#e11d48] transition p-1" title="발음 듣기">
+              <i class="fa-solid fa-volume-high"></i>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderQuiz() {
+      const container = document.getElementById('quizContainer');
+      if (!container) return;
+      container.innerHTML = '';
+      let correctCount = 0;
+
+      QUIZ_DATA.forEach((q, qIdx) => {
+        const selected = userQuizAnswers[qIdx];
+        const isAnswered = selected !== undefined;
+        if (isAnswered && selected === q.answer) correctCount++;
+
+        const card = document.createElement('div');
+        card.className = "p-5 sm:p-6 rounded-2xl border border-slate-200/90 bg-slate-50/50 space-y-4";
+
+        let optionsHtml = '';
+        q.options.forEach((opt, oIdx) => {
+          let optClass = "p-3 rounded-xl border text-xs sm:text-sm font-medium transition flex items-center justify-between cursor-pointer ";
+          if (!isAnswered) optClass += "bg-white border-slate-200 hover:border-rose-300 hover:bg-rose-50/50 text-slate-700";
+          else {
+            if (oIdx === q.answer) optClass += "bg-emerald-50 border-emerald-400 text-emerald-800 font-bold";
+            else if (selected === oIdx) optClass += "bg-rose-50 border-rose-400 text-rose-800 line-through";
+            else optClass += "bg-white border-slate-100 text-slate-400 opacity-60";
+          }
+          optionsHtml += `
+            <div onclick="selectQuizOption(${qIdx}, ${oIdx})" class="${optClass}">
+              <span class="chinese-text">${opt}</span>
+              ${isAnswered && oIdx === q.answer ? '<span class="text-emerald-600 font-bold ml-2 flex-shrink-0">✓ 正确</span>' : ''}
+              ${isAnswered && selected === oIdx && oIdx !== q.answer ? '<span class="text-rose-600 font-bold ml-2 flex-shrink-0">✕ 错误</span>' : ''}
+            </div>
+          `;
+        });
+
+        card.innerHTML = `
+          <div class="space-y-1.5">
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded bg-rose-100 text-rose-700 text-[11px] font-black font-mono">第 ${String(qIdx + 1).padStart(2, '0')} 题</span>
+              <span class="px-2 py-0.5 rounded bg-slate-200 text-slate-700 text-[10px] font-bold">${q.type || '실전 독해'}</span>
+            </div>
+            <h3 class="text-sm sm:text-base font-bold text-slate-900 leading-snug chinese-text whitespace-pre-line">${q.question}</h3>
+          </div>
+          <div class="space-y-2 pt-1">${optionsHtml}</div>
+          ${isAnswered ? `<div class="p-3.5 rounded-xl bg-white border border-slate-200 text-xs text-slate-600 leading-relaxed shadow-xs"><span class="font-bold text-slate-800">💡 详细解析 & HSK 考点:</span> ${q.explanation}</div>` : ''}
+        `;
+        container.appendChild(card);
+      });
+
+      const scoreEl = document.getElementById('quizScoreText');
+      if (scoreEl) scoreEl.textContent = correctCount + " / " + QUIZ_DATA.length;
+    }
+
+    function selectQuizOption(qIdx, optIdx) {
+      if (userQuizAnswers[qIdx] !== undefined) return;
+      userQuizAnswers[qIdx] = optIdx;
+      renderQuiz();
+    }
+
+    function resetQuiz() {
+      userQuizAnswers = {};
+      renderQuiz();
+    }
+
+    function exportStandaloneHtml() {
+      try {
+        const issueNo = document.getElementById('currentIssueNumber')?.textContent?.trim() || '43';
+        const docContent = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+        const blob = new Blob([docContent], { type: 'text/html;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = "닌진중국어_제" + issueNo + "기_소장본.html";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast("📥", "제 " + issueNo + "기 학습 대시보드 소장본(HTML)이 다운로드되었습니다!");
+      } catch (err) {
+        console.error("Download Error:", err);
+        showToast("⚠️", "다운로드 중 오류가 발생했습니다.");
+      }
+    }
+
+    function showToast(icon, message) {
+      const toast = document.getElementById('toastNotification');
+      const iconEl = document.getElementById('toastIcon');
+      const msgEl = document.getElementById('toastMessage');
+      if (!toast) return;
+      if (iconEl) iconEl.textContent = icon;
+      if (msgEl) msgEl.textContent = message;
+
+      toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+        toast.classList.remove('translate-y-0', 'opacity-100');
+      }, 3000);
+    }
+
+    const missionInput = document.getElementById('userMissionInput');
+    if (missionInput) {
+      missionInput.addEventListener('input', () => {
+        const charEl = document.getElementById('missionCharCount');
+        if (charEl) charEl.textContent = missionInput.value.length + " 자";
+      });
+    }
+
+    function loadMissionSample() {
+      const input = document.getElementById('userMissionInput');
+      if (!input) return;
+      input.value = "无论是面对商家以虚假噱头诱导消费的制度漏洞，还是身处人生低谷面临重重坎坷，我们都需要秉持契约精神与坚韧斗志。唯有敢于直面挑战、战胜内心的恐惧，才能在风雨洗礼中完成自我救赎与涅槃重生。";
+      const charEl = document.getElementById('missionCharCount');
+      if (charEl) charEl.textContent = input.value.length + " 자";
+    }
+
+    function submitMissionTask() {
+      const input = document.getElementById('userMissionInput')?.value.trim();
+      const feedbackBox = document.getElementById('missionFeedbackBox');
+      const badge = document.getElementById('missionStatusBadge');
+      if (!input) {
+        if (feedbackBox) {
+          feedbackBox.classList.remove('hidden');
+          document.getElementById('missionScoreTag').textContent = "작문 미입력";
+          document.getElementById('missionFeedbackText').textContent = "문장을 1자 이상 입력한 후 제출 버튼을 눌러주세요.";
+        }
+        return;
+      }
+
+      const keywords = ['契约精神', '漏洞', '噱头', '斗志', '涅槃重生'];
+      const usedKeywords = keywords.filter(k => input.includes(k));
+
+      if (feedbackBox) {
+        feedbackBox.classList.remove('hidden');
+        const scoreTag = document.getElementById('missionScoreTag');
+        const feedbackText = document.getElementById('missionFeedbackText');
+
+        if (usedKeywords.length >= 2 || input.includes('契约精神') || input.includes('斗志')) {
+          scoreTag.className = "px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px]";
+          scoreTag.textContent = "100점 탁월";
+          feedbackText.innerHTML = "대단합니다! 핵심 어휘와 구문 틀(<span class='text-emerald-700 font-bold'>" + usedKeywords.join(', ') + "</span>)을 훌륭하게 활용하여 설득력 있는 고급 시사 논평을 완성하셨습니다. 오늘의 학습 타카가 완료되었습니다!";
+        } else {
+          scoreTag.className = "px-2 py-0.5 rounded bg-blue-100 text-blue-800 text-[10px]";
+          scoreTag.textContent = "85점 우수";
+          feedbackText.textContent = "좋은 문장입니다! 배운 핵심 어휘(‘契约精神’, ‘漏洞’, ‘噱头’, ‘斗志’, ‘涅槃重生’)를 1~2개 더 접목해보세요.";
+        }
+      }
+
+      if (badge) {
+        badge.className = "text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 animate-pulse";
+        badge.textContent = "오늘 타카 완료! 🥕";
+      }
+    }
+
+    function copyQuoteText() {
+      const quote = document.getElementById('goldenQuoteZh')?.textContent.trim();
+      if (!quote) return;
+      const dummy = document.createElement('textarea');
+      dummy.value = quote;
+      document.body.appendChild(dummy);
+      dummy.select();
+      document.execCommand('copy');
+      document.body.removeChild(dummy);
+      showToast("📋", "금구가 클립보드에 복사되었습니다!");
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      try {
+        renderArticleDetail(0);
+        renderCurrentFlashcard();
+        renderVocabGrid();
+        renderQuiz();
+      } catch (err) {
+        console.error("Init Error:", err);
+      }
+    });
+
+    window.addEventListener('beforeunload', () => {
+      if (window.speechSynthesis) window.speechSynthesis.cancel();
+    });
+  </script>
+</body>
+</html>
