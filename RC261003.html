@@ -1,0 +1,2002 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>恁近热词现场 - 인터넷 실전 닌진중국어</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Google Fonts: Noto Sans SC (Simplified Chinese) & Pretendard -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;800;900&family=Noto+Serif+SC:wght@600;700;900&display=swap" rel="stylesheet">
+  <!-- Pretendard Korean Web Font CDN for flawless typography -->
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              carrot: '#F97316',
+              carrotDark: '#EA580C',
+              leaf: '#10B981',
+              leafDark: '#059669',
+              cream: '#FFFDF9',
+              dark: '#1E293B',
+              slate: '#334155'
+            }
+          },
+          fontFamily: {
+            sans: ['Pretendard', '"Noto Sans SC"', '"PingFang SC"', '"Microsoft YaHei"', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
+            chinese: ['"Noto Sans SC"', '"PingFang SC"', '"Hiragino Sans GB"', '"Microsoft YaHei"', 'sans-serif'],
+            chineseSerif: ['"Noto Serif SC"', '"Songti SC"', 'SimSun', 'serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Pretendard', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    }
+
+    /* Pinyin visibility control */
+    body.hide-pinyin .pinyin-tag {
+      display: none !important;
+    }
+
+    /* Mascot bouncing animation on interaction */
+    @keyframes carrot-bounce {
+      0%, 100% { transform: scale(1) translateY(0); }
+      30% { transform: scale(1.18, 0.85) translateY(2px); }
+      50% { transform: scale(0.9, 1.22) translateY(-8px); }
+      75% { transform: scale(1.05, 0.95) translateY(-2px); }
+    }
+    .animate-carrot {
+      animation: carrot-bounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* Sound wave animation while Chinese TTS is active */
+    @keyframes wave-bar {
+      0%, 100% { height: 4px; }
+      50% { height: 18px; }
+    }
+    .wave-playing span:nth-child(1) { animation: wave-bar 0.7s infinite ease-in-out; }
+    .wave-playing span:nth-child(2) { animation: wave-bar 0.5s infinite ease-in-out 0.15s; }
+    .wave-playing span:nth-child(3) { animation: wave-bar 0.9s infinite ease-in-out 0.3s; }
+    .wave-playing span:nth-child(4) { animation: wave-bar 0.6s infinite ease-in-out 0.1s; }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f8fafc;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    /* Refined, Elegant Chinese Typography */
+    .chinese-text, [lang="zh-CN"], .font-chinese {
+      font-family: 'Noto Sans SC', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', system-ui, sans-serif !important;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      letter-spacing: 0.02em;
+    }
+
+    .chinese-serif {
+      font-family: 'Noto Serif SC', 'Songti SC', SimSun, serif !important;
+      letter-spacing: 0.03em;
+    }
+  </style>
+</head>
+
+<body class="bg-stone-50 text-stone-800 antialiased font-sans selection:bg-orange-200 selection:text-orange-950 pb-20">
+
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-stone-200/80 shadow-xs">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 py-2.5 flex items-center justify-between gap-3">
+      
+      <!-- Brand Logo & Study Badges -->
+      <div class="flex items-center gap-3 select-none">
+        <!-- Carrot Mascot Avatar with enhanced visibility -->
+        <div id="mascot-avatar" onclick="triggerMascotClick()" class="relative flex items-center justify-center w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-br from-amber-50 to-orange-100 border-2 border-orange-400 shadow-md shadow-orange-500/10 cursor-pointer transition-transform hover:scale-105 active:scale-95" title="당근 마스코트 '小近'">
+          <!-- Cute Vector Carrot SVG -->
+          <svg viewBox="0 0 100 100" class="w-8 h-8 sm:w-9 sm:h-9 drop-shadow-xs">
+            <path d="M50 32 C46 16 34 14 30 20 C34 26 42 28 48 34 Z" fill="#10B981" />
+            <path d="M50 30 C50 10 56 8 58 16 C58 22 54 26 50 32 Z" fill="#059669" />
+            <path d="M50 32 C56 16 66 14 70 20 C66 26 58 28 52 34 Z" fill="#34D399" />
+            <path d="M33 36 C31 46 42 82 50 92 C58 82 69 46 67 36 C66 31 34 31 33 36 Z" fill="#F97316" stroke="#EA580C" stroke-width="2" />
+            <circle cx="44" cy="46" r="2.8" fill="#1E293B" />
+            <circle cx="56" cy="46" r="2.8" fill="#1E293B" />
+            <circle cx="45" cy="44.8" r="0.9" fill="#FFFFFF" />
+            <circle cx="57" cy="44.8" r="0.9" fill="#FFFFFF" />
+            <ellipse cx="40" cy="51" rx="2.5" ry="1.4" fill="#FDA4AF" opacity="0.8" />
+            <ellipse cx="60" cy="51" rx="2.5" ry="1.4" fill="#FDA4AF" opacity="0.8" />
+            <path d="M47 52 Q50 56 53 52" stroke="#1E293B" stroke-width="1.8" stroke-linecap="round" fill="none" />
+          </svg>
+          <span class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-emerald-500 border-2 border-white rounded-full"></span>
+        </div>
+
+        <div>
+          <div class="flex items-center flex-wrap gap-1.5 sm:gap-2">
+            <h1 class="text-base sm:text-xl font-black text-stone-900 tracking-tight chinese-text">
+              恁近热词现场
+            </h1>
+            <span class="px-2 py-0.5 rounded-full text-[11px] sm:text-xs font-black bg-orange-500 text-white shadow-2xs">
+              인터넷 실전 닌진중국어
+            </span>
+            <span class="hidden md:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200">
+              <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+              ニンジン중국어 스터디 모임
+            </span>
+          </div>
+          <p class="text-[11px] text-stone-500 font-medium hidden sm:block mt-0.5">
+            REAL CHINESE · REAL COMMENTS | <span class="text-stone-700">“중국인들은 실제 인터넷에서 어떻게 말할까?”</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Controls: Pinyin Toggle, Search, Speed -->
+      <div class="flex items-center gap-2">
+        <button onclick="togglePinyinMode()" id="pinyin-toggle-btn" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-orange-400 bg-orange-50 text-xs font-black text-orange-700 shadow-xs transition-all hover:scale-102" title="병음 표시/숨김 전환">
+          <i class="fa-solid fa-language text-orange-500 text-sm"></i>
+          <span id="pinyin-toggle-label" class="hidden sm:inline">병음(拼音) ON</span>
+        </button>
+
+        <div class="relative hidden lg:block w-52">
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-stone-400 text-xs"></i>
+          <input type="text" id="global-search-input" onkeyup="handleGlobalSearch(event)" placeholder="단어, 유행어, 댓글 검색..." class="w-full pl-8 pr-3 py-1.5 text-xs bg-stone-100 hover:bg-stone-50 focus:bg-white rounded-xl border border-stone-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-200/50 outline-hidden transition-all">
+        </div>
+
+        <div class="flex items-center bg-stone-100 p-0.5 rounded-xl border border-stone-200 text-xs font-bold text-stone-600">
+          <button onclick="setAudioSpeed(0.75)" id="speed-btn-075" class="px-2 py-1 rounded-lg transition-colors hover:text-stone-900">0.75x</button>
+          <button onclick="setAudioSpeed(1.0)" id="speed-btn-100" class="px-2 py-1 rounded-lg bg-white text-orange-600 shadow-2xs font-black">1.0x</button>
+          <button onclick="setAudioSpeed(1.25)" id="speed-btn-125" class="px-2 py-1 rounded-lg transition-colors hover:text-stone-900">1.25x</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="sticky top-[57px] z-30 bg-white/90 backdrop-blur-md border-b border-stone-200/70 shadow-2xs">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 py-2 flex items-center justify-between overflow-x-auto no-scrollbar gap-2">
+      <div class="flex items-center gap-1.5 sm:gap-2 whitespace-nowrap">
+        <button onclick="switchMainTab('home')" id="tab-btn-home" class="nav-button flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-black bg-stone-900 text-white shadow-xs transition-all hover:scale-102">
+          <i class="fa-solid fa-house text-xs"></i> <span>首页 (메인)</span>
+        </button>
+        <button onclick="switchMainTab('china-hot')" id="tab-btn-china-hot" class="nav-button flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-stone-100 hover:bg-stone-200/70 text-stone-700 transition-all hover:scale-102">
+          <i class="fa-solid fa-fire text-red-500"></i> <span>今日热榜 (중국 핫이슈)</span>
+        </button>
+        <button onclick="switchMainTab('korea-hot')" id="tab-btn-korea-hot" class="nav-button flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-stone-100 hover:bg-stone-200/70 text-stone-700 transition-all hover:scale-102">
+          <span class="text-[10px] font-black px-1 rounded-xs bg-blue-100 text-blue-800">KR</span> <span>中国网友看韩国 (한국 관련)</span>
+        </button>
+        <button onclick="switchMainTab('vocab')" id="tab-btn-vocab" class="nav-button flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-stone-100 hover:bg-stone-200/70 text-stone-700 transition-all hover:scale-102">
+          <i class="fa-solid fa-bookmark text-amber-500"></i> <span>我的词库 (단어장)</span>
+          <span id="vocab-count-badge" class="px-1.5 py-0.2 rounded-full text-[10px] font-black bg-amber-200 text-amber-900">0</span>
+        </button>
+        <button onclick="switchMainTab('quiz')" id="tab-btn-quiz" class="nav-button flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-stone-100 hover:bg-stone-200/70 text-stone-700 transition-all hover:scale-102">
+          <i class="fa-solid fa-bullseye text-emerald-500"></i> <span>练习实战 (실전 퀴즈 5선)</span>
+        </button>
+      </div>
+
+      <div class="hidden xl:flex items-center gap-2 text-xs font-bold text-stone-500 pl-4 border-l border-stone-200">
+        <i class="fa-solid fa-bolt text-amber-500 animate-pulse"></i>
+        <span>지난주 7일간 실시간 바이럴 핫토픽 데이터셋 가동 중</span>
+      </div>
+    </div>
+  </nav>
+
+  <main class="max-w-7xl mx-auto px-3 sm:px-6 pt-5">
+    
+    <!-- Hero Pedagogical Banner -->
+    <div id="hero-banner" class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-orange-50 via-amber-50 to-emerald-50 border border-orange-200/70 p-5 sm:p-7 mb-6 shadow-xs">
+      <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-5">
+        <div class="space-y-2 max-w-2xl">
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-black bg-orange-500 text-white">
+              <i class="fa-solid fa-fire-flame-curved text-[10px]"></i> 지난주 7일간 실시간 바이럴 핫이슈 전수 분석
+            </span>
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-white text-stone-700 border border-stone-200">
+              교과서 탈피 · 원어민 감각 직수입
+            </span>
+          </div>
+          <h2 class="text-xl sm:text-2xl lg:text-3xl font-black text-stone-900 leading-snug">
+            <span class="chinese-text font-black text-stone-900 inline-block tracking-normal">“中国人到底是怎么说的？”</span> <br class="hidden sm:inline">
+            <span class="text-orange-600">지난주 댓글 속 진짜 속뜻</span>과 뉘앙스를 해부합니다.
+          </h2>
+          <p class="text-xs sm:text-sm text-stone-600 leading-relaxed font-normal">
+            한국의 템플스테이와 한강 멍때리기 대회 '무소유 힐링 열풍'부터 편의점 대용량 점보 떡볶이 먹방, 
+            전통 재래시장 즉석 조리(代炒菜) 옌훠치(烟火气) 신드롬과 '사이버 분신(AI 아바타)' 회의 대행 논쟁까지! 살아있는 중국 네티즌들의 실제 언어 온도를 느껴보세요.
+          </p>
+        </div>
+
+        <!-- Mascot Tutor Tip Bubble -->
+        <div class="bg-white/90 backdrop-blur-xs p-4 rounded-2xl border border-orange-200/80 shadow-xs max-w-xs shrink-0 flex items-start gap-3">
+          <div class="w-9 h-9 rounded-xl bg-orange-100 flex items-center justify-center shrink-0 text-lg">
+            🥕
+          </div>
+          <div class="text-xs space-y-1">
+            <div class="font-black text-orange-950 flex items-center gap-1">
+              당근 튜터 '小近'의 팁
+              <span class="text-[10px] text-orange-600 font-normal">“댓글을 누르면 해부실이 열려요!”</span>
+            </div>
+            <p class="text-stone-600 leading-tight">
+              💡 댓글 속 유행어 태그를 누르면 <strong class="text-orange-600">「词源研究室」</strong>이 열리며 한자 구성과 탄생 비하인드를 바로 확인할 수 있습니다.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category Filter Chips -->
+    <div id="category-filter-section" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-3 mb-4 text-xs font-bold">
+      <span class="text-stone-400 font-bold mr-1 shrink-0 flex items-center gap-1">
+        <i class="fa-solid fa-filter text-[10px]"></i> 카테고리:
+      </span>
+      <button onclick="filterTopicsByCategory('all')" id="cat-btn-all" class="cat-chip px-3 py-1.5 rounded-full bg-stone-900 text-white shadow-2xs">전체 보기</button>
+      <button onclick="filterTopicsByCategory('Korea')" id="cat-btn-Korea" class="cat-chip px-3 py-1.5 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-700">🇰🇷 한국 관련</button>
+      <button onclick="filterTopicsByCategory('life-healing')" id="cat-btn-life-healing" class="cat-chip px-3 py-1.5 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-700">🧘 힐링·라이프</button>
+      <button onclick="filterTopicsByCategory('food-culture')" id="cat-btn-food-culture" class="cat-chip px-3 py-1.5 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-700">🍜 미식·문화</button>
+      <button onclick="filterTopicsByCategory('tech')" id="cat-btn-tech" class="cat-chip px-3 py-1.5 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-700">🤖 AI·직장문화</button>
+      <span class="ml-auto text-[11px] text-stone-400 font-medium shrink-0 hidden sm:block">
+        총 <strong class="text-orange-600 font-bold" id="topic-count-display">4</strong>개 실시간 토픽 · 댓글 20선 전수 해부
+      </span>
+    </div>
+
+    <!-- Topics Grid Container -->
+    <div id="topics-container" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- Dynamic topic cards will be rendered here by renderTopics() -->
+    </div>
+
+    <section id="quiz-section" class="hidden mt-4 space-y-6">
+      <div class="bg-white rounded-3xl border border-stone-200 p-6 sm:p-8 shadow-xs">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-stone-100 pb-5">
+          <div>
+            <div class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-black bg-emerald-100 text-emerald-800 mb-2">
+              <i class="fa-solid fa-gamepad text-xs"></i> 실전 댓글 훈련소
+            </div>
+            <h3 class="text-xl sm:text-2xl font-black text-stone-900 tracking-tight">
+              “중국인이라면 어떻게 댓글을 달까?”
+            </h3>
+            <p class="text-xs sm:text-sm text-stone-600 mt-1">
+              지난주 7일간 온라인에서 실시간으로 유행한 뉘앙스를 바탕으로 어색한 번역투를 버리고 진짜 원어민처럼 반응해 보세요.
+            </p>
+          </div>
+          <!-- Quick Jump Buttons for 5 Questions -->
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <button onclick="scrollToQuiz(0)" class="quiz-nav-chip px-3 py-1.5 rounded-xl text-xs font-bold bg-orange-500 text-white">Q1 (템플스테이&멍때리기)</button>
+            <button onclick="scrollToQuiz(1)" class="quiz-nav-chip px-3 py-1.5 rounded-xl text-xs font-bold bg-stone-100 hover:bg-stone-200 text-stone-700">Q2 (편의점 대용량 먹방)</button>
+            <button onclick="scrollToQuiz(2)" class="quiz-nav-chip px-3 py-1.5 rounded-xl text-xs font-bold bg-stone-100 hover:bg-stone-200 text-stone-700">Q3 (재래시장 즉석볶음)</button>
+            <button onclick="scrollToQuiz(3)" class="quiz-nav-chip px-3 py-1.5 rounded-xl text-xs font-bold bg-stone-100 hover:bg-stone-200 text-stone-700">Q4 (AI 사이버 분신)</button>
+            <button onclick="scrollToQuiz(4)" class="quiz-nav-chip px-3 py-1.5 rounded-xl text-xs font-bold bg-stone-100 hover:bg-stone-200 text-stone-700">Q5 (충동구매 호구 방지)</button>
+          </div>
+        </div>
+
+        <div id="all-quizzes-container" class="mt-6 space-y-8">
+          <!-- Populated by renderAllQuizzes() -->
+        </div>
+      </div>
+    </section>
+
+    <section id="vocab-section" class="hidden mt-4 space-y-6">
+      <div class="bg-white rounded-3xl border border-stone-200 p-6 sm:p-8 shadow-xs">
+        <div class="flex items-center justify-between border-b border-stone-100 pb-5 mb-6">
+          <div>
+            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-black bg-amber-100 text-amber-800 mb-2">
+              <i class="fa-solid fa-star text-xs"></i> SRS 맞춤 복습 시스템
+            </span>
+            <h3 class="text-xl sm:text-2xl font-black text-stone-900 tracking-tight">
+              我的词库 (나만의 실전 어휘 보관함)
+            </h3>
+            <p class="text-xs sm:text-sm text-stone-600 mt-0.5">
+              댓글 해부실에서 담아둔 핵심 인터넷 유행어와 한자 어원을 다시 복습하며 원어민 감각을 체화하세요.
+            </p>
+          </div>
+          <button onclick="clearAllVocab()" class="text-xs font-bold text-stone-400 hover:text-red-500 transition-colors">
+            전체 비우기
+          </button>
+        </div>
+
+        <div id="vocab-list-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- Populated by renderVocabList() -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="comment-modal" style="z-index: 50;" class="fixed inset-0 z-50 hidden bg-stone-950/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-5 overflow-y-auto">
+    <div class="bg-white w-full max-w-3xl rounded-3xl shadow-2xl border border-stone-200 overflow-hidden my-auto transform transition-all">
+      <div class="bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 p-4 sm:p-6 text-white relative">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-black bg-white/20 backdrop-blur-xs text-white">
+              🔬 댓글 해부학 연구실
+            </span>
+            <span id="modal-sentiment-badge" class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-black/20">
+              😊 긍정 반응
+            </span>
+          </div>
+          <button onclick="closeCommentModal()" class="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white transition-colors" title="닫기">
+            <i class="fa-solid fa-xmark text-sm"></i>
+          </button>
+        </div>
+
+        <div class="mt-3.5 space-y-1">
+          <p id="modal-chinese" class="text-lg sm:text-2xl font-black chinese-text tracking-tight leading-snug">
+            “--”
+          </p>
+          <p id="modal-pinyin" class="pinyin-tag text-xs sm:text-sm font-mono text-orange-100 font-medium">
+            --
+          </p>
+        </div>
+      </div>
+
+      <div class="p-5 sm:p-7 space-y-6 max-h-[75vh] overflow-y-auto">
+        
+        <!-- Audio & Speed Player Bar -->
+        <div class="bg-stone-50 rounded-2xl p-3 sm:p-4 border border-stone-200 flex items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <button id="modal-play-btn" onclick="playModalCommentAudio()" class="w-10 h-10 rounded-xl bg-orange-500 hover:bg-orange-600 text-white flex items-center justify-center shadow-md shadow-orange-500/20 transition-transform active:scale-95">
+              <i class="fa-solid fa-volume-high text-sm"></i>
+            </button>
+            <div>
+              <div class="text-xs font-black text-stone-900 flex items-center gap-1.5">
+                <span>원어민 표준 낭독</span>
+                <div id="modal-wave-bars" class="flex items-center gap-0.5 h-4">
+                  <span class="w-0.5 h-1.5 bg-orange-400 rounded-full"></span>
+                  <span class="w-0.5 h-3 bg-orange-500 rounded-full"></span>
+                  <span class="w-0.5 h-1.5 bg-orange-400 rounded-full"></span>
+                  <span class="w-0.5 h-2 bg-orange-500 rounded-full"></span>
+                </div>
+              </div>
+              <p class="text-[11px] text-stone-500">배속: <span id="modal-speed-indicator" class="font-bold text-orange-600">1.0x</span></p>
+            </div>
+          </div>
+          <button id="modal-bookmark-btn" onclick="toggleModalBookmark()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-stone-200 hover:border-amber-400 bg-white text-xs font-bold text-stone-700 transition-colors">
+            <i class="fa-regular fa-star text-amber-500"></i>
+            <span>단어장 담기</span>
+          </button>
+        </div>
+
+        <!-- Dual Breakdown Translations -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="p-4 rounded-2xl bg-amber-50/60 border border-amber-200/80 space-y-1">
+            <div class="flex items-center gap-1.5 text-xs font-black text-amber-900">
+              <i class="fa-solid fa-sparkles text-amber-600"></i> 자연스러운 원어민 해석
+            </div>
+            <p id="modal-korean-natural" class="text-xs sm:text-sm font-bold text-stone-800 leading-relaxed">
+              --
+            </p>
+          </div>
+          <div class="p-4 rounded-2xl bg-stone-50 border border-stone-200 space-y-1">
+            <div class="flex items-center gap-1.5 text-xs font-black text-stone-700">
+              <i class="fa-solid fa-quote-left text-stone-400"></i> 글자 그대로의 직역
+            </div>
+            <p id="modal-literal" class="text-xs sm:text-sm text-stone-600 leading-relaxed">
+              --
+            </p>
+          </div>
+        </div>
+
+        <!-- Clickable Expressions Triggering Etymology Lab -->
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <h4 class="text-xs font-black text-stone-900 flex items-center gap-1.5">
+              <i class="fa-solid fa-microchip text-orange-500"></i> 핵심 인터넷 유행어 & 키워드 (클릭하여 어원 해부)
+            </h4>
+            <span class="text-[10px] text-stone-400">태그 클릭 시 词源研究室 호출</span>
+          </div>
+          <div id="modal-expressions-container" class="flex flex-wrap gap-2"></div>
+        </div>
+
+        <!-- Tone & Nuance Radar -->
+        <div class="p-4 rounded-2xl bg-stone-50 border border-stone-200 space-y-2">
+          <div class="flex items-center justify-between text-xs font-black text-stone-900">
+            <span class="flex items-center gap-1.5">
+              <i class="fa-solid fa-masks-theater text-purple-500"></i> 말투 & 뉘앙스 해부 (语气分析)
+            </span>
+            <span id="modal-tone-tag" class="px-2 py-0.5 rounded-full text-[10px] bg-purple-100 text-purple-800">
+              --
+            </span>
+          </div>
+          <p id="modal-nuance-detail" class="text-xs text-stone-600 leading-relaxed">
+            --
+          </p>
+        </div>
+
+        <!-- Cultural Context -->
+        <div class="p-4 rounded-2xl bg-orange-50/50 border border-orange-200/80 space-y-2">
+          <h4 class="text-xs font-black text-orange-950 flex items-center gap-1.5">
+            <i class="fa-solid fa-earth-asia text-orange-600"></i> 왜 중국 네티즌은 이렇게 반응할까? (문화적 맥락)
+          </h4>
+          <p id="modal-culture-context" class="text-xs text-stone-700 leading-relaxed">
+            --
+          </p>
+        </div>
+
+      </div>
+
+      <div class="bg-stone-50 px-6 py-3 border-t border-stone-200 flex items-center justify-between">
+        <span class="text-[11px] text-stone-500 font-medium">
+          💡 인터넷 댓글은 중국 사회의 전반적 태도를 대변하지 않는 개인의 견해일 수 있습니다.
+        </span>
+        <button onclick="closeCommentModal()" class="px-4 py-1.5 rounded-xl bg-stone-900 text-white text-xs font-bold hover:bg-stone-800 transition-colors">
+          확인 완료
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="etymology-modal" style="z-index: 70;" class="fixed inset-0 z-[70] hidden bg-stone-950/70 backdrop-blur-xs flex items-center justify-center p-3 sm:p-5 overflow-y-auto">
+    <div class="bg-white w-full max-w-xl rounded-3xl shadow-2xl border border-stone-200 overflow-hidden my-auto transform transition-all">
+      <div class="bg-gradient-to-r from-amber-500 to-orange-500 p-5 text-white relative">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-black bg-white/25 text-white">
+              词源研究室
+            </span>
+            <span id="etym-confidence-badge" class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-600 text-white">
+              ✓ 已确认 (확실한 어원)
+            </span>
+          </div>
+          <button onclick="closeEtymologyModal()" class="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white transition-colors" title="닫기">
+            <i class="fa-solid fa-xmark text-sm"></i>
+          </button>
+        </div>
+        <h3 id="etym-word" class="text-2xl sm:text-3xl font-black chinese-text tracking-tight">
+          --
+        </h3>
+        <p id="etym-pinyin" class="pinyin-tag text-xs sm:text-sm font-mono text-amber-100 font-bold mt-0.5">
+          --
+        </p>
+      </div>
+
+      <div class="p-6 space-y-4 text-xs">
+        <div class="bg-amber-50 p-3.5 rounded-2xl border border-amber-200 space-y-1">
+          <div class="text-[11px] font-black text-amber-800 flex items-center gap-1">
+            <i class="fa-solid fa-bullseye"></i> 실제 의미 (자연스러운 한국어 뜻):
+          </div>
+          <p id="etym-meaning" class="text-sm font-bold text-stone-900 leading-snug">
+            --
+          </p>
+          <p id="etym-literal" class="text-[11px] text-stone-500 pt-1 border-t border-amber-200/60">
+            글자 직역: --
+          </p>
+        </div>
+
+        <div class="space-y-1.5">
+          <div class="font-black text-stone-800 flex items-center gap-1.5">
+            <i class="fa-solid fa-lightbulb text-amber-500"></i> 어원 및 유래 (词源):
+          </div>
+          <div id="etym-origin-text" class="p-3 bg-stone-50 rounded-xl border border-stone-200 text-stone-700 leading-relaxed">
+            --
+          </div>
+        </div>
+
+        <div class="space-y-1.5">
+          <div class="font-black text-stone-800 flex items-center gap-1.5">
+            <i class="fa-solid fa-cubes-stacked text-emerald-500"></i> 한자 자체 해부 (汉字拆解):
+          </div>
+          <div id="etym-character-breakdown" class="p-3 bg-emerald-50/50 rounded-xl border border-emerald-200 text-stone-700 leading-relaxed">
+            --
+          </div>
+        </div>
+
+        <div class="space-y-1.5">
+          <div class="font-black text-stone-800 flex items-center gap-1.5">
+            <i class="fa-solid fa-quote-right text-orange-500"></i> 실전 댓글 예문:
+          </div>
+          <div id="etym-example" class="p-3 bg-stone-50 rounded-xl border border-stone-200 text-stone-800 font-medium chinese-text">
+            --
+          </div>
+        </div>
+
+        <div class="pt-2 flex items-center justify-between gap-3">
+          <button id="etym-audio-btn" onclick="playEtymologyAudio()" class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-orange-100 hover:bg-orange-200 text-orange-900 font-bold transition-colors">
+            <i class="fa-solid fa-volume-high text-xs"></i> <span>단어 발음 듣기</span>
+          </button>
+          <button id="etym-save-btn" onclick="saveCurrentEtymologyToVocab()" class="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-black shadow-md shadow-orange-500/20 transition-all hover:scale-102">
+            <i class="fa-solid fa-star text-xs"></i> <span>내 단어장에 저장</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" style="z-index: 100;" class="fixed bottom-6 right-6 z-[100] hidden px-4 py-2.5 rounded-2xl bg-stone-900 text-white text-xs font-bold shadow-xl border border-stone-700 flex items-center gap-2 transform transition-all">
+    <i class="fa-solid fa-circle-check text-emerald-400"></i>
+    <span id="toast-message">저장되었습니다.</span>
+  </div>
+
+  <footer class="mt-20 border-t border-stone-200 bg-white/70 py-6 text-center text-xs">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-stone-500">
+      <span class="font-black text-orange-600 tracking-tight text-sm">
+        ニンジン 닌진중국어
+      </span>
+      <span class="font-normal text-stone-500">
+        © 2026 스마트 뉴스레터 학습 플랫폼 (제44기). All rights reserved.
+      </span>
+    </div>
+  </footer>
+
+  <script>
+    let audioContext = null;
+    let currentSpeechRate = 1.0;
+    let isPinyinVisible = true;
+    let activeModalComment = null;
+    let currentEtymWord = null;
+
+    function initAudioContext() {
+      if (!audioContext) {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtx) {
+          audioContext = new AudioCtx();
+        }
+      }
+      if (audioContext && audioContext.state === 'suspended') {
+        audioContext.resume();
+      }
+    }
+
+    // Two-tone clean chime sound: G5 (784Hz) -> C5 (523Hz)
+    function playDingDongSound() {
+      try {
+        initAudioContext();
+        if (!audioContext) return;
+
+        const now = audioContext.currentTime;
+
+        // Tone 1: High Bell "Ding"
+        const osc1 = audioContext.createOscillator();
+        const gain1 = audioContext.createGain();
+        osc1.type = 'sine';
+        osc1.frequency.setValueAtTime(783.99, now); // G5
+        gain1.gain.setValueAtTime(0.18, now);
+        gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+        osc1.connect(gain1);
+        gain1.connect(audioContext.destination);
+        osc1.start(now);
+        osc1.stop(now + 0.35);
+
+        // Tone 2: Low Bell "Dong"
+        const osc2 = audioContext.createOscillator();
+        const gain2 = audioContext.createGain();
+        osc2.type = 'sine';
+        osc2.frequency.setValueAtTime(523.25, now + 0.12); // C5
+        gain2.gain.setValueAtTime(0.22, now + 0.12);
+        gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.55);
+        osc2.connect(gain2);
+        gain2.connect(audioContext.destination);
+        osc2.start(now + 0.12);
+        osc2.stop(now + 0.55);
+      } catch (err) {
+        console.warn('Audio chime playback suppressed by browser policy:', err);
+      }
+    }
+
+    // Chinese TTS Voice synthesizer
+    function speakChinese(text, onEndCallback) {
+      if (!('speechSynthesis' in window)) {
+        showToast('이 브라우저는 음성 합성을 지원하지 않습니다.');
+        return;
+      }
+      window.speechSynthesis.cancel();
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'zh-CN';
+      utterance.rate = currentSpeechRate || 1.0;
+      utterance.pitch = 1.0;
+
+      const voices = window.speechSynthesis.getVoices();
+      const zhVoice = voices.find(v => (v.lang === 'zh-CN' || v.lang === 'zh_CN') && !v.name.includes('Male'));
+      if (zhVoice) {
+        utterance.voice = zhVoice;
+      }
+
+      if (onEndCallback) {
+        utterance.onend = onEndCallback;
+        utterance.onerror = onEndCallback;
+      }
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function setAudioSpeed(speed) {
+      currentSpeechRate = speed;
+      [0.75, 1.0, 1.25].forEach(s => {
+        const id = 'speed-btn-' + s.toString().replace('.', '');
+        const btn = document.getElementById(id);
+        if (btn) {
+          if (s === speed) {
+            btn.className = 'px-2 py-1 rounded-lg bg-white text-orange-600 shadow-2xs font-black';
+          } else {
+            btn.className = 'px-2 py-1 rounded-lg transition-colors hover:text-stone-900';
+          }
+        }
+      });
+      const modalInd = document.getElementById('modal-speed-indicator');
+      if (modalInd) modalInd.textContent = speed + 'x';
+      showToast(`청취 속도가 ${speed}x 로 변경되었습니다.`);
+    }
+
+    const TOPICS = [
+      {
+        id: "topic-temple-daze",
+        title: "韩国“低欲望慢节奏”寺庙寄宿与汉江发呆大赛走红，中国年轻人直呼“治愈内耗的神”",
+        titlePinyin: "hánguó “dī yùwàng màn jiézòu” sìmiào jìsù yǔ hànjiāng fādāi dàsài zǒuhóng, zhōngguó niánqīngrén zhíhū “zhìyù nèihào de shén”",
+        koreanTitle: "[지난주 7일간 爆款] 템플스테이와 한강 멍때리기 대회 열풍, '멘탈 소모 치유의 신'이라 찬사 보낸 중국 청년들",
+        category: "Korea",
+        isKoreaTopic: true,
+        source: "小红书 · 微博旅游热搜 (지난주 7일간 바이럴)",
+        publishedAt: "지난주 화제성 1위",
+        originalText: "近期在小红书与微博上，‘去韩国寺庙寄宿过周末’与‘汉江发呆大赛选手生动表情’持续霸榜。面对高压内卷，年轻人渴望逃离信息轰炸，去深山听晨钟暮鼓、吃清淡素斋，或在汉江边放空九十分钟。中国网友直呼‘这种合法的松弛感简直太绝了’，但也有人提醒‘别盲目跟风冲，有些商业化民宿纯纯割情绪韭菜’。",
+        originalTextPinyin: "jìnqī zài xiǎohóngshū yǔ wēibó shàng, 'qù hánguó sìmiào jìsù guò zhōumò' yǔ 'hànjiāng fādāi dàsài xuǎnshǒu shēngdòng biǎoqíng' chíxù bàbǎng. miànduì gāoyā nèijuǎn, niánqīngrén kěwàng táolí xìnxī hōngzhà, qù shēnshān tīng chénzhōng mùgǔ, chī qīngdàn sùzhāi, huò zài hànjiāng biān fàngkōng jiǔshí fēnzhōng. zhōngguó wǎngyǒu zhíhū 'zhè zhǒng héfǎ de sōngchígǎn jiǎnzhí tài jué le', dàn yě yǒu rén tíxǐng 'bié mángmù gēnfēng chōng, yǒuxiē shāngyèhuà mínsù chúnchún gē qíngxù jiǔcài'.",
+        koreanTranslation: "지난주 중국 소홍서(小红书)와 웨이보를 뜨겁게 달군 힐링 트렌드입니다. '한국 산사 템플스테이 주말 체험'과 '한강 멍때리기 대회 참가자들의 멍한 표정 짤'이 연일 핫토픽 상위권을 차지했습니다. 과도한 무한경쟁(内卷)에 시달리는 청년들이 디지털 소음을 피해 산사에서 새벽 종소리를 듣고 정갈한 사찰음식을 먹거나, 한강 변에서 90분간 넋을 놓고 쉬는 문화에 열광하고 있습니다. 네티즌들은 '죄책감 없는 합법적 릴랙스(松弛感)의 끝판왕'이라며 부러워하면서도, '감성 마케팅에 낚여 호구(割韭菜)가 되지 않도록 주의하라'는 현실적 조언도 남기고 있습니다.",
+        koreaContext: "한국의 템플스테이 예약 사이트 영문/중문 접속자 수 급증 및 한강 멍때리기 대회의 유쾌한 문화가 해외 미디어와 중국 SNS에 대대적으로 보도된 현실을 반영합니다.",
+        comments: [
+          {
+            id: "comm-td-1",
+            author: "首尔发呆选手",
+            chinese: "看到汉江发呆大赛笑不活了，这不就是我每天上班的精神状态吗？直接参赛妥妥拿冠军！",
+            pinyin: "kàndào hànjiāng fādāi dàsài xiào bù huó le, zhè bú jiùshì wǒ měitiān shàngbān de jīngshén zhuàngtài ma? zhíjiē cānsài tuǒtuǒ ná guànjūn!",
+            korean: "한강 멍때리기 대회 짤 보고 웃겨서 기절할 뻔ㅋㅋ 이거 완전 내가 출근해서 짓는 영혼 가출 표정 아니냐? 당장 나가면 무조건 1등 감이다!",
+            literal: "한강 멍때리기 대회를 보고 웃어서 살지 못하겠고(배꼽 잡았고), 이것이 바로 내가 매일 출근하는 정신 상태가 아닌가? 곧장 출전하면 무탈하게 챔피언을 딴다!",
+            sentiment: "😂 폭소/공감",
+            tone: "유쾌한 자조, 높은 현실 공감",
+            expressions: ["笑不活了", "精神状态", "妥妥的"],
+            nuanceDetail: "‘笑不活了(웃겨서 못 살겠다)’는 배꼽이 빠질 만큼 폭소했다는 밈이며, ‘精神状态’는 번아웃 온 직장인의 멍한 멘탈을 풍자할 때 씁니다.",
+            cultureContext: "치열한 경쟁 사회 속에서 멍때리는 휴식조차 대회가 되어야 정당성을 얻는 현대 청년들의 웃픈 현실을 유쾌하게 소비하는 반응입니다."
+          },
+          {
+            id: "comm-td-2",
+            author: "佛系打工妹",
+            chinese: "寺庙寄宿真的太绝了，晨钟暮鼓吃素斋，直接把我这几年的内耗焦虑全部物理超度。",
+            pinyin: "sìmiào jìsù zhēn de tài jué le, chénzhōng mùgǔ chī sùzhāi, zhíjiē bǎ wǒ zhè jǐ nián de nèihào jiāolǜ quánbù wùlǐ chāodù.",
+            korean: "템플스테이 진짜 기가 막히게 좋다. 새벽 종소리 들으며 담백한 절밥 먹으니 몇 년 묵은 속박과 불안이 싹 물리적으로 성불당한 느낌.",
+            literal: "사찰 기숙이 진짜 너무 절묘하고, 새벽 종과 저녁 북을 듣고 채소 절밥을 먹으니, 곧장 나의 지난 몇 년간의 내부소모 불안을 전부 물리적으로 천도(성불)시켰다.",
+            sentiment: "❤️ 극상 힐링",
+            tone: "평온하고 깊은 감동",
+            expressions: ["太绝了", "物理超度", "内耗"],
+            nuanceDetail: "‘物理超度(물리적 성불/해탈)’는 불교 용어를 유머러스하게 비틀어, 잡념과 스트레스가 확실하게 박멸되었음을 강조하는 최신 표현입니다.",
+            cultureContext: "중국에서도 최근 청년들이 사찰을 찾아 향을 피우며 마음의 평화를 찾는 '사찰 여행(寺庙游)' 열풍과 일맥상통합니다."
+          },
+          {
+            id: "comm-td-3",
+            author: "避坑大侦探",
+            chinese: "大家别盲目跟风冲，有些商业化民宿打着禅修旗号一晚大几百，纯纯割年轻人的情绪韭菜。",
+            pinyin: "dàjiā bié mángmù gēnfēng chōng, yǒuxiē shāngyèhuà mínsù dǎzhe chánxiū qíhào yì wǎn dà jǐ bǎi, chúnchún gē niánqīngrén de qíngxù jiǔcài.",
+            korean: "다들 맹목적으로 유행 따라 냅다 가지 마세요. 몇몇 상업적 펜션들이 템플스테이 흉내 내며 1박에 수십만 원씩 받는데, 순전히 청년들 감성 착취하는 호구 잡기임.",
+            literal: "모두 맹목적으로 바람을 따라 돌진하지 마라, 어떤 상업화된 민박은 참선 수행의 깃발을 내걸고 하룻밤에 수백 위안을 하니, 순수하게 젊은이의 정서 부추(호구)를 베는 것이다.",
+            sentiment: "😒 팩폭/경고",
+            tone: "냉철하고 이성적인 비판",
+            expressions: ["盲目冲", "割韭菜", "纯纯"],
+            nuanceDetail: "‘割韭菜(부추를 베다)’는 주식이나 마케팅에서 힘없는 대중을 등쳐먹는 상술을 뜻하며, ‘纯纯’은 100% 그러하다는 강한 단언입니다.",
+            cultureContext: "힐링 열풍의 뒤편에 파고든 상업주의적 과소비를 경계하는 똑똑한 소비자들의 조언입니다."
+          },
+          {
+            id: "comm-td-4",
+            author: "渴望松弛感",
+            chinese: "这种松弛感真的让人狠狠羡慕，当代牛马最缺的就是合情合理的放空时间。",
+            pinyin: "zhè zhǒng sōngchígǎn zhēn de ràng rén hěnhěn xiànmù, dāngdài niúmǎ zuì quē de jiùshì héqíng hélǐ de fàngkōng shíjiān.",
+            korean: "이런 힘 뺀 여유로움은 진짜 너무 부럽다. 요즘 일하는 소와 말(노예 직장인)들에게 제일 부족한 게 죄책감 없이 멍때리는 시간임.",
+            literal: "이런 느슨한 감각은 진짜 사람으로 하여금 모질게 부럽게 하니, 현대의 소와 말이 가장 결핍한 것은 정과 이치에 합당한 멍때림 시간이다.",
+            sentiment: "😌 부러움/자조",
+            tone: "차분하면서도 씁쓸한 공감",
+            expressions: ["松弛感", "狠狠", "牛马"],
+            nuanceDetail: "‘松弛感(느슨함/여유)’은 과도하게 긴장하지 않고 담담한 태도를 뜻하는 최고의 유행어이며, ‘牛马’는 고된 노동자를 뜻하는 자조 밈입니다.",
+            cultureContext: "끝없는 경쟁과 압박 속에 살아가는 동아시아 젊은 세대의 공통된 심리적 갈증을 드러냅니다."
+          },
+          {
+            id: "comm-td-5",
+            author: "赛博祈福狂",
+            chinese: "听说还有电子木鱼和冥想手串，韩国人把情绪消费的心理拿捏得死死的！",
+            pinyin: "tīngshuō hái yǒu diànzǐ mùyú hé míngxiǎng shǒuchuàn, hánguórén bǎ qíngxù xiāofèi de xīnlǐ nániē de sǐsǐ de!",
+            korean: "듣자 하니 전자 목탁에 명상 염주 팔찌까지 있다던데, 한국 사람들 멘탈 힐링 감성 비즈니스 심리를 완전 기가 막히게 쥐락펴락하네!",
+            literal: "듣자니 또 전자 목탁과 명상 염주가 있다는데, 한국인이 정서 소비의 심리를 쥐고 주무르기를 아주 단단히 죽도록 했다!",
+            sentiment: "😮 감탄/인정",
+            tone: "트렌드 통찰, 위트 있는 칭찬",
+            expressions: ["拿捏得死死的", "电子木鱼"],
+            nuanceDetail: "‘拿捏得死死的’는 소비자의 니즈를 빈틈없이 100% 꿰뚫고 완벽하게 공략했다는 극찬입니다.",
+            cultureContext: "스마트폰 앱으로 목탁을 두드리며 공덕을 쌓는 '전자 목탁' 문화와 결합된 한중 청년들의 힐링 굿즈 열풍을 보여줍니다."
+          }
+        ]
+      },
+      {
+        id: "topic-jumbo-convenience",
+        title: "韩国便利店“巨型大号”辣炒年糕与一升咖啡爆火，中国年轻人疯狂扫货测评",
+        titlePinyin: "hánguó biànlìdiàn “jùxíng dàhào” làchǎo niángāo yǔ yì shēng kāfēi bàohuǒ, zhōngguó niánqīngrén fēngkuáng sǎohuò cèpíng",
+        koreanTitle: "[지난주 7일간 爆款] 한국 편의점 점보 대용량 떡볶이와 1리터 갓성비 아아 열풍, 중국 유학생·관광객 언박싱 리뷰 폭발",
+        category: "food-culture",
+        isKoreaTopic: true,
+        source: "哔哩哔哩 · 抖音吃播 (지난주 7일간 누적 3000만 뷰)",
+        publishedAt: "지난주 누적 3000만뷰",
+        originalText: "近一周在各大视频平台，韩国便利店推出的‘巨型脸盆装辣炒年糕’与‘一升大容量冰美式’成为顶流流量密码。博主们纷纷开启‘特大号美食开箱测评’，惊呼‘十几块钱买一升咖啡，量大管饱，简直是打工人的续命神仙神器’。但也有理性网友吐槽‘噱头大于实际，热量炸弹吃不完纯纯吃灰浪费’。",
+        originalTextPinyin: "jìn yì zhōu zài gè dà shìpín píngtái, hánguó biànlìdiàn tuīchū de 'jùxíng liǎnpén zhuāng làchǎo niángāo' yǔ 'yì shēng dà róngliàng bīngměishì' chéngwéi dǐngliú liúliàng mìmǎ. bózhǔmen fēnfēn kāiqǐ 'tè dàhào měishí kāixiāng cèpíng', jīnghū 'shí jǐ kuài qián mǎi yì shēng kāfēi, liàng dà guǎn bǎo, jiǎnzhí shì dǎgōngrén de xùmìng shénxiān shénqì'. dàn yě yǒu lǐxìng wǎngyǒu tǔcáo 'xuétóu dàyú shíjì, rèliàng zhàdàn chī bù wán chúnchún chīhuī làngfèi'.",
+        koreanTranslation: "지난주 숏폼 영상 플랫폼을 강타한 먹방 트렌드입니다. 한국 편의점에서 출시된 '세숫대야 크기 점보 떡볶이'와 '1리터 메가사이즈 아이스 아메리카노'가 최고의 바이럴 아이템으로 등극했습니다. 크리에이터들은 앞다투어 대용량 언박싱 먹방을 찍으며 '2~3천 원에 1리터 커피라니, 양 많고 든든해서 일하는 직장인의 생명 연장 치트키'라며 환호했습니다. 반면 일각에서는 '맛보다 눈길 끌기용 바이럴 마케팅이며, 칼로리 폭탄에 다 먹지도 못하고 버리게 된다'는 현실적인 평가도 팽팽합니다.",
+        koreaContext: "한국 편의점 업계의 점보 사이즈 시리즈가 펀슈머(Fun-sumer) 트렌드를 타고 외국인 관광객들의 필수 쇼핑 코스로 자리 잡은 현상과 일치합니다.",
+        comments: [
+          {
+            id: "comm-jc-1",
+            author: "深夜干饭王",
+            chinese: "这么大一桶辣炒年糕才三十多块，量大管饱，深夜看吃播测评直接暴风吸入！",
+            pinyin: "zhème dà yì tǒng làchǎo niángāo cái sānshí duō kuài, liàng dà guǎn bǎo, shēnyè kàn chībō cèpíng zhíjiē bàofēng xīrù!",
+            korean: "이렇게 거대한 대야 떡볶이가 6천 원대라니, 양 푸짐해서 배 터지겠네. 야밤에 먹방 리뷰 보다가 진짜 미친 듯이 흡입함!",
+            literal: "이렇게 큰 한 통의 매운 볶음 떡이 겨우 30여 위안이니, 양이 많고 배부름을 관할하며, 심야에 먹방 측정을 보다가 곧장 폭풍 흡입했다!",
+            sentiment: "❤️ 식욕 폭발",
+            tone: "격렬한 침샘 자극, 유쾌한 식탐",
+            expressions: ["量大管饱", "测评", "暴风吸入"],
+            nuanceDetail: "‘量大管饱(양 많고 배부름 보장)’는 가성비 음식의 최고 찬사이며, ‘暴风吸入(폭풍 흡입)’은 젓가락을 멈추지 못하고 게걸스럽게 먹는 모습을 뜻합니다.",
+            cultureContext: "고물가 시대에 시각적 충격과 푸짐한 만족감을 동시에 주는 편의점 대용량 식품에 열광하는 2030의 소비 심리입니다."
+          },
+          {
+            id: "comm-jc-2",
+            author: "冰美式续命工",
+            chinese: "一升装冰美式只要十几块钱，简直是学生党和牛马的续命神器，审美和实用全在线！",
+            pinyin: "yì shēng zhuāng bīngměishì zhǐ yào shí jǐ kuài qián, jiǎnzhí shì xuéshengdǎng hé niúmǎ de xùmìng shénqì, shěnměi hé shíyòng quán zàixiàn!",
+            korean: "1리터짜리 대용량 아아가 겨우 2~3천 원이라니, 학생이랑 직장인 노예들에게 진짜 생명 연장 치트키임. 힙한 패키지랑 실용성 둘 다 인정!",
+            literal: "1리터 포장 아이스 아메리카노가 겨우 십 몇 위안이니, 그야말로 학생 무리와 소와 말의 명을 잇는 신비한 그릇이며, 심미성과 실용성이 전부 온라인이다!",
+            sentiment: "👍 가성비 극찬",
+            tone: "실용적인 감탄, 친근한 직장인 말투",
+            expressions: ["牛马", "续命", "在线"],
+            nuanceDetail: "‘续命(생명 연장)’은 현대 직장인이 카페인으로 하루를 버티는 필수 밈이며, ‘在线’은 감각이나 퀄리티가 제대로 살아있다는 뜻입니다.",
+            cultureContext: "하루 종일 공부하거나 컴퓨터 앞에 앉아 있는 한중 청년들의 고용량 카페인 수혈 문화를 반영합니다."
+          },
+          {
+            id: "comm-jc-3",
+            author: "理智剁手人",
+            chinese: "噱头大于味道吧，买过一次根本吃不完，留在冰箱吃灰，纯纯智商税。",
+            pinyin: "xuétóu dàyú wèidao ba, mǎi guò yí cì gēnběn chī bù wán, liú zài bīngxiāng chīhuī, chúnchún zhìshāngshuì.",
+            korean: "솔직히 맛보다는 어그로용이지. 한 번 사봤는데 도저히 다 못 먹고 냉장고 구석에서 먼지만 먹는 중. 순전히 호구 인증 지능세임.",
+            literal: "눈길 끄는 수법이 맛보다 크겠지, 한 번 사봤더니 도무지 다 먹지 못하고 냉장고에 남아 먼지를 먹으니, 순수한 지능세이다.",
+            sentiment: "😒 거품 지적",
+            tone: "냉정한 팩폭, 솔직한 후회",
+            expressions: ["噱头", "吃灰", "纯纯"],
+            nuanceDetail: "‘噱头(어그로/이목 끌기 수법)’는 본질보다 겉포장에 치중함을 꼬집고, ‘吃灰(먼지를 먹다)’는 방치되어 썩어가는 상태를 뜻합니다.",
+            cultureContext: "SNS 인증샷만을 노린 기형적 대용량 제품에 현혹된 후 낭비를 반성하는 현실파 소비자들의 견해입니다."
+          },
+          {
+            id: "comm-jc-4",
+            author: "营销研究员",
+            chinese: "韩国便利店的联名营销真的封神，每次路过都忍不住剁手买到手软。",
+            pinyin: "hánguó biànlìdiàn de liánmíng yíngxiāo zhēn de fēngshén, měi cì lùguò dōu rěnbuzhù duòshǒu mǎi dào shǒuruǎn.",
+            korean: "한국 편의점들 캐릭터 콜라보 마케팅은 진짜 레전드 갓벽함. 지나갈 때마다 참지 못하고 지갑 털려서 손 뻐근하게 사 들고 나옴.",
+            literal: "한국 편의점의 연명(콜라보) 마케팅은 진짜 신으로 봉해졌으니, 매번 지나칠 때마다 손을 자르는 것을 참지 못하고 손이 부드러워질 때까지 샀다.",
+            sentiment: "❤️ 마케팅 감탄",
+            tone: "열정적인 쇼핑 충동 고백",
+            expressions: ["封神", "剁手", "买到手软"],
+            nuanceDetail: "‘封神’은 최고의 경지에 올랐다는 뜻이며, ‘剁手(손을 자르다)’는 쇼핑 충동을 자제 못 해 손을 베고 싶을 만큼 질렀다는 뜻입니다.",
+            cultureContext: "단순 소매점을 넘어 트렌드와 문화를 소비하는 공간으로 진화한 편의점 리테일의 흡인력을 평가합니다."
+          },
+          {
+            id: "comm-jc-5",
+            author: "自由行老驴",
+            chinese: "以前去韩国直奔免税店，现在第一站必须直奔便利店，这才是最接地气的正确打开方式！",
+            pinyin: "yǐqián qù hánguó zhíbēn miǎnshuìdiàn, xiànzài dì yī zhàn bìxū zhíbēn biànlìdiàn, zhè cái shì zuì jiēdìqì de zhèngquè dǎkāi fāngshì!",
+            korean: "옛날엔 한국 가면 면세점으로 직행했는데, 이젠 무조건 편의점으로 1차 돌격함. 이게 바로 현지 골목 감성 제대로 즐기는 찐 정석이지!",
+            literal: "이전에는 한국에 가면 면세점으로 곧장 달렸으나 지금은 첫 정거장으로 반드시 편의점으로 곧장 달려야 하니, 이것이야말로 가장 땅의 기운에 닿는 올바른 여는 방식이다!",
+            sentiment: "👍 여행 꿀팁",
+            tone: "노련하고 유쾌한 추천",
+            expressions: ["接地气", "正确打开方式"],
+            nuanceDetail: "‘接地气(땅의 기운에 닿다)’는 격식 차리지 않고 서민들의 생생한 일상과 밀착되었다는 긍정적 찬사입니다.",
+            cultureContext: "해외여행 소비가 획일적인 명품 쇼핑에서 현지인들의 편의점 간식 문화를 체험하는 소소한 낭만으로 이동했음을 보여줍니다."
+          }
+        ]
+      },
+      {
+        id: "topic-market-cooking",
+        title: "年轻人流行去菜市场“微度假与代炒菜”，十块钱吃出米其林幸福感与烟火气",
+        titlePinyin: "niánqīngrén liúxíng qù càishìchǎng “wēi dùjià yǔ dài chǎocài”, shí kuài qián chī chū mǐqílín xìngfúgǎn yǔ yānhuǒqì",
+        koreanTitle: "[지난주 7일간 爆款] 재래시장 '마이크로 힐링과 즉석 조리 대행(代炒菜)', 2천 원으로 맛보는 사람 사는 냄새(烟火气)",
+        category: "food-culture",
+        isKoreaTopic: false,
+        source: "新浪新闻 · 抖音生活 (지난주 7일간 트렌드 1위)",
+        publishedAt: "지난주 트렌드 1위",
+        originalText: "近一周来，各大城市的传统菜市场成为Z世代年轻人的新宠。年轻人不再热衷于去网红餐厅排长队，而是流行在菜市场‘微度假’。不仅可以现买新鲜活鱼鲜肉，还能花十块钱让档口老板‘代客烹饪炒菜’，现炒现吃，镬气十足。网友纷纷表示‘在菜市场的烟火气里，身上的班味瞬间被治愈，这才是良心人间值得’。",
+        originalTextPinyin: "jìn yì zhōu lái, gè dà chéngshì de chuántǒng càishìchǎng chéngwéi Z shìdài niánqīngrén de xīn chǒng. niánqīngrén bú zài rèzhōng yú qù wǎnghóng cāntīng pái chángduì, ér shì liúxíng zài càishìchǎng 'wēi dùjià'. bùjǐn kěyǐ xiàn mǎi xīnxiān huóyú xiānròu, hái néng huā shí kuài qián ràng dàngkǒu lǎobǎn 'dàikè pēngrèn chǎocài', xiàn chǎo xiàn chī, huòqì shízú. wǎngyǒu fēnfēn biǎoshì 'zài càishìchǎng de yānhuǒqì lǐ, shēnshang de bānwèi shùnjiān bèi zhìyù, zhè cái shì liángxīn rénjiān zhíde'.",
+        koreanTranslation: "지난주 중국 대도시 젊은이들 사이에서 폭발적으로 유행한 로컬 라이프스타일입니다. 비싸고 줄만 서는 인스타 맛집 대신 전통 재래시장으로 '마이크로 휴가'를 떠나는 청년들이 급증했습니다. 싱싱한 해산물과 채소를 직접 고른 뒤, 단돈 10위안(약 1,900원) 안팎의 가공비만 내면 시장 내 노포 상인이 센 불에 갓 볶아주는 '다이차오차이(代炒菜, 조리 대행)'가 대유행입니다. 네티즌들은 '지글지글 웍 소리와 훈훈한 사람 사는 온기(烟火气) 속에서 지친 출근 냄새(班味)가 싹 씻겨나간다'며 열광하고 있습니다.",
+        koreaContext: "한국에서도 복잡한 프랜차이즈 대신 광장시장, 망원시장 등 재래시장에서 갓 부친 전과 시장 음식을 즐기며 정을 느끼는 레트로 힐링 열풍과 일맥상통합니다.",
+        comments: [
+          {
+            id: "comm-mc-1",
+            author: "人间烟火气",
+            chinese: "买五块钱小菜加二两肉让老板爆炒，出锅那一口香迷糊了，这才是治愈生活的烟火气！",
+            pinyin: "mǎi wǔ kuài qián xiǎocài jiā èr liǎng ròu ràng lǎobǎn bàochǎo, chūguō nà yì kǒu xiāng míhu le, zhè cái shì zhìyù shēnghuó de yānhuǒqì!",
+            korean: "천 원어치 청경채에 고기 조금 사서 사장님한테 센 불에 볶아달라 했는데, 갓 나온 한 입 먹고 너무 맛있어서 정신 혼미해짐. 이게 찐 힐링이지!",
+            literal: "5위안어치 채소에 2냥의 고기를 사서 사장에게 폭발적으로 볶게 하니, 솥을 나온 그 한 입에 향긋하여 멍해졌고, 이것이야말로 생활을 치유하는 밥 짓는 연기의 기운이다!",
+            sentiment: "❤️ 극상의 미식",
+            tone: "따뜻하고 감격스러운 찬사",
+            expressions: ["香迷糊了", "烟火气", "爆炒"],
+            nuanceDetail: "‘香迷糊了(너무 맛있어서 혼미해지다)’는 맛과 향이 압도적일 때 쓰는 최신 슬랭이며, ‘烟火气’는 사람 사는 따뜻한 온기를 뜻합니다.",
+            cultureContext: "차가운 배달 음식과 밀키트에 지친 1인 가구 청년들이 갓 지은 뜨거운 즉석 요리에서 얻는 정서적 위로입니다."
+          },
+          {
+            id: "comm-mc-2",
+            author: "拒绝预制菜",
+            chinese: "比起商场里大几百的预制菜大冤种，菜市场代炒十块钱加工费，简直良心到破防！",
+            pinyin: "bǐqǐ shāngchǎng lǐ dà jǐ bǎi de yùzhìcài dàyuānzhǒng, càishìchǎng dàichǎo shí kuài qián jiāgōngfèi, jiǎnzhí liángxīn dào pòfáng!",
+            korean: "쇼핑몰에서 십만 원 내고 레토르트 밀키트 데워주는 호구 식당 가느니, 시장에서 2천 원 내고 즉석에서 볶아 먹는 게 양심적이라 감동 실화 눈물 남.",
+            literal: "쇼핑몰 안의 수백 위안짜리 미리 제조된 음식(밀키트)의 큰 억울한 종자에 비하면, 채소 시장 대리 볶음의 10위안 가공비는 그야말로 양심적이라 방어선이 깨질 지경이다!",
+            sentiment: "👏 양심 찬사",
+            tone: "신랄한 외식업 비판, 진심 어린 만족",
+            expressions: ["预制菜", "大冤种", "破防"],
+            nuanceDetail: "‘预制菜(공장제 조리식품/밀키트)’에 대한 불만을 드러내며, 가격 대비 정직한 품질에 마음의 장벽이 무너졌다는 뜻의 ‘破防’을 썼습니다.",
+            cultureContext: "비싼 가격에 공장 밀키트를 파는 식당들에 분노한 중국 소비자들이 원재료가 눈앞에서 조리되는 투명성에 환호하는 현상입니다."
+          },
+          {
+            id: "comm-mc-3",
+            author: "解压打工人",
+            chinese: "谁懂啊！周末早起逛菜市场听听大爷大妈砍价，身上被腌透的班味瞬间被洗干净了。",
+            pinyin: "shéi dǒng a! zhōumò zǎoqǐ guàng càishìchǎng tīngting dàyé dàmā kǎnjià, shēnshang bèi yāntòu de bānwèi shùnjiān bèi xǐ gānjìng le.",
+            korean: "이 힐링 누가 알까! 주말에 일찍 일어나 시장에서 할머니 할아버지들 흥정하는 소리 들으니 찌들 대로 찌든 회사원 냄새 싹 가심.",
+            literal: "누가 알겠는가! 주말에 일찍 일어나 채소 시장을 거닐며 어르신들의 값 깎는 것을 들으니, 몸에 절여진 출근 냄새가 순간 깨끗이 씻겼다.",
+            sentiment: "😌 감성 힐링",
+            tone: "다정하고 편안한 독백",
+            expressions: ["谁懂啊", "班味", "砍价"],
+            nuanceDetail: "‘谁懂啊(누가 알겠어/진짜 공감하지 않냐)’는 깊은 공감을 유도하는 대표 말머리이고, ‘班味’는 직장인의 찌든 피로감을 뜻합니다.",
+            cultureContext: "삭막한 빌딩 숲과 디지털 모니터를 벗어나 활기찬 오프라인 시장 골목에서 생명력을 충전하는 트렌드입니다."
+          },
+          {
+            id: "comm-mc-4",
+            author: "本地挑剔精",
+            chinese: "很多菜市场被吹成网红打卡点后也开始乱收费了，卫生条件参差不齐，别闭眼吹。",
+            pinyin: "hěnduō càishìchǎng bèi chuī chéng wǎnghóng dǎkǎdiǎn hòu yě kāishǐ luàn shōufèi le, wèishēng tiáojiàn cēncī bùqí, bié bìyǎn chuī.",
+            korean: "인스타 성지랍시고 바이럴 타더니 바가지요금 슬슬 올리는 시장도 많음. 위생 상태도 제각각이니 무지성으로 찬양하진 말길.",
+            literal: "많은 채소 시장이 왕홍 체크인 지점으로 바람 불어진(띄워진) 후 어지럽게 요금을 받기 시작했고 위생 조건이 들쭉날쭉하니, 눈 감고 불어대지(찬양하지) 마라.",
+            sentiment: "🤔 냉철한 경계",
+            tone: "차분하고 현실적인 일침",
+            expressions: ["打卡", "参差不齐", "闭眼吹"],
+            nuanceDetail: "‘闭眼吹(눈 감고 무조건 빨아주다/찬양하다)’는 무비판적으로 유행을 맹종하는 세태를 꼬집는 인터넷 비판 용어입니다.",
+            cultureContext: "인기만 얻으면 상업화되어 본래의 순박함과 가성비를 잃어버리는 젠트리피케이션에 대한 우려를 담고 있습니다."
+          },
+          {
+            id: "comm-mc-5",
+            author: "懒癌晚期",
+            chinese: "现挑现炒现吃，不用洗碗不用备料，当代年轻人的硬核偷懒智慧直接拉满！",
+            pinyin: "xiàn tiāo xiàn chǎo xiàn chī, búyòng xǐwǎn búyòng bèiliào, dāngdài niánqīngrén de yìnghé tōulǎn zhìhuì zhíjiē lāmǎn!",
+            korean: "현장에서 바로 골라 볶아 먹고 설거지도 재료 손질도 필요 없음. 요즘 2030의 하드코어 꾀돌이 지혜 게이지 100% 꽉 찼다!",
+            literal: "즉석에서 고르고 즉석에서 볶아 즉석에서 먹으니, 설거지할 필요 없고 재료 준비할 필요 없어, 현대 젊은이의 단단한 게으름 피우는 지혜가 곧장 가득 당겨졌다!",
+            sentiment: "😏 유쾌한 찬양",
+            tone: "재치 있고 당당한 게으름 예찬",
+            expressions: ["硬核", "偷懒", "拉满"],
+            nuanceDetail: "‘硬核(하드코어/진짜배기)’과 ‘拉满(게이지 100% 채움)’의 조합으로 효율성을 극대화한 현대인의 라이프스타일을 자화자찬했습니다.",
+            cultureContext: "1인 가구의 취사 부담(재료 손질, 음식물 쓰레기, 설거지)을 현명하게 해결하는 새로운 외식 솔루션에 대한 환호입니다."
+          }
+        ]
+      },
+      {
+        id: "topic-cyber-avatar-meeting",
+        title: "“赛博分身替我开会汇报”风靡大厂，打工人沉迷调教数字人：反向整顿职场还是自掘坟墓？",
+        titlePinyin: "“sàibó fēnshēn tì wǒ kāihuì huìbào” fēngmǐ dàchǎng, dǎgōngrén chénmí tiáojiào shùzìrén: fǎnxiàng zhěngdùn zhíchǎng háishì zìjué fénmù?",
+        koreanTitle: "[지난주 7일간 爆款] '사이버 분신이 대신 화상회의 참석', AI 아바타 훈련에 빠진 직장인들의 칼퇴 꿀팁 논쟁",
+        category: "tech",
+        isKoreaTopic: false,
+        source: "36氪 · 知乎热榜 (지난주 7일간 누적 조회수 1800만)",
+        publishedAt: "지난주 조회수 1800만",
+        originalText: "近一周在各大科技大厂中，‘用AI数字人生成自己的赛博分身替自己挂机开会’成为最火爆的极客黑话。打工人训练AI学习自己的音色与微表情，在冗长形式主义的例会上自动点头微笑、甚至总结发文字汇报。支持者直呼‘这是打工人反向整顿职场的终极摸鱼神技’，但技术专家冷酷提醒‘小心你的分身明天就转正代替了本体’。",
+        originalTextPinyin: "jìn yì zhōu zài gè dà kējì dàchǎng zhōng, 'yòng AI shùzìrén shēngchéng zìjǐ de sàibó fēnshēn tì zìjǐ guàjī kāihuì' chéngwéi zuì huǒbào de jíkè hēihuà. dǎgōngrén xùnliàn AI xuéxí zìjǐ de yīnsè yǔ wēibiǎoqíng, zài rǒngcháng xíngshìzhǔyì de lìhuì shàng zìdòng diǎntóu wēixiào, shènzhì zǒngjié fā wénzì huìbào. zhīchízhě zhíhū 'zhè shì dǎgōngrén fǎnxiàng zhěngdùn zhíchǎng de zhōngjí mōyú shénjì', dàn jìshù zhuānjiā lěngkù tíxǐng 'xiǎoxīn nǐ de fēnshēn míngtiān jiù zhuǎnzhèng dàitì le běntǐ'.",
+        koreanTranslation: "지난주 주요 빅테크 기업 직장인들 사이에서 폭발적으로 유행한 화제의 토픽입니다. 생성형 AI 디지털 휴먼 기술로 '자신의 목소리와 표정을 딴 사이버 분신(赛博分身)'을 만들어, 지루한 화상 회의에 대신 앉혀두는 신종 칼퇴 기술이 퍼졌습니다. AI 분신은 고개를 끄덕이며 회의 내용을 요약해 사내 메신저로 보고서까지 자동 전송합니다. 네티즌들은 '형식주의 회의에 맞선 직장인들의 통쾌한 루팡질(摸鱼)'이라며 환호했지만, 일각에서는 '내일 당장 당신의 분신이 정직원이 되어 당신을 대체할 수 있다'는 오싹한 경고도 나옵니다.",
+        koreaContext: "한국에서도 재택 및 원격근무 화상회의 피로감 속에서 AI 요약 툴과 자동 응답 봇을 활용하는 직장인들이 늘어나는 현상과 맥을 같이합니다.",
+        comments: [
+          {
+            id: "comm-ca-1",
+            author: "摸鱼先锋官",
+            chinese: "让赛博分身去开无聊的周会，本体在工位安心摸鱼喝咖啡，科技终于给牛马减负了！",
+            pinyin: "ràng sàibó fēnshēn qù kāi wúliáo de zhōuhuì, běntǐ zài gōngwèi ānxīn mōyú hē kāfēi, kējì zhōngyú gěi niúmǎ jiǎnfù le!",
+            korean: "사이버 분신 보내서 영양가 없는 주간회의 틀어놓고, 내 본체는 자리에서 마음 편히 딴짓하며 커피 마심. 기술이 드디어 노예 직장인들을 살리네!",
+            literal: "사이버 분신으로 하여금 무료한 주간회의를 열게 하고, 본체는 업무 자리에서 안심하고 물고기를 더듬으며(농땡이 치며) 커피를 마시니, 과학기술이 마침내 소와 말에게 부담을 덜어주었다!",
+            sentiment: "😂 통쾌한 승리",
+            tone: "월급루팡의 짜릿한 쾌감",
+            expressions: ["赛博分身", "摸鱼", "牛马"],
+            nuanceDetail: "‘赛博分身(사이버 분신)’은 디지털 세계의 아바타를 뜻하며, ‘摸鱼(농땡이/루팡질)’와 ‘牛马’가 어우러져 오피스 블랙유머를 자아냅니다.",
+            cultureContext: "알맹이 없는 형식주의 회의로 야근을 유발하는 기업 문화에 첨단 기술로 반격하는 2030 직장인들의 위트입니다."
+          },
+          {
+            id: "comm-ca-2",
+            author: "吃瓜第一线",
+            chinese: "昨天同事的AI分身在领导提问时卡死重复同一句话，大型翻车现场笑发财了！",
+            pinyin: "zuótiān tóngshì de AI fēnshēn zài lǐngdǎo tíwèn shí kǎsǐ chóngfù tóng yí jù huà, dàxíng fānchē xiànchǎng xiào fācái le!",
+            korean: "어제 팀장님이 기습 질문 던졌을 때 동료 AI 분신이 렉 걸려서 똑같은 말만 무한 반복함ㅋㅋ 대형 방송 사고 터져서 현웃 빵 터짐!",
+            literal: "어제 동료의 AI 분신이 리더가 질문할 때 렉이 걸려 멈추어 같은 한 문장을 반복하니, 대형 차 뒤집힌(대형 사고) 현장에 웃어서 부자가 되었다!",
+            sentiment: "🤣 폭소 만발",
+            tone: "생생한 직장 썰, 코믹한 묘사",
+            expressions: ["翻车", "笑发财了"],
+            nuanceDetail: "‘翻车(차가 전복되다/대형 사고 치다)’는 계획이 엉망으로 들통난 상황을 유쾌하게 이르는 말입니다.",
+            cultureContext: "AI 기술을 꼼수로 쓰다 벌어진 인간미 넘치는 해프닝을 동료들과 함께 웃음으로 승화하는 직장인 유대감입니다."
+          },
+          {
+            id: "comm-ca-3",
+            author: "清醒程序员",
+            chinese: "现在是AI替你开会汇报，过几天老板就发现只要AI就行了，妥妥的自掘坟墓！",
+            pinyin: "xiànzài shì AI tì nǐ kāihuì huìbào, guò jǐ tiān lǎobǎn jiù fāxiàn zhǐ yào AI jiù xíng le, tuǒtuǒ de zìjué fénmù!",
+            korean: "지금이야 AI가 대신 회의하고 보고서 써주니 좋지? 며칠 지나면 사장이 '어? 너 없이 AI만 돌려도 되겠네?' 할 거다. 완벽한 자폭이지!",
+            literal: "지금은 AI가 너를 대신해 회의하고 보고하나, 며칠 지나면 사장이 AI만 있으면 된다는 것을 발견할 것이니, 아주 무탈한(확실한) 스스로 무덤 파기다!",
+            sentiment: "😮 섬뜩한 경고",
+            tone: "날카롭고 현실적인 일침",
+            expressions: ["妥妥的", "自掘坟墓"],
+            nuanceDetail: "‘妥妥的(아주 확실하고 틀림없이)’는 북방 구어로 100% 필연적인 결과를 단언할 때 씁니다.",
+            cultureContext: "업무 자동화의 편리함 뒤에 도사린 화이트칼라 노동 대체와 실직 불안이라는 냉혹한 현실을 지적합니다."
+          },
+          {
+            id: "comm-ca-4",
+            author: "职场反卷狂",
+            chinese: "以为是在调教AI反向整顿职场，实际上是给系统免费喂数据，格局还是小了。",
+            pinyin: "yǐwéi shì zài tiáojiào AI fǎnxiàng zhěngdùn zhíchǎng, shíjìshang shì gěi xìtǒng miǎnfèi wèi shùjù, géjú háishì xiǎo le.",
+            korean: "자기는 AI 잘 길들여서 꼰대 직장 버릇 고쳐놓는 줄 알겠지만, 실상은 빅테크 시스템에 무료로 영혼 데이터 떠먹여 주는 중. 아직 시야가 좁네.",
+            literal: "AI를 조련하여 반방향으로 직장을 정돈한다고 여겼으나, 실제로는 시스템에 무료로 데이터를 먹여주는 것이니, 그릇이 여전히 작았다.",
+            sentiment: "🤔 냉철한 통찰",
+            tone: "구조적 모순을 짚는 진지함",
+            expressions: ["调教", "反向整顿", "格局"],
+            nuanceDetail: "‘调教(길들이다/조련하다)’는 소프트웨어나 프롬프트를 튜닝할 때 쓰는 단어이며, ‘格局小了’는 근시안적인 시각을 꼬집는 유행어입니다.",
+            cultureContext: "단기적인 농땡이에 안주하지 않고 빅데이터 알고리즘 자본주의의 노동 착취 구조를 꿰뚫어 본 시각입니다."
+          },
+          {
+            id: "comm-ca-5",
+            author: "效率天花板",
+            chinese: "真正厉害的大佬已经用AI把汇报做成了好莱坞大片，卷王不管到哪都在疯狂降本增效。",
+            pinyin: "zhēnzhèng lìhai de dàlǎo yǐjīng yòng AI bǎ huìbào zuò chéng le hǎoláiwù dàpiān, juǎnwáng bùguǎn dào nǎ dōu zài fēngkuáng jiàngběn zēngxiào.",
+            korean: "진짜 무서운 에이스들은 벌써 AI로 주간보고서를 할리우드 블록버스터급으로 뽑아냄. 경쟁 끝판왕들은 어딜 가나 미친 듯이 효율 쥐어짜는 중.",
+            literal: "진짜 대단한 거물들은 이미 AI로 보고를 할리우드 대작으로 만들었으니, 말아먹기 왕(경쟁 괴물)은 어디를 가든 미친 듯이 원가를 낮추고 효율을 높인다.",
+            sentiment: "👏 경악/리스펙",
+            tone: "놀라움 섞인 한탄과 체념",
+            expressions: ["大佬", "卷王", "降本增效"],
+            nuanceDetail: "‘卷王(경쟁의 왕/프로 야근러)’은 경쟁을 주도해 전체 기준치를 올려버리는 사람을 뜻하는 자조 밈입니다.",
+            cultureContext: "생산성 도구가 들어와도 직장인들 사이의 피 튀기는 네이쥐안(内卷) 경쟁은 결코 멈추지 않는다는 씁쓸한 현실입니다."
+          }
+        ]
+      }
+    ];
+
+    const WORD_DICTIONARY = {
+      "笑不活了": {
+        pinyin: "xiào bù huó le",
+        meaning: "웃겨서 배꼽 빠지겠다, 웃겨서 기절할 지경이다 (극도의 폭소)",
+        literal: "웃느라 숨이 넘어갈 것 같아 더는 살지 못하겠다",
+        origin: "더우인(抖音)과 웨이보 댓글 창에서 태어난 최신 Z세대 과장 밈으로, 배가 찢어질 듯 웃긴 짤이나 상황을 보았을 때 포복절도하는 유쾌함을 표현합니다.",
+        breakdown: "笑(웃을 소) + 不(아니 불) + 活(살 활) + 了(어조사). 생리적으로 웃음을 주체할 수 없는 극한의 재미입니다.",
+        example: "看到他模仿领导讲话的视频，我直接笑不活了！ (그 친구가 팀장님 말투 흉내 내는 영상 보고 나 진짜 배꼽 빠져 죽을 뻔했어!)"
+      },
+      "松弛感": {
+        pinyin: "sōng chí gǎn",
+        meaning: "느슨함, 힘을 뺀 여유로움, 초조해하지 않는 담담한 멘탈",
+        literal: "느슨하게 풀어진 감각과 태도",
+        origin: "어떤 돌발 상황이나 일상의 시련 앞에서도 당황하거나 악쓰지 않고 여유를 잃지 않는 건강한 심리 상태를 뜻하는 2023~2024년 최고의 심리 유행어입니다.",
+        breakdown: "松(소나무 송/느슨할 송: 팽팽함을 풀다) + 弛(활 늦출 이: 활시위를 늦추다) + 感(느낄 감). 활시위를 팽팽하게 당기지 않고 부드럽게 이완된 모습입니다.",
+        example: "旅行中最宝贵的就是那种不赶行程的松弛感。 (여행에서 가장 소중한 것은 일정에 쫓기지 않는 그 느긋한 여유로움이다.)"
+      },
+      "香迷糊了": {
+        pinyin: "xiāng mí hu le",
+        meaning: "너무 맛있어서 정신이 멍해지다, 향긋함에 취해 기절할 지경이다",
+        literal: "음식의 향에 취해 멍하고 어지러워졌다",
+        origin: "동북 지방 구어에서 기원해 전국 먹방 크리에이터들의 감탄사로 정착되었습니다. 입에 넣자마자 눈이 번쩍 뜨일 만큼 맛있을 때 쓰는 최상급 찬사입니다.",
+        breakdown: "香(향기 향: 맛있다) + 迷糊(미혹할 미, 어두울 호: 넋을 잃고 멍해지다) + 了(어조사). 맛의 황홀경입니다.",
+        example: "刚出锅的现烤烧饼，一口咬下去直接香迷糊了！ (방금 화덕에서 나온 구운 빵 한 입 베어 물자마자 너무 맛있어서 황홀경에 빠졌다!)"
+      },
+      "烟火气": {
+        pinyin: "yān huǒ qì",
+        meaning: "사람 사는 냄새, 훈훈한 일상의 정취, 따스한 골목 온기",
+        literal: "밥 짓는 연기와 불의 기운",
+        origin: "신선들이 먹지 않는 인간 세상의 불로 익힌 음식 연기를 뜻하던 고전 문학 표현이 현대에는 시끌벅적한 야시장, 재래시장, 골목길 식당의 정겨운 온기를 뜻하게 되었습니다.",
+        breakdown: "烟(연기 연) + 火(불 화) + 气(기운 기). 따스한 밥상을 차리며 피어오르는 생명력입니다.",
+        example: "比起冰冷的商场，我更喜欢传统菜市场的烟火气。 (삭막한 쇼핑몰보다 나는 전통 시장의 구수한 사람 사는 냄새가 훨씬 좋다.)"
+      },
+      "赛博分身": {
+        pinyin: "sài bó fēn shēn",
+        meaning: "사이버 분신 (자신의 음성과 얼굴을 모방해 대신 온라인 활동을 하는 AI 아바타)",
+        literal: "사이버네틱스(Cyber) 공간 속 나의 분신",
+        origin: "SF 개념이었으나 생성형 AI와 딥페이크 디지털 휴먼 기술의 상용화로 직장인들이 회의 참석이나 화상 통화를 대신하게 하는 현실의 AI 봇을 부르는 신조어입니다.",
+        breakdown: "赛博(사이버의 음차: Cybernetics) + 分(나눌 분) + 身(몸 신: 하나의 몸에서 갈라져 나온 또 다른 나).",
+        example: "他居然用赛博分身替自己去参加线上周会。 (그 친구는 세상에 사이버 분신을 보내서 자기 대신 온라인 주간회의에 참석하게 했다.)"
+      },
+      "牛马": {
+        pinyin: "niú mǎ",
+        meaning: "일하는 소와 말 (고된 야근과 적은 월급에 묶인 현대 직장인의 자조 밈)",
+        literal: "소와 말 (가축)",
+        origin: "사마천의 《보임안서》에 나오는 '소와 말처럼 고생스럽게 일한다(牛马走)'는 고사에서 유래하여, 현대 직장인들이 자신을 회사에 저당 잡힌 노예에 비유하는 자조적 단어입니다.",
+        breakdown: "牛(소 우) + 马(말 마). 묵묵히 쟁기질하고 짐을 나르는 가축의 비애입니다.",
+        example: "为了每个月的房贷，当代牛马只能咬牙早起。 (매달 나가는 대출금을 위해 현대 직장인 노예들은 입술 깨물고 일찍 일어날 수밖에 없다.)"
+      },
+      "暴风吸入": {
+        pinyin: "bào fēng xī rù",
+        meaning: "폭풍 흡입하다, 젓가락을 멈추지 않고 미친 듯이 흡입하듯 먹다",
+        literal: "폭풍우처럼 거세게 빨아들이다",
+        origin: "먹방(吃播) 영상에서 맛있는 음식을 거침없이 입으로 밀어 넣는 역동적인 동작을 묘사하며 젊은 네티즌들의 필수 먹방 슬랭으로 자리 잡았습니다.",
+        breakdown: "暴风(사나울 폭, 바람 풍: 사나운 바람) + 吸(마실 흡) + 入(들 입). 진공청소기처럼 빨아들이는 식욕입니다.",
+        example: "太饿了，面对那盘大盘鸡我直接暴风吸入！ (너무 배고파서 그 닭볶음탕 한 접시를 보고 그대로 폭풍 흡입해 버렸다!)"
+      },
+      "翻车": {
+        pinyin: "fān chē",
+        meaning: "(계획·방송·비밀이) 대형 사고 나다, 엉망으로 털리거나 들통나다",
+        literal: "자동차가 길에서 뒤집히다",
+        origin: "교통사고에서 유래하여 라이브 방송 중 실수, 꼼수가 발각된 상황, 요리 실패, 시험 망침 등 예상치 못한 대실패를 유쾌하게 풍자하는 인터넷 상용어입니다.",
+        breakdown: "翻(뒤집힐 번: 날개 우 羽 부수) + 车(수레 거/차). 완벽하던 균형이 와르르 전복된 모습입니다.",
+        example: "本想用AI偷懒，结果在老板提问时彻底翻车了。 (AI로 땡땡이치려다 사장님 질문 타임에 아주 제대로 대형 사고로 털렸다.)"
+      },
+      "妥妥的": {
+        pinyin: "tuǒ tuǒ de",
+        meaning: "아주 확실한, 땅 짚고 헤엄치기인, 문제없이 100% 보장된",
+        literal: "아주 온당하고 온당한",
+        origin: "중국 동북 방언 어조사로, 일의 성패가 너무나 명백하여 의심의 여지가 없을 때 쓰는 유쾌하고 확신에 찬 구어 표현입니다.",
+        breakdown: "妥(온당할 타: 손톱 조 爪 + 계집 녀 女로 평온하게 안착함). 첩어 형태로 확실성을 강조합니다.",
+        example: "有老张带队，这次项目拿下是妥妥的！ (장 팀장님이 이끄시니 이번 프로젝트 수주는 아주 따 놓은 당상이지!)"
+      },
+      "卷王": {
+        pinyin: "juǎn wáng",
+        meaning: "경쟁 끝판왕, 프로 야근러 (남들보다 더 일해 경쟁 기준을 높여버리는 인물)",
+        literal: "소용돌이치듯 휘말리는 내권(内卷) 경쟁의 제왕",
+        origin: "무한 경쟁을 뜻하는 '내권(内卷)'에 '왕(王)'을 합성한 신조어로, 주말 근무, 자격증 취득 등 초인적인 노력으로 동료들을 긴장하게 만드는 인물을 뜻합니다.",
+        breakdown: "卷(말 권: 안으로 말려드는 소용돌이) + 王(임금 왕). 과도한 노력의 지배자입니다.",
+        example: "周末还去公司自愿加班，小李真是实至名归的卷王。 (주말에도 회사 나가서 자발적으로 야근하다니 이 대리는 진짜 찐 경쟁 끝판왕이다.)"
+      },
+      "谁懂啊": {
+        pinyin: "shéi dǒng a",
+        meaning: "이 기분 누가 알까!, 진짜 폭풍 공감하지 않냐?",
+        literal: "누가 이것을 알아주겠는가?",
+        origin: "SNS(더우인, 샤오홍슈)에서 기막힌 경험이나 황당한 일, 극상의 힐링을 털어놓을 때 네티즌들의 감정적 공감을 강력하게 이끌어내는 마법의 문장 머리 표현입니다.",
+        breakdown: "谁(누구 수) + 懂(알 동: 마음 심 忄 + 무거울 중 重) + 啊(어조사 아). 내 마음의 무게를 헤아려달라는 호소입니다.",
+        example: "谁懂啊家人们！下班路上偶遇绝美晚霞有多治愈！ (여러분 이 기분 누가 알까요! 퇴근길에 마주친 노을이 얼마나 힐링인지!)"
+      },
+      "割韭菜": {
+        pinyin: "gē jiǔ cài",
+        meaning: "호구 잡다, 등쳐먹다, 밑바닥 대중을 상대로 피 같은 돈을 착취하다",
+        literal: "자라난 부추를 베어내다",
+        origin: "부추는 잎을 잘라내도 며칠 뒤면 다시 자라나 계속 베어 먹을 수 있다는 데서 유래하여, 금융 시장이나 상업 마케팅에서 순진한 개미 투자자나 소비자를 착취하는 행위를 뜻합니다.",
+        breakdown: "割(벨 할: 칼 도 刂 부수) + 韭菜(부추 구, 나물 채). 끊임없이 재생되는 희생양입니다.",
+        example: "这种劣质付费课纯纯是割年轻人的韭菜。 (이런 질 낮은 유료 강의는 순전히 청년들 코 묻은 돈 등쳐먹는 호구 잡기다.)"
+      },
+      "量大管饱": {
+        pinyin: "liàng dà guǎn bǎo",
+        meaning: "양이 엄청나게 푸짐해서 배부름을 확실히 보장하다 (갓성비의 대명사)",
+        literal: "분량이 커서 배부름을 관할한다",
+        origin: "북방 노동자들의 식당 간판 문구에서 유래하여, 화려한 플레이팅보다는 묵직한 푸짐함과 든든한 포만감을 안겨주는 혜자스러운 음식을 극찬할 때 씁니다.",
+        breakdown: "量(헤아릴 량) + 大(큰 대) + 管(주관할 관) + 饱(배부를 포: 밥 식 飠 부수). 든든한 한 끼의 약속입니다.",
+        example: "这碗拉面不仅味道地道，而且量大管饱。 (이 라면은 맛도 정통일 뿐만 아니라 양이 아주 혜자스러워서 배가 든든하다.)"
+      },
+      "预制菜": {
+        pinyin: "yù zhì cài",
+        meaning: "밀키트, 공장 제조 냉동 반조리 식품",
+        literal: "미리 제조해 둔 요리",
+        origin: "식품 가공 산업 용어로, 현대 외식업체들이 주방장을 고용하지 않고 공장 패키지를 단순히 뜯어 데워 내놓는 세태에 대해 소비자들이 신선도와 정성을 의심할 때 단골로 언급됩니다.",
+        breakdown: "预(미리 예) + 制(만들 제) + 菜(나물/요리 채). 손맛 대신 공장 레시피로 규격화된 음식입니다.",
+        example: "去高档餐厅吃到的居然是预制菜，让人太下头了。 (고급 식당에 갔는데 공장제 밀키트가 나오다니 진짜 확 깬다.)"
+      },
+      "接地气": {
+        pinyin: "jiē dì qì",
+        meaning: "사람 냄새 나다, 대중적이고 친근하다, 격식 없이 서민적이다",
+        literal: "땅의 흙 기운(地气)에 발을 딛고 닿다",
+        origin: "고대 의학에서 땅의 음기(地气)를 받아야 건강하다는 데서 유래하여, 현대에는 거만하거나 추상적이지 않고 보통 서민들의 눈높이와 삶에 밀착되어 정겨운 태도를 뜻합니다.",
+        breakdown: "接(이을 접: 손 수 扌) + 地(땅 지) + 气(기운 기). 공중에 붕 뜨지 않고 현실 대지에 단단히 발을 붙임입니다.",
+        example: "这位博主的视频非常接地气，深受大家喜爱。 (이 크리에이터의 영상은 굉장히 사람 냄새 나고 친근해서 다들 좋아한다.)"
+      },
+      "爆炒": {
+        pinyin: "bào chǎo",
+        meaning: "센 불에 단숨에 볶아내다 (중식 웍 요리의 핵심 불맛 기법)",
+        literal: "폭발하듯 거센 불길에 볶다",
+        origin: "중국 8대 요리에서 높은 화력(镬气)을 이용해 채소의 아삭함과 고기의 육즙을 찰나에 가두는 정통 조리법입니다.",
+        breakdown: "爆(터질 폭: 불 화 火 부수) + 炒(볶을 초: 불 화 火 + 적을 소 少). 불길을 뿜어내며 볶음입니다.",
+        example: "猛火爆炒出来的牛肉嫩滑多汁。 (센 불에 화르륵 볶아낸 소고기는 부드럽고 육즙이 가득하다.)"
+      },
+      "调教": {
+        pinyin: "tiáo jiào",
+        meaning: "길들이다, 조련하다 (소프트웨어 프롬프트나 봇을 내 입맛에 맞게 최적화하다)",
+        literal: "조정하고 가르치다",
+        origin: "말이나 반려동물을 훈련하던 전통 용어였으나, 현대 테크 커뮤니티에서 거대언어모델(LLM)이나 AI 에이전트의 프롬프트를 정교하게 다듬는 작업을 친근하게 일컫는 말로 전용되었습니다.",
+        breakdown: "调(고를 조: 말씀 언 言 부수) + 教(가르칠 교). 섬세하게 소통하며 바로잡음입니다.",
+        example: "花了三天时间调教，这个AI终于能写出我的文风了。 (사흘 동안 공들여 길들였더니 이 AI가 마침내 내 글투를 완벽히 흉내 낸다.)"
+      },
+      "反向整顿": {
+        pinyin: "fǎn xiàng zhěng dùn",
+        meaning: "반방향 군기 잡기, 아랫사람이 윗사람의 낡은 악습을 거꾸로 개혁하다",
+        literal: "반대 방향으로 바로잡고 정돈하다",
+        origin: "'00后整顿职场(2000년대생들이 직장 문화를 뜯어고친다)'는 밈에서 파생되어, 불합리한 야근이나 형식주의 회의를 당돌하게 거부하거나 AI로 우회 돌파하는 청년들의 저항을 뜻합니다.",
+        breakdown: "反(되돌릴 반) + 向(향할 향) + 整顿(가지런할 정, 조아릴 돈). 권력의 흐름을 뒤집는 시도입니다.",
+        example: "准点下班拒绝无效社交，年轻人在反向整顿职场。 (칼퇴하고 쓸데없는 회식을 거부하며 젊은이들이 직장 문화를 거꾸로 뜯어고치고 있다.)"
+      },
+      "自掘坟墓": {
+        pinyin: "zì jué fén mù",
+        meaning: "스스로 제 무덤을 파다, 어리석게 자멸의 길로 걸어 들어가다",
+        literal: "스스로 자기 무덤을 파내다",
+        origin: "고대 성어에서 유래하여, 눈앞의 작은 꾀나 이익(땡땡이 치기)에 눈이 멀어 장기적으로 자신의 존재 기반(일자리)을 송두리째 파괴하는 치명적 자폭 행위를 경고할 때 씁니다.",
+        breakdown: "自(스스로 자) + 掘(팔 굴: 손 수 扌) + 坟墓(무덤 분, 흙 무덤 묘). 자멸의 길을 재촉함입니다.",
+        example: "只顾眼前偷懒而不用心提升自己，无异于自掘坟墓。 (눈앞의 땡땡이에만 급급해 실력을 키우지 않는 것은 제 무덤을 파는 짓과 다름없다.)"
+      },
+      "测评": {
+        pinyin: "cè píng",
+        meaning: "직접 써보고 검증하는 리뷰/테스트 (언박싱 평가 콘텐츠)",
+        literal: "측정하여 평론하다",
+        origin: "산업 시험 용어에서 출발해 SNS상에서 전자기기, 화장품, 맛집 메뉴를 직접 사서 장단점을 가감 없이 까발리는 신뢰성 높은 소비자 리뷰를 통칭합니다.",
+        breakdown: "测(잴 측: 물 수 氵) + 评(평할 평: 말씀 언 言). 객관적인 잣대로 평가함입니다.",
+        example: "在下单之前，建议多看看各路博主的深度测评。 (결제하기 전에 여러 크리에이터들의 솔직한 심층 리뷰를 찾아보길 권한다.)"
+      },
+      "盲目冲": {
+        pinyin: "máng mù chōng",
+        meaning: "이것저것 따져보지도 않고 무지성으로 냅다 지르다/돌격하다",
+        literal: "눈이 먼 채로 냅다 돌진하다",
+        origin: "게임에서 적진으로 생각 없이 돌격하는 '冲(돌격)'에 '맹목(盲目)'을 더해, SNS에서 유행한다는 이유만으로 줄을 서거나 물건을 사는 충동성을 경계하는 말입니다.",
+        breakdown: "盲(눈멀 맹: 눈 목 目 + 망할 망 亡) + 目(눈 목) + 冲(돌진할 충). 눈가리개를 한 채 내달림입니다.",
+        example: "这家店评分虚高，千万别看网图就盲目冲。 (이 식당 평점 조작된 거니까 인스타 사진만 보고 냅다 가지 마라.)"
+      },
+      "剁手": {
+        pinyin: "duò shǒu",
+        meaning: "지름신이 강림하다, 충동구매하고 손을 자르고 싶을 만큼 후회하다",
+        literal: "지름신을 멈추기 위해 손을 자르다",
+        origin: "타오바오 광군제 등 대형 쇼핑 세일 때마다 '다시는 과소비 안 한다, 또 사면 내 손을 자른다'고 맹세하면서도 결제 버튼을 누르는 네티즌들의 유쾌한 자조 표현입니다.",
+        breakdown: "剁(칼로 벨 타: 칼 도 刂) + 手(손 수). 쇼핑 충동을 멈추기 위한 극단적 해학입니다.",
+        example: "双十一刚过，看着长长的账单我恨不得立刻剁手。 (광군제 끝나고 길게 찍힌 카드 명세서 보니 진짜 손목을 치고 싶다.)"
+      },
+      "参差不齐": {
+        pinyin: "cēn cī bù qí",
+        meaning: "수준이나 퀄리티가 들쭉날쭉하다, 고르지 못하고 제각각이다",
+        literal: "길고 짧은 것이 가지런하지 않다",
+        origin: "《시경》의 '참치행채(参差荇菜)'에서 유래한 유서 깊은 성어로, 서비스의 품질, 가격, 위생 상태가 편차가 심할 때 이를 냉정하게 지적하는 표준 성어입니다.",
+        breakdown: "参差(들쭉날쭉할 참치) + 不(아니 불) + 齐(가지런할 제). 고르지 못한 상태입니다.",
+        example: "市面上的网课质量参差不齐，选择时要擦亮眼睛。 (시중 인터넷 강의의 퀄리티가 천차만별이니 고를 때 눈을 부릅떠야 한다.)"
+      },
+      "闭眼吹": {
+        pinyin: "bì yǎn chuī",
+        meaning: "눈 감고 무지성으로 빨아주다, 맹목적으로 무조건 칭송하다",
+        literal: "눈을 질끈 감고 나팔을 불어대다",
+        origin: "나팔을 불 듯 과장되게 칭찬하는 '吹'에 '闭眼(눈을 감다)'을 결합하여, 단점이나 부작용은 애써 외면하고 무조건 최고라고 띄워주는 바이럴 여론을 비판하는 말입니다.",
+        breakdown: "闭(닫을 폐) + 眼(눈 안) + 吹(불 취: 입 구 口 + 하품 흠 欠). 맹목적인 과장 찬사입니다.",
+        example: "这部电影漏洞百出，粉丝们就别再闭眼吹了。 (이 영화는 구멍투성이인데 팬들은 제발 무지성으로 찬양하지 좀 마라.)"
+      },
+      "物理超度": {
+        pinyin: "wù lǐ chāo dù",
+        meaning: "물리적 성불 (골치 아픈 고민이나 번뇌를 근원적으로 깨끗이 박멸하다)",
+        literal: "물리적인 힘으로 영혼을 천도(성불)시키다",
+        origin: "원래 서브컬처 애니메이션이나 게임에서 악당을 설득 대신 압도적인 화력으로 시원하게 해치우는 유머였으나, 현대에는 산사의 새벽 공기나 강도 높은 휴식이 뇌 속 잡념을 싹 날려줄 때 비유적으로 씁니다.",
+        breakdown: "物理(물리: 과학적 물리력) + 超度(넘을 초, 건널 도: 고통에서 벗어나 극락왕생시킴). 유쾌한 의미 전환입니다.",
+        example: "在山顶吹了半小时冷风，把我的精神内耗直接物理超度了。 (산꼭대기에서 찬바람 30분 맞았더니 머릿속 쓸데없는 멘탈 소모가 싹 박멸됐다.)"
+      },
+      "精神状态": {
+        pinyin: "jīng shén zhuàng tài",
+        meaning: "멘탈 상태, 영혼 나간 현대 직장인들의 피폐한 정신줄 (유쾌한 자조 밈)",
+        literal: "정신의 작동 상태",
+        origin: "'나 요즘 멘탈이 나갔다'는 뜻으로, '발광(发疯)' 밈과 함께 스트레스에 지쳐 허탈하게 웃거나 멍때리는 청년들의 심리적 탈진을 위트 있게 표현합니다.",
+        breakdown: "精神(정신) + 状态(모양 상, 형태 태). 외부 자극에 흔들리는 영혼의 현주소입니다.",
+        example: "看看我凌乱的书桌，就知道我今天的精神状态有多美丽了。 (내 어질러진 책상을 보면 오늘 내 멘탈이 얼마나 처참한지 바로 알 수 있다.)"
+      },
+      "噱头": {
+        pinyin: "xué tou",
+        meaning: "눈길 끌기용 어그로, 실속 없는 껍데기 쇼맨십, 요란한 상술",
+        literal: "웃음을 유발하는 말장난이나 재주",
+        origin: "희곡이나 연극 무대에서 관객의 폭소를 유도하는 우스갯소리에서 유래하여, 현대에는 상품이나 마케팅이 알맹이 없이 자극적인 화제성만 노리는 꼼수를 비판할 때 씁니다.",
+        breakdown: "噱(웃길 학: 입 구 口 부수) + 头(머리 두). 겉으로 드러난 잔재주입니다.",
+        example: "这种网红食品全是噱头，买回去尝一口就后悔。 (이런 인스타용 음식은 온통 허세뿐이라 사서 한 입 먹으면 바로 후회한다.)"
+      },
+      "电子木鱼": {
+        pinyin: "diàn zǐ mù yú",
+        meaning: "디지털 목탁 (스마트폰 앱 화면을 탭하며 '공덕 +1'을 쌓는 청년 힐링 밈)",
+        literal: "전자기기로 두드리는 나무 물고기(목탁)",
+        origin: "화가 나거나 스트레스받을 때 스마트폰 화면의 목탁을 톡톡 터치하면 '공덕+1(功德+1)'이라는 글자가 뜨는 앱이 대유행하면서 직장인들의 디지털 마인드컨트롤 필수품이 되었습니다.",
+        breakdown: "电子(디지털) + 木鱼(목탁: 사찰의 법구). 전통 사찰 문화와 숏폼 디지털 세대의 절묘한 결합입니다.",
+        example: "遇到奇葩客户先别发火，打开手机敲两下电子木鱼。 (진상 손님을 만나도 욱하지 말고 스마트폰 열어 디지털 목탁 두 번 두드려라.)"
+      }
+    };
+
+    const PRACTICE_QUIZZES = [
+      {
+        id: "quiz-1",
+        title: "문제 1 · 힐링/라이프 밈 (지난주 템플스테이&멍때리기 핫이슈)",
+        scenario: "지난주 화제가 된 한강 멍때리기 대회와 산사 템플스테이 소식처럼, 치열한 일상과 스마트폰 알림을 끄고 여유롭게 마음을 비워낸 뒤 '이런 릴랙스한 여유로움은 진짜 너무 부럽다. 영혼 나간 직장인들에게 꼭 필요한 쉼이다'라고 원어민식으로 가장 자연스럽게 반응한 댓글은?",
+        correctOption: "D",
+        options: [
+          { key: "A", text: "这里空气很多，大家都在睡觉。", isCorrect: false, feedback: "초급 교과서 직역투로, 젊은 세대의 공감 슬랭과 뉘앙스가 전혀 반영되지 않았습니다." },
+          { key: "B", text: "纯纯大冤种，买这么大的爆炒不划算。", isCorrect: false, feedback: "‘大冤种(호구)’과 ‘爆炒(센 불 볶음)’는 음식/쇼핑 관련 단어로 힐링 문맥에 어울리지 않습니다." },
+          { key: "C", text: "同事的赛博分身翻车了，笑死我了。", isCorrect: false, feedback: "AI 화상회의 대형 사고 이야기로 템플스테이 힐링 소감과 무관합니다." },
+          { key: "D", text: "这种松弛感真的让人狠狠羡慕，当代牛马最缺的就是合情合理的放空时间。", isCorrect: true, feedback: "정답! ‘松弛感(느슨한 여유)’, ‘狠狠羡慕(너무나 부러움)’, ‘牛马(노예 직장인)’가 완벽하게 어우러진 지난주 최고의 공감 댓글입니다." },
+          { key: "E", text: "没有天花板的盘子很大，量大管饱。", isCorrect: false, feedback: "‘没有天花板’은 야외 자연을 뜻하는 말이지 음식 접시 크기를 뜻하지 않습니다." }
+        ]
+      },
+      {
+        id: "quiz-2",
+        title: "문제 2 · 편의점 점보 대용량 먹방 (지난주 K-푸드 바이럴)",
+        scenario: "지난주 소홍서와 틱톡에서 큰 화제가 된 한국 편의점 세숫대야 점보 떡볶이 먹방을 보고, '가성비도 엄청 푸짐해서 배부름 보장이고 보는 내내 군침 돌아서 미친 듯이 흡입하듯 봤다'라고 가장 찰지게 표현한 댓글은?",
+        correctOption: "A",
+        options: [
+          { key: "A", text: "这么大一桶辣炒年糕才三十多块，量大管饱，深夜看吃播直接暴风吸入！", isCorrect: true, feedback: "정답! ‘量大管饱(양 많고 배부름 보장)’과 ‘暴风吸入(폭풍 흡입)’을 절묘하게 결합한 찐 원어민 먹방 리뷰 표현입니다." },
+          { key: "B", text: "这个年糕非常热，我的嘴巴很难受。", isCorrect: false, feedback: "초등학생 수준의 어색한 직역 표현으로 감탄의 뉘앙스가 전혀 없습니다." },
+          { key: "C", text: "我用AI写了周报，老板觉得很香迷糊了。", isCorrect: false, feedback: "오피스 주간보고서 이야기와 음식 슬랭을 엉뚱하게 뒤섞은 오답입니다." },
+          { key: "D", text: "寺庙寄宿吃素斋，把我物理超度了。", isCorrect: false, feedback: "산사 템플스테이 채식 절밥 후기 문구입니다." },
+          { key: "E", text: "盲目跟风当韭菜，这个电脑太贵了。", isCorrect: false, feedback: "전자기기 충동구매 호구 방지 문구입니다." }
+        ]
+      },
+      {
+        id: "quiz-3",
+        title: "문제 3 · 재래시장 옌훠치 & 즉석 조리 (지난주 미식 핫이슈)",
+        scenario: "지난주 중국 대도시에서 열풍을 일으킨 재래시장 즉석 조리 대행(代炒菜)처럼, 갓 볶아낸 따끈따끈한 시장 요리를 맛보고 '진짜 너무 맛있어서 정신이 혼미해질 지경이고, 사람 사는 따스한 온기(烟火气)가 제대로 느껴진다'고 찬사를 보낼 때의 표현은?",
+        correctOption: "C",
+        options: [
+          { key: "A", text: "预制菜很好吃，我们要多多去商场排队。", isCorrect: false, feedback: "냉동 밀키트(预制菜)를 쇼핑몰 가서 줄 서 먹자는 말로 실제 현상과 정반대입니다." },
+          { key: "B", text: "开会很无聊，让我的分身去替我吃饭。", isCorrect: false, feedback: "AI 아바타로 밥을 대신 먹게 한다는 황당한 비문맥 문장입니다." },
+          { key: "C", text: "买点小菜让老板猛火爆炒，刚出锅那一口香迷糊了，这才是真正的烟火气！", isCorrect: true, feedback: "정답! ‘爆炒(센 불 볶음)’, ‘香迷糊了(맛있어서 혼미함)’, ‘烟火气(사람 사는 훈훈한 냄새)’ 3박자가 완벽한 A급 감탄 표현입니다." },
+          { key: "D", text: "谁懂啊，一升冰美式留在冰箱吃灰了。", isCorrect: false, feedback: "커피를 사놓고 방치했다는 불만 댓글입니다." },
+          { key: "E", text: "这个菜市场全程无尿点，堪称电子榨菜。", isCorrect: false, feedback: "‘无尿点’과 ‘电子榨菜’는 드라마나 영상물에 쓰는 극찬이지 음식에 쓰지 않습니다." }
+        ]
+      },
+      {
+        id: "quiz-4",
+        title: "문제 4 · 오피스 AI 사이버 분신 (지난주 테크 핫이슈)",
+        scenario: "지난주 빅테크 직장인들이 AI 아바타로 온라인 회의를 켜두고 자리에서 몰래 여유를 부리는 상황에서, '내 분신 보내서 지루한 주간회의 켜놓고, 본체는 편하게 딴짓하며 커피 한잔 마시는 게 진짜 노예 탈출이지'라고 맞장구치는 슬랭은?",
+        correctOption: "B",
+        options: [
+          { key: "A", text: "电脑在开会，我在马路上暴走两万步。", isCorrect: false, feedback: "성수동 쇼핑 파워워킹과 뒤섞인 어색한 문장입니다." },
+          { key: "B", text: "让赛博分身去开无聊的周会，本体在工位安心摸鱼喝咖啡，科技终于造福牛马了！", isCorrect: true, feedback: "정답! ‘赛博分身(AI 아바타)’, ‘摸鱼(농땡이/루팡질)’, ‘牛马(노예 직장인)’가 완벽하게 조화된 찐 오피스 블랙유머입니다." },
+          { key: "C", text: "去菜市场买两斤肉让电脑炒一下。", isCorrect: false, feedback: "컴퓨터한테 고기를 볶으라는 황당한 오류 문장입니다." },
+          { key: "D", text: "汉江发呆大赛拿了冠军，真是太绝了。", isCorrect: false, feedback: "한강 멍때리기 대회 관련 문구입니다." },
+          { key: "E", text: "很多东西国内电商都有，别当大冤种。", isCorrect: false, feedback: "해외 직구 쇼핑 관련 훈수 표현입니다." }
+        ]
+      },
+      {
+        id: "quiz-5",
+        title: "문제 5 · 충동구매 및 유행 팔이 방지 조언",
+        scenario: "SNS에서 유행한다고 무작정 휩쓸려 가서 비싼 돈을 내고 낭패를 보는 사람들에게, '남들 따라 무지성으로 냅다 지르지 마라, 감성 마케팅에 낚여서 순전히 호구(부추) 꼴 난다'고 똑똑하게 충고하는 원어민 댓글은?",
+        correctOption: "E",
+        options: [
+          { key: "A", text: "你是一个很坏的人，偷懒是不好的行为。", isCorrect: false, feedback: "초등학교 도덕 교과서식 훈계로 네티즌들의 유행어 뉘앙스가 아닙니다." },
+          { key: "B", text: "大半夜吃辣炒年糕，直接封神。", isCorrect: false, feedback: "야식 떡볶이 먹방을 찬양하는 정반대의 문맥입니다." },
+          { key: "C", text: "敲敲电子木鱼，老板就会给你加薪。", isCorrect: false, feedback: "전자 목탁 두드리면 월급 오른다는 엉뚱한 말입니다." },
+          { key: "D", text: "我的赛博分身在菜市场暴风吸入。", isCorrect: false, feedback: "아바타가 시장에서 먹방을 한다는 말이 안 되는 문맥입니다." },
+          { key: "E", text: "大家别盲目跟风冲，有些噱头营销纯纯是割年轻人的情绪韭菜！", isCorrect: true, feedback: "정답! ‘盲目跟风冲(무지성으로 유행 좇기)’, ‘噱头(어그로 상술)’, ‘割韭菜(호구 잡기)’, ‘纯纯(100%)’의 결합은 현대 스마트 소비자들의 정석 조언입니다." }
+        ]
+      }
+    ];
+
+    let userVocab = [];
+
+    function loadUserVocab() {
+      try {
+        const stored = localStorage.getItem('ninjin_user_vocab');
+        if (stored) {
+          userVocab = JSON.parse(stored);
+        } else {
+          userVocab = [
+            {
+              word: "松弛感",
+              pinyin: "sōng chí gǎn",
+              meaning: "느슨함, 힘을 뺀 여유로움, 초조해하지 않는 담담한 멘탈",
+              dateAdded: "2026-10-02"
+            }
+          ];
+          saveUserVocab();
+        }
+      } catch (e) {
+        userVocab = [];
+      }
+      updateVocabBadge();
+    }
+
+    function saveUserVocab() {
+      try {
+        localStorage.setItem('ninjin_user_vocab', JSON.stringify(userVocab));
+      } catch (e) {}
+      updateVocabBadge();
+    }
+
+    function updateVocabBadge() {
+      const badge = document.getElementById('vocab-count-badge');
+      if (badge) {
+        badge.textContent = userVocab.length;
+      }
+    }
+
+    function addWordToVocab(wordData) {
+      if (!wordData || !wordData.word) return;
+      const exists = userVocab.some(item => item.word === wordData.word);
+      if (exists) {
+        showToast(`'${wordData.word}' 은(는) 이미 단어장에 저장되어 있습니다.`);
+        return;
+      }
+      userVocab.unshift({
+        word: wordData.word,
+        pinyin: wordData.pinyin || '',
+        meaning: wordData.meaning || '',
+        dateAdded: new Date().toISOString().split('T')[0]
+      });
+      saveUserVocab();
+      renderVocabList();
+      showToast(`'${wordData.word}' 을(를) 단어장에 추가했습니다! ⭐`);
+    }
+
+    function removeWordFromVocab(word) {
+      userVocab = userVocab.filter(item => item.word !== word);
+      saveUserVocab();
+      renderVocabList();
+      showToast(`'${word}' 단어를 삭제했습니다.`);
+    }
+
+    function clearAllVocab() {
+      if (userVocab.length === 0) return;
+      userVocab = [];
+      saveUserVocab();
+      renderVocabList();
+      showToast('단어장을 모두 비웠습니다.');
+    }
+
+    let currentCategoryFilter = 'all';
+
+    function renderTopics() {
+      const container = document.getElementById('topics-container');
+      if (!container) return;
+
+      const filtered = TOPICS.filter(t => {
+        if (currentCategoryFilter === 'all') return true;
+        if (currentCategoryFilter === 'Korea') return t.isKoreaTopic;
+        return t.category === currentCategoryFilter;
+      });
+
+      const countDisplay = document.getElementById('topic-count-display');
+      if (countDisplay) {
+        countDisplay.textContent = filtered.length;
+      }
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full py-16 text-center text-stone-400">
+            <i class="fa-solid fa-magnifying-glass text-3xl mb-3 text-stone-300"></i>
+            <p class="text-sm font-bold">해당 카테고리의 핫이슈를 찾을 수 없습니다.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.map(t => {
+        const isKr = t.isKoreaTopic;
+        const cardBorder = isKr ? 'border-orange-300/80 hover:border-orange-400 shadow-orange-500/5' : 'border-stone-200 hover:border-stone-300';
+        const badgeColor = isKr ? 'bg-orange-500 text-white' : 'bg-red-500 text-white';
+
+        return `
+          <article class="bg-white rounded-3xl border ${cardBorder} p-5 sm:p-6 shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between group">
+            
+            <div class="space-y-4">
+              <!-- Meta Tags Header -->
+              <div class="flex items-center justify-between gap-2 flex-wrap text-xs">
+                <div class="flex items-center gap-2">
+                  <span class="px-2.5 py-0.5 rounded-full text-xs font-black ${badgeColor}">
+                    ${isKr ? '🇰🇷 한국 핫이슈' : '🔥 중국 핫이슈'}
+                  </span>
+                  <span class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-stone-100 text-stone-600">
+                    ${t.source}
+                  </span>
+                </div>
+                <span class="text-[11px] text-stone-400 font-medium">
+                  <i class="fa-regular fa-clock"></i> ${t.publishedAt}
+                </span>
+              </div>
+
+              <!-- Topic Title & Korean Translation -->
+              <div>
+                <h3 class="text-lg sm:text-xl font-black text-stone-900 chinese-text leading-snug tracking-tight">
+                  ${t.title}
+                </h3>
+                <p class="pinyin-tag text-xs font-mono font-medium text-orange-600 mt-1 leading-snug">
+                  ${t.titlePinyin || ''}
+                </p>
+                <p class="text-xs sm:text-sm font-bold text-stone-600 mt-1.5 flex items-center gap-1.5">
+                  <i class="fa-solid fa-arrow-turn-down-right text-orange-500 text-xs"></i> ${t.koreanTitle}
+                </p>
+              </div>
+
+              <!-- Pedagogical Chip Row -->
+              <div class="flex items-center gap-2 flex-wrap text-[11px] font-bold">
+                <span class="px-2 py-0.5 rounded-md bg-amber-50 text-amber-900 border border-amber-200/80">
+                  <span class="w-1.5 h-1.5 rounded-full bg-amber-500 inline-block mr-1"></span> HSK 5-6급 연계
+                </span>
+                <span class="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-900 border border-emerald-200/80">
+                  <i class="fa-solid fa-bolt text-emerald-500 text-[10px]"></i> 실전 댓글 5선 전수해부
+                </span>
+                <span class="px-2 py-0.5 rounded-md bg-stone-100 text-stone-600">
+                  음성 청취 지원
+                </span>
+              </div>
+
+              <!-- Article Core Summary Card (原文核心 & Korean Translation) -->
+              <div class="bg-stone-50/90 rounded-2xl p-4 border border-stone-200/80 space-y-3">
+                <div class="flex items-center justify-between gap-2 border-b border-stone-200 pb-2.5">
+                  <span class="text-xs font-black text-stone-900 flex items-center gap-1.5">
+                    <i class="fa-solid fa-newspaper text-orange-500"></i> 原文核心 (원문 핵심 요약)
+                  </span>
+                  <!-- Voice Read Button for Original Article -->
+                  <button onclick="readArticleFullText('${t.id}')" id="article-audio-btn-${t.id}" class="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-orange-100 hover:bg-orange-200 text-orange-900 text-xs font-black transition-colors" title="기사 원문 중국어 전체 듣기">
+                    <i class="fa-solid fa-volume-high text-orange-600"></i> <span>원문 듣기</span>
+                  </button>
+                </div>
+
+                <!-- Chinese Text with Dynamic Pinyin Support -->
+                <div class="space-y-1.5">
+                  <p class="text-xs sm:text-sm text-stone-800 chinese-text leading-relaxed font-medium">
+                    ${t.originalText}
+                  </p>
+                  <p class="pinyin-tag text-xs font-mono font-normal text-orange-700/85 leading-relaxed bg-orange-50/50 p-2.5 rounded-xl border border-orange-200/60">
+                    ${t.originalTextPinyin || ''}
+                  </p>
+                </div>
+
+                <!-- Detailed Korean Translation -->
+                <div class="bg-white p-3 rounded-xl border border-stone-200 space-y-1">
+                  <div class="text-[11px] font-black text-stone-700 flex items-center gap-1">
+                    <i class="fa-solid fa-language text-stone-400"></i> 한국어 전문 번역:
+                  </div>
+                  <p class="text-xs text-stone-600 leading-relaxed font-normal">
+                    ${t.koreanTranslation}
+                  </p>
+                </div>
+
+                <!-- Korea Situation Background Box -->
+                <div class="text-[11px] text-stone-500 bg-amber-50/60 p-2.5 rounded-xl border border-amber-200/60 flex items-start gap-1.5">
+                  <span class="font-bold text-amber-900 shrink-0">KR 배경 정보:</span>
+                  <span class="leading-tight text-amber-950/80">${t.koreaContext}</span>
+                </div>
+              </div>
+
+              <!-- 5 Authentic Comments Preview List -->
+              <div class="space-y-2 pt-2">
+                <div class="flex items-center justify-between text-xs font-black text-stone-800">
+                  <span class="flex items-center gap-1.5">
+                    <i class="fa-solid fa-comments text-orange-500"></i> 中国网友评论 (실전 댓글 5선)
+                  </span>
+                  <span class="text-[10px] text-stone-400 font-normal">댓글을 누르면 해부실이 열립니다</span>
+                </div>
+
+                <div class="space-y-2">
+                  ${t.comments.map((c, idx) => `
+                    <div onclick="openCommentModal('${t.id}', '${c.id}')" class="p-3 rounded-2xl bg-white hover:bg-orange-50/60 border border-stone-200 hover:border-orange-300 transition-all cursor-pointer group/comm space-y-1.5 shadow-2xs">
+                      <div class="flex items-center justify-between text-xs">
+                        <div class="flex items-center gap-1.5">
+                          <span class="w-5 h-5 rounded-full bg-orange-100 text-orange-800 text-[10px] font-black flex items-center justify-center">
+                            ${idx + 1}
+                          </span>
+                          <span class="font-bold text-stone-800 text-[11px]">网友 @${c.author}</span>
+                        </div>
+                        <span class="text-[10px] px-2 py-0.5 rounded-full bg-stone-100 text-stone-600 font-medium">
+                          ${c.sentiment}
+                        </span>
+                      </div>
+
+                      <div>
+                        <p class="text-xs sm:text-sm font-bold text-stone-900 chinese-text leading-snug">
+                          “${c.chinese}”
+                        </p>
+                        <p class="pinyin-tag text-xs font-mono font-medium text-orange-600 mt-1 leading-snug">
+                          ${c.pinyin}
+                        </p>
+                      </div>
+
+                      <p class="text-xs text-stone-600 line-clamp-1">
+                        👉 ${c.korean}
+                      </p>
+
+                      <div class="flex items-center gap-1.5 pt-1 flex-wrap">
+                        ${c.expressions.map(exp => `
+                          <span onclick="event.stopPropagation(); openEtymologyModal('${exp}')" class="text-[10px] font-black px-2 py-0.5 rounded-md bg-orange-100/70 text-orange-900 hover:bg-orange-200 border border-orange-200 transition-colors" title="어원 연구실">
+                            # ${exp}
+                          </span>
+                        `).join('')}
+                      </div>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+
+            </div>
+
+            <div class="pt-4 mt-2 border-t border-stone-100 flex items-center justify-between">
+              <span class="text-[11px] text-stone-400">5개 댓글 전수 해부 완료</span>
+              <button onclick="openCommentModal('${t.id}', '${t.comments[0].id}')" class="text-xs font-black text-orange-600 hover:text-orange-700 flex items-center gap-1">
+                <span>첫 번째 댓글 해부실 열기</span>
+                <i class="fa-solid fa-chevron-right text-[10px]"></i>
+              </button>
+            </div>
+
+          </article>
+        `;
+      }).join('');
+    }
+
+    let currentlyReadingArticleId = null;
+
+    function readArticleFullText(topicId) {
+      const topic = TOPICS.find(t => t.id === topicId);
+      if (!topic) return;
+
+      const btn = document.getElementById(`article-audio-btn-${topicId}`);
+      
+      if (currentlyReadingArticleId === topicId) {
+        window.speechSynthesis.cancel();
+        currentlyReadingArticleId = null;
+        if (btn) {
+          btn.innerHTML = `<i class="fa-solid fa-volume-high text-orange-600"></i> <span>원문 듣기</span>`;
+          btn.className = 'flex items-center gap-1.5 px-3 py-1 rounded-xl bg-orange-100 hover:bg-orange-200 text-orange-900 text-xs font-black transition-colors';
+        }
+        return;
+      }
+
+      if (currentlyReadingArticleId) {
+        const prevBtn = document.getElementById(`article-audio-btn-${currentlyReadingArticleId}`);
+        if (prevBtn) {
+          prevBtn.innerHTML = `<i class="fa-solid fa-volume-high text-orange-600"></i> <span>원문 듣기</span>`;
+          prevBtn.className = 'flex items-center gap-1.5 px-3 py-1 rounded-xl bg-orange-100 hover:bg-orange-200 text-orange-900 text-xs font-black transition-colors';
+        }
+      }
+
+      currentlyReadingArticleId = topicId;
+      if (btn) {
+        btn.innerHTML = `<i class="fa-solid fa-circle-stop text-white animate-pulse"></i> <span>정지</span>`;
+        btn.className = 'flex items-center gap-1.5 px-3 py-1 rounded-xl bg-orange-600 text-white text-xs font-black shadow-md transition-colors';
+      }
+
+      showToast(`기사 원문을 낭독합니다 (${currentSpeechRate}x).`);
+
+      speakChinese(topic.originalText, () => {
+        currentlyReadingArticleId = null;
+        if (btn) {
+          btn.innerHTML = `<i class="fa-solid fa-volume-high text-orange-600"></i> <span>원문 듣기</span>`;
+          btn.className = 'flex items-center gap-1.5 px-3 py-1 rounded-xl bg-orange-100 hover:bg-orange-200 text-orange-900 text-xs font-black transition-colors';
+        }
+      });
+    }
+
+    function openCommentModal(topicId, commentId) {
+      playDingDongSound();
+
+      const topic = TOPICS.find(t => t.id === topicId);
+      if (!topic) return;
+      const comment = topic.comments.find(c => c.id === commentId);
+      if (!comment) return;
+
+      activeModalComment = comment;
+
+      document.getElementById('modal-chinese').textContent = `“${comment.chinese}”`;
+      document.getElementById('modal-pinyin').textContent = comment.pinyin;
+      document.getElementById('modal-sentiment-badge').textContent = comment.sentiment;
+      document.getElementById('modal-korean-natural').textContent = comment.korean;
+      document.getElementById('modal-literal').textContent = comment.literal;
+      document.getElementById('modal-tone-tag').textContent = comment.tone;
+      document.getElementById('modal-nuance-detail').textContent = comment.nuanceDetail;
+      document.getElementById('modal-culture-context').textContent = comment.cultureContext;
+
+      const exprContainer = document.getElementById('modal-expressions-container');
+      exprContainer.innerHTML = comment.expressions.map(exp => `
+        <button onclick="openEtymologyModal('${exp}')" class="px-3 py-1.5 rounded-xl bg-orange-100 hover:bg-orange-200 text-orange-950 font-black text-xs border border-orange-300 transition-transform hover:scale-105 flex items-center gap-1.5 shadow-2xs">
+          <i class="fa-solid fa-magnifying-glass text-[10px] text-orange-600"></i>
+          <span class="chinese-text font-black">${exp}</span>
+          <span class="text-[10px] font-normal text-orange-700">(어원 해부)</span>
+        </button>
+      `).join('');
+
+      updateModalBookmarkButton();
+
+      const modal = document.getElementById('comment-modal');
+      modal.classList.remove('hidden');
+    }
+
+    function closeCommentModal() {
+      const modal = document.getElementById('comment-modal');
+      modal.classList.add('hidden');
+      window.speechSynthesis.cancel();
+    }
+
+    function playModalCommentAudio() {
+      if (!activeModalComment) return;
+      const waveBars = document.getElementById('modal-wave-bars');
+      if (waveBars) waveBars.classList.add('wave-playing');
+
+      speakChinese(activeModalComment.chinese, () => {
+        if (waveBars) waveBars.classList.remove('wave-playing');
+      });
+    }
+
+    function updateModalBookmarkButton() {
+      const btn = document.getElementById('modal-bookmark-btn');
+      if (!btn || !activeModalComment) return;
+      const primaryWord = activeModalComment.expressions[0] || activeModalComment.chinese;
+      const exists = userVocab.some(item => item.word === primaryWord);
+
+      if (exists) {
+        btn.innerHTML = `<i class="fa-solid fa-star text-amber-500"></i> <span>저장됨</span>`;
+        btn.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-amber-300 bg-amber-50 text-xs font-bold text-amber-900 transition-colors';
+      } else {
+        btn.innerHTML = `<i class="fa-regular fa-star text-amber-500"></i> <span>단어장 담기</span>`;
+        btn.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-stone-200 hover:border-amber-400 bg-white text-xs font-bold text-stone-700 transition-colors';
+      }
+    }
+
+    function toggleModalBookmark() {
+      if (!activeModalComment) return;
+      const word = activeModalComment.expressions[0] || activeModalComment.chinese;
+      const exists = userVocab.some(item => item.word === word);
+
+      if (exists) {
+        removeWordFromVocab(word);
+      } else {
+        const dict = WORD_DICTIONARY[word] || {
+          pinyin: activeModalComment.pinyin,
+          meaning: activeModalComment.korean
+        };
+        addWordToVocab({
+          word: word,
+          pinyin: dict.pinyin,
+          meaning: dict.meaning
+        });
+      }
+      updateModalBookmarkButton();
+    }
+
+    function openEtymologyModal(word) {
+      playDingDongSound();
+
+      currentEtymWord = word;
+      const dict = WORD_DICTIONARY[word] || {
+        pinyin: "pīnyīn",
+        meaning: "해당 문맥에서 널리 쓰이는 최근 중국 인터넷 실전 구어 표현",
+        literal: "해당 한자의 결합 의미",
+        origin: "중국 네티즌들 사이에서 활발히 확산되며 정착된 신조어입니다.",
+        breakdown: "개별 한자의 형태와 부수 조합 분석",
+        example: `大家都在说'${word}'。`
+      };
+
+      document.getElementById('etym-word').textContent = word;
+      document.getElementById('etym-pinyin').textContent = dict.pinyin;
+      document.getElementById('etym-meaning').textContent = dict.meaning;
+      document.getElementById('etym-literal').textContent = `글자 직역: ${dict.literal}`;
+      document.getElementById('etym-origin-text').textContent = dict.origin;
+      document.getElementById('etym-character-breakdown').textContent = dict.breakdown;
+      document.getElementById('etym-example').innerHTML = `“${dict.example}”`;
+
+      const modal = document.getElementById('etymology-modal');
+      modal.classList.remove('hidden');
+    }
+
+    function closeEtymologyModal() {
+      const modal = document.getElementById('etymology-modal');
+      modal.classList.add('hidden');
+    }
+
+    function playEtymologyAudio() {
+      if (!currentEtymWord) return;
+      speakChinese(currentEtymWord);
+    }
+
+    function saveCurrentEtymologyToVocab() {
+      if (!currentEtymWord) return;
+      const dict = WORD_DICTIONARY[currentEtymWord] || {};
+      addWordToVocab({
+        word: currentEtymWord,
+        pinyin: dict.pinyin || '',
+        meaning: dict.meaning || ''
+      });
+    }
+
+    const userQuizAnswers = {};
+
+    function renderAllQuizzes() {
+      const container = document.getElementById('all-quizzes-container');
+      if (!container) return;
+
+      container.innerHTML = PRACTICE_QUIZZES.map((q, qIndex) => {
+        const selected = userQuizAnswers[qIndex];
+        return `
+          <div id="quiz-card-${qIndex}" class="p-5 sm:p-7 rounded-3xl bg-stone-50 border border-stone-200/90 space-y-4">
+            <div class="flex items-center justify-between border-b border-stone-200 pb-3">
+              <span class="text-xs font-black text-orange-600 bg-orange-100 px-3 py-1 rounded-xl">
+                ${q.title}
+              </span>
+              <span class="text-xs text-stone-400 font-bold">5지 선다형</span>
+            </div>
+
+            <p class="text-xs sm:text-sm font-bold text-stone-900 leading-relaxed">
+              ${q.scenario}
+            </p>
+
+            <div class="space-y-2.5 pt-1">
+              ${q.options.map(opt => {
+                const isSelected = selected === opt.key;
+                let btnStyle = "bg-white hover:bg-orange-50 border-stone-200 text-stone-800";
+                if (isSelected) {
+                  btnStyle = opt.isCorrect 
+                    ? "bg-emerald-500 border-emerald-600 text-white font-black shadow-md"
+                    : "bg-red-500 border-red-600 text-white font-black shadow-md";
+                }
+
+                return `
+                  <button onclick="handleQuizSelection(${qIndex}, '${opt.key}')" class="w-full text-left p-3.5 rounded-2xl border text-xs sm:text-sm transition-all flex items-start gap-3 ${btnStyle}">
+                    <span class="w-6 h-6 rounded-xl flex items-center justify-center font-black text-xs shrink-0 ${isSelected ? 'bg-white/20 text-white' : 'bg-stone-100 text-stone-700'}">
+                      ${opt.key}
+                    </span>
+                    <span class="leading-relaxed chinese-text">${opt.text}</span>
+                  </button>
+                `;
+              }).join('')}
+            </div>
+
+            ${selected ? `
+              <div class="p-4 rounded-2xl border ${selected === q.correctOption ? 'bg-emerald-50 border-emerald-200 text-emerald-950' : 'bg-red-50 border-red-200 text-red-950'} space-y-2 mt-3">
+                <div class="flex items-center justify-between text-xs font-black">
+                  <span class="flex items-center gap-1.5">
+                    ${selected === q.correctOption ? '🎉 정답입니다! (훌륭한 원어민 감각)' : '⚠️ 다시 확인해 보세요! (오답 뉘앙스 분석)'}
+                  </span>
+                  ${selected === q.correctOption ? `
+                    <button onclick="speakChinese('${q.options.find(o => o.key === q.correctOption).text}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white text-[11px] font-bold hover:bg-emerald-700 flex items-center gap-1">
+                      <i class="fa-solid fa-volume-high"></i> 정답 발음 듣기
+                    </button>
+                  ` : ''}
+                </div>
+                <p class="text-xs leading-relaxed">
+                  ${q.options.find(o => o.key === selected).feedback}
+                </p>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }).join('');
+    }
+
+    function handleQuizSelection(qIndex, optionKey) {
+      playDingDongSound();
+      userQuizAnswers[qIndex] = optionKey;
+      renderAllQuizzes();
+    }
+
+    function scrollToQuiz(qIndex) {
+      playDingDongSound();
+      const el = document.getElementById(`quiz-card-${qIndex}`);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+
+    function renderVocabList() {
+      const container = document.getElementById('vocab-list-container');
+      if (!container) return;
+
+      if (userVocab.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full py-12 text-center text-stone-400">
+            <i class="fa-solid fa-bookmark text-4xl mb-3 text-stone-200"></i>
+            <p class="text-sm font-bold">보관함이 비어 있습니다.</p>
+            <p class="text-xs text-stone-400 mt-1">기사 댓글 속 유행어 태그나 해부실에서 [단어장 담기]를 눌러보세요.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = userVocab.map(item => `
+        <div class="bg-stone-50 rounded-2xl p-4 border border-stone-200 space-y-2 hover:border-amber-300 transition-colors">
+          <div class="flex items-center justify-between">
+            <span class="text-base font-black text-stone-900 chinese-text">
+              ${item.word}
+            </span>
+            <div class="flex items-center gap-1">
+              <button onclick="speakChinese('${item.word}')" class="w-7 h-7 rounded-lg bg-orange-100 hover:bg-orange-200 text-orange-800 flex items-center justify-center transition-colors" title="발음 듣기">
+                <i class="fa-solid fa-volume-high text-xs"></i>
+              </button>
+              <button onclick="removeWordFromVocab('${item.word}')" class="w-7 h-7 rounded-lg bg-stone-200/70 hover:bg-red-100 hover:text-red-600 text-stone-500 flex items-center justify-center transition-colors" title="삭제">
+                <i class="fa-solid fa-trash-can text-xs"></i>
+              </button>
+            </div>
+          </div>
+          <p class="pinyin-tag text-xs font-mono font-bold text-orange-600">
+            ${item.pinyin}
+          </p>
+          <p class="text-xs text-stone-600 font-medium">
+            ${item.meaning}
+          </p>
+          <div class="text-[10px] text-stone-400 pt-1 border-t border-stone-200/60 flex items-center justify-between">
+            <span>저장일: ${item.dateAdded}</span>
+            <button onclick="openEtymologyModal('${item.word}')" class="text-orange-600 font-bold hover:underline">
+              어원 보기
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function togglePinyinMode() {
+      isPinyinVisible = !isPinyinVisible;
+      const body = document.body;
+      const btnLabel = document.getElementById('pinyin-toggle-label');
+      const btn = document.getElementById('pinyin-toggle-btn');
+
+      playDingDongSound();
+
+      if (isPinyinVisible) {
+        body.classList.remove('hide-pinyin');
+        if (btnLabel) btnLabel.textContent = '병음(拼音) ON';
+        if (btn) {
+          btn.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-orange-400 bg-orange-50 text-xs font-black text-orange-700 shadow-xs transition-all hover:scale-102';
+        }
+        showToast('병음(拼音)이 중문 문장 아래에 표시됩니다.');
+      } else {
+        body.classList.add('hide-pinyin');
+        if (btnLabel) btnLabel.textContent = '병음(拼音) OFF';
+        if (btn) {
+          btn.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-stone-200 bg-white hover:bg-stone-50 text-xs font-bold text-stone-600 shadow-2xs transition-all hover:scale-102';
+        }
+        showToast('한자 집중 모드 (병음이 숨겨졌습니다).');
+      }
+    }
+
+    function switchMainTab(tab) {
+      playDingDongSound();
+
+      const hero = document.getElementById('hero-banner');
+      const filterSec = document.getElementById('category-filter-section');
+      const topicsContainer = document.getElementById('topics-container');
+      const quizSec = document.getElementById('quiz-section');
+      const vocabSec = document.getElementById('vocab-section');
+
+      const navIds = ['home', 'china-hot', 'korea-hot', 'vocab', 'quiz'];
+      navIds.forEach(id => {
+        const btn = document.getElementById(`tab-btn-${id}`);
+        if (!btn) return;
+        if (id === tab) {
+          btn.className = 'nav-button flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-black bg-stone-900 text-white shadow-xs transition-all hover:scale-102';
+        } else {
+          btn.className = 'nav-button flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-stone-100 hover:bg-stone-200/70 text-stone-700 transition-all hover:scale-102';
+        }
+      });
+
+      if (tab === 'home') {
+        hero.classList.remove('hidden');
+        filterSec.classList.remove('hidden');
+        topicsContainer.classList.remove('hidden');
+        quizSec.classList.add('hidden');
+        vocabSec.classList.add('hidden');
+        currentCategoryFilter = 'all';
+        updateCategoryFilterChips();
+        renderTopics();
+      } else if (tab === 'china-hot') {
+        hero.classList.add('hidden');
+        filterSec.classList.remove('hidden');
+        topicsContainer.classList.remove('hidden');
+        quizSec.classList.add('hidden');
+        vocabSec.classList.add('hidden');
+        filterTopicsByCategory('food-culture');
+      } else if (tab === 'korea-hot') {
+        hero.classList.add('hidden');
+        filterSec.classList.remove('hidden');
+        topicsContainer.classList.remove('hidden');
+        quizSec.classList.add('hidden');
+        vocabSec.classList.add('hidden');
+        filterTopicsByCategory('Korea');
+      } else if (tab === 'vocab') {
+        hero.classList.add('hidden');
+        filterSec.classList.add('hidden');
+        topicsContainer.classList.add('hidden');
+        quizSec.classList.add('hidden');
+        vocabSec.classList.remove('hidden');
+        renderVocabList();
+      } else if (tab === 'quiz') {
+        hero.classList.add('hidden');
+        filterSec.classList.add('hidden');
+        topicsContainer.classList.add('hidden');
+        quizSec.classList.remove('hidden');
+        vocabSec.classList.add('hidden');
+        renderAllQuizzes();
+      }
+    }
+
+    function filterTopicsByCategory(category) {
+      playDingDongSound();
+      currentCategoryFilter = category;
+      updateCategoryFilterChips();
+      renderTopics();
+    }
+
+    function updateCategoryFilterChips() {
+      const cats = ['all', 'Korea', 'life-healing', 'food-culture', 'tech'];
+      cats.forEach(c => {
+        const btn = document.getElementById(`cat-btn-${c}`);
+        if (!btn) return;
+        if (c === currentCategoryFilter) {
+          btn.className = 'cat-chip px-3 py-1.5 rounded-full bg-stone-900 text-white shadow-2xs font-bold';
+        } else {
+          btn.className = 'cat-chip px-3 py-1.5 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold';
+        }
+      });
+    }
+
+    function triggerMascotClick() {
+      playDingDongSound();
+      const mascot = document.getElementById('mascot-avatar');
+      if (mascot) {
+        mascot.classList.remove('animate-carrot');
+        void mascot.offsetWidth;
+        mascot.classList.add('animate-carrot');
+      }
+      showToast('당근 튜터 小近: “지난주 핫이슈로 배우는 실전 중국어, 함께 시작해 봐요!” 🥕');
+    }
+
+    function handleGlobalSearch(event) {
+      const query = event.target.value.trim().toLowerCase();
+      if (!query) {
+        renderTopics();
+        return;
+      }
+      const filtered = TOPICS.filter(t => {
+        const inTitle = t.title.toLowerCase().includes(query) || t.koreanTitle.toLowerCase().includes(query);
+        const inArticle = t.originalText.toLowerCase().includes(query) || t.koreanTranslation.toLowerCase().includes(query);
+        const inComments = t.comments.some(c => 
+          c.chinese.toLowerCase().includes(query) || 
+          c.korean.toLowerCase().includes(query) ||
+          c.expressions.some(e => e.toLowerCase().includes(query))
+        );
+        return inTitle || inArticle || inComments;
+      });
+
+      const container = document.getElementById('topics-container');
+      if (container) {
+        if (filtered.length === 0) {
+          container.innerHTML = `
+            <div class="col-span-full py-16 text-center text-stone-400">
+              <i class="fa-solid fa-magnifying-glass text-3xl mb-3 text-stone-300"></i>
+              <p class="text-sm font-bold">'${query}' 검색 결과가 없습니다.</p>
+            </div>
+          `;
+        } else {
+          container.innerHTML = filtered.map(t => `
+            <article class="bg-white rounded-3xl border border-stone-200 p-5 sm:p-6 shadow-xs space-y-4">
+              <div class="flex items-center justify-between text-xs">
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-black ${t.isKoreaTopic ? 'bg-orange-500 text-white' : 'bg-red-500 text-white'}">
+                  ${t.isKoreaTopic ? '🇰🇷 한국 핫이슈' : '🔥 중국 핫이슈'}
+                </span>
+                <span class="text-stone-400">${t.publishedAt}</span>
+              </div>
+              <h3 class="text-lg font-black text-stone-900 chinese-text leading-snug">${t.title}</h3>
+              <p class="text-xs text-stone-600 font-bold">${t.koreanTitle}</p>
+              <div class="pt-2">
+                <button onclick="openCommentModal('${t.id}', '${t.comments[0].id}')" class="px-3 py-1.5 rounded-xl bg-orange-500 text-white text-xs font-bold">
+                  댓글 해부실 열기
+                </button>
+              </div>
+            </article>
+          `).join('');
+        }
+      }
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toast-message');
+      if (!toast || !toastMsg) return;
+
+      toastMsg.textContent = msg;
+      toast.classList.remove('hidden');
+      toast.classList.add('opacity-100');
+
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 2600);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadUserVocab();
+      renderTopics();
+      renderAllQuizzes();
+
+      window.addEventListener('click', (e) => {
+        const commModal = document.getElementById('comment-modal');
+        const etymModal = document.getElementById('etymology-modal');
+        if (e.target === etymModal) {
+          closeEtymologyModal();
+        } else if (e.target === commModal) {
+          closeCommentModal();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
