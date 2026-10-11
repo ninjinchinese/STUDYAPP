@@ -1,0 +1,2303 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>热词现场 · REAL CHINESE REAL COMMENTS</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Noto Sans SC & Noto Sans KR -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              red: '#C53030',
+              redHover: '#9B2C2C',
+              dark: '#1A202C',
+              charcoal: '#2D3748',
+              ivory: '#F7FAFC',
+              warmBg: '#F8F7F4',
+              koreaBlue: '#2B6CB0',
+              koreaLight: '#EBF8FF',
+              tagBg: '#EDF2F7',
+              accent: '#DD6B20'
+            }
+          },
+          fontFamily: {
+            sans: ['"Noto Sans KR"', '"Noto Sans SC"', 'sans-serif'],
+            serifSc: ['"Noto Serif SC"', 'serif'],
+            chinese: ['"Noto Sans SC"', '"PingFang SC"', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #F8F7F4;
+      color: #2D3748;
+      font-family: 'Noto Sans KR', 'Noto Sans SC', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background-color: #CBD5E0;
+      border-radius: 9999px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background-color: transparent;
+    }
+    .chinese-serif {
+      font-family: 'Noto Serif SC', serif;
+    }
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.15rem 0.5rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+    .glass-nav {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(8px);
+    }
+    .card-shadow {
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .card-shadow:hover {
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
+      transform: translateY(-2px);
+    }
+    /* Pinyin annotation styling */
+    ruby {
+      ruby-position: over;
+    }
+    rt {
+      font-size: 0.7em;
+      color: #C53030;
+      font-family: 'Noto Sans SC', sans-serif;
+      font-weight: 400;
+    }
+    @keyframes pulse-subtle {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+    .animate-subtle {
+      animation: pulse-subtle 2s infinite ease-in-out;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased select-text">
+
+  <!-- Header Bar -->
+  <header class="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm glass-nav">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <!-- Logo & Branding -->
+      <div class="flex items-center space-x-3 cursor-pointer" onclick="navigateTab('home')">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-red to-red-700 flex items-center justify-center text-white shadow-md">
+          <span class="font-serifSc font-black text-xl tracking-tighter">热</span>
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <span class="chinese-serif text-xl font-bold text-gray-900 tracking-tight">热词现场</span>
+            <span class="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-red-100 text-brand-red">Real Comments</span>
+          </div>
+          <p class="text-[11px] text-gray-500 hidden sm:block font-medium">“中国人到底是怎么说的？” · 댓글로 해부하는 실전 중국어</p>
+        </div>
+      </div>
+
+      <!-- Quick Search Bar -->
+      <div class="flex-1 max-w-md mx-4 hidden md:block">
+        <div class="relative">
+          <i data-lucide="search" class="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+          <input 
+            type="text" 
+            id="globalSearchInput" 
+            placeholder="搜索热词 (예: 刹车, 破防, 尊界, 糖葫芦, 麻辣烫)..." 
+            class="w-full pl-10 pr-4 py-2 bg-gray-100 focus:bg-white text-sm rounded-full border border-transparent focus:border-red-400 focus:outline-none transition-all"
+            oninput="handleGlobalSearch(this.value)"
+          />
+        </div>
+      </div>
+
+      <!-- Top Right Actions -->
+      <div class="flex items-center space-x-2 sm:space-x-3">
+        <!-- Daily Audio Speed Setting -->
+        <div class="relative inline-block text-left" id="ttsSpeedControl">
+          <button onclick="toggleSpeedDropdown()" class="px-2.5 py-1.5 bg-gray-100 hover:bg-gray-200 text-xs font-semibold rounded-lg text-gray-700 flex items-center space-x-1 transition">
+            <i data-lucide="volume-2" class="w-3.5 h-3.5 text-brand-red"></i>
+            <span id="currentSpeedLabel">1.0x</span>
+          </button>
+          <div id="speedDropdownMenu" class="hidden absolute right-0 mt-1.5 w-24 bg-white rounded-lg shadow-lg border border-gray-100 py-1 text-xs z-50">
+            <button onclick="setGlobalTtsSpeed(1.0)" class="w-full text-left px-3 py-1.5 hover:bg-red-50 text-gray-700 font-medium">1.0x (정상)</button>
+            <button onclick="setGlobalTtsSpeed(0.75)" class="w-full text-left px-3 py-1.5 hover:bg-red-50 text-gray-700 font-medium">0.75x (학습)</button>
+            <button onclick="setGlobalTtsSpeed(0.5)" class="w-full text-left px-3 py-1.5 hover:bg-red-50 text-gray-700 font-medium">0.5x (정밀)</button>
+          </div>
+        </div>
+
+        <!-- Vocab count link -->
+        <button onclick="navigateTab('vocab')" class="relative px-3 py-1.5 bg-yellow-50 hover:bg-yellow-100 text-yellow-800 rounded-lg text-xs font-bold flex items-center space-x-1.5 border border-yellow-200 transition">
+          <i data-lucide="bookmark" class="w-3.5 h-3.5 text-yellow-600"></i>
+          <span>단어장</span>
+          <span id="headerVocabBadge" class="bg-yellow-500 text-white text-[10px] px-1.5 py-0.2 rounded-full font-bold">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-5 flex gap-6">
+
+    <!-- PC Sidebar Navigation -->
+    <aside class="hidden lg:block w-56 flex-shrink-0">
+      <div class="sticky top-24 space-y-5">
+        <nav class="bg-white rounded-2xl border border-gray-200 p-2.5 shadow-sm space-y-1">
+          <button onclick="navigateTab('home')" id="nav-btn-home" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-gray-700 hover:bg-red-50 hover:text-brand-red transition">
+            <i data-lucide="home" class="w-4 h-4"></i>
+            <span>首页 · 메인</span>
+          </button>
+          <button onclick="navigateTab('hot')" id="nav-btn-hot" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-gray-700 hover:bg-red-50 hover:text-brand-red transition">
+            <i data-lucide="flame" class="w-4 h-4 text-orange-500"></i>
+            <span>今日热榜 · 중국이슈</span>
+          </button>
+          <button onclick="navigateTab('korea')" id="nav-btn-korea" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-gray-700 hover:bg-blue-50 hover:text-brand-koreaBlue transition">
+            <i data-lucide="globe" class="w-4 h-4 text-brand-koreaBlue"></i>
+            <span>眼中的韩国 · 한국이슈</span>
+            <span class="ml-auto text-[10px] bg-blue-100 text-blue-700 font-bold px-1.5 py-0.5 rounded">Special</span>
+          </button>
+          <button onclick="navigateTab('comments')" id="nav-btn-comments" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-gray-700 hover:bg-red-50 hover:text-brand-red transition">
+            <i data-lucide="message-square" class="w-4 h-4 text-emerald-600"></i>
+            <span>评论海 · 댓글연구실</span>
+          </button>
+          <button onclick="navigateTab('quiz')" id="nav-btn-quiz" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-gray-700 hover:bg-red-50 hover:text-brand-red transition">
+            <i data-lucide="target" class="w-4 h-4 text-purple-600"></i>
+            <span>实战演练 · 퀴즈시험</span>
+          </button>
+          <button onclick="navigateTab('vocab')" id="nav-btn-vocab" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-gray-700 hover:bg-red-50 hover:text-brand-red transition">
+            <i data-lucide="book-marked" class="w-4 h-4 text-amber-600"></i>
+            <span>我的词库 · SRS복습</span>
+          </button>
+        </nav>
+
+        <!-- Daily Level Indicator Banner -->
+        <div class="bg-gradient-to-br from-gray-900 to-gray-800 text-white p-4 rounded-2xl shadow-sm text-xs">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-amber-400 font-bold uppercase tracking-wider text-[10px]">Learning Level</span>
+            <span class="bg-gray-700 px-2 py-0.5 rounded text-[10px] font-mono text-gray-200">NIC V1.0</span>
+          </div>
+          <p class="font-bold text-sm mb-1">Native Internet Chinese</p>
+          <p class="text-gray-300 text-[11px] leading-relaxed">
+            교과서엔 안 나오는 중국 인터넷 진짜 표현·슬랭·댓글 심층 분석기
+          </p>
+          <div class="mt-3 pt-3 border-t border-gray-700 flex items-center justify-between text-[11px]">
+            <span class="text-gray-400">오늘의 학습 완주도</span>
+            <span id="sidebarProgressText" class="font-bold text-amber-300">2 / 5</span>
+          </div>
+          <div class="w-full bg-gray-700 h-1.5 rounded-full mt-1.5 overflow-hidden">
+            <div id="sidebarProgressBar" class="bg-amber-400 h-full rounded-full transition-all duration-300" style="width: 40%"></div>
+          </div>
+        </div>
+
+        <!-- Authenticity Note Badge -->
+        <div class="p-3 bg-amber-50/80 border border-amber-200 rounded-xl text-[11px] text-amber-900">
+          <div class="flex items-center space-x-1.5 font-bold mb-1">
+            <i data-lucide="shield-check" class="w-3.5 h-3.5 text-amber-600"></i>
+            <span>콘텐츠 원칙 및 사실 표기</span>
+          </div>
+          <p class="text-[10px] leading-relaxed text-amber-800">
+            • 본 데모는 2026년 10월 이번주 주요 핫이슈 및 실제 온라인 화제 댓글 표현 양식을 분석형태로 제공합니다.<br>
+            • 모든 댓글은 특정 인물의 비방이 아닌 순수 어휘·화법 학습용 분석 자료입니다.
+          </p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Dynamic Container -->
+    <main class="flex-1 min-w-0 pb-20 lg:pb-10">
+
+      <!-- ================= TAB: HOME ================= -->
+      <section id="tab-home" class="tab-view space-y-6">
+
+        <!-- Hero Headline / Daily Brief -->
+        <div class="relative overflow-hidden bg-gradient-to-r from-red-900 via-brand-red to-red-800 text-white rounded-3xl p-6 sm:p-8 shadow-md">
+          <div class="relative z-10 max-w-2xl">
+            <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-white/15 backdrop-blur text-xs font-semibold mb-3 border border-white/20">
+              <span class="w-2 h-2 rounded-full bg-red-300 animate-ping"></span>
+              <span>2026년 10월 이번 주 인터넷 핫키워드 현장</span>
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-black chinese-serif tracking-tight mb-2">
+              今天中国网友都在说什么？
+            </h1>
+            <p class="text-sm sm:text-base text-red-100 leading-relaxed font-light mb-4">
+              “刹车踏板断裂” 논란부터 “탕후루 vs 마라탕” 한국 식문화 담론까지 — <br class="hidden sm:inline">
+              중국인들이 실제로 쓰는 신조어, 비꼬는 뉘앙스, 밈(梗)을 직독직해하고 어원을 뜯어봅니다.
+            </p>
+            <div class="flex flex-wrap gap-2.5">
+              <button onclick="filterCategory('科技')" class="px-3.5 py-1.5 rounded-full bg-white text-brand-red font-bold text-xs hover:bg-red-50 transition shadow-sm flex items-center space-x-1.5">
+                <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+                <span>이번 주 핫토픽: 尊界踏板断裂</span>
+              </button>
+              <button onclick="navigateTab('korea')" class="px-3.5 py-1.5 rounded-full bg-blue-900/60 hover:bg-blue-900 text-blue-200 border border-blue-400/40 font-bold text-xs transition flex items-center space-x-1.5">
+                <i data-lucide="globe" class="w-3.5 h-3.5 text-blue-300"></i>
+                <span>중국인이 본 한국 이슈</span>
+              </button>
+            </div>
+          </div>
+          <!-- Decorative Chinese Character BG -->
+          <div class="absolute right-[-15px] bottom-[-30px] select-none pointer-events-none opacity-10 text-[180px] font-black chinese-serif leading-none">
+            现场
+          </div>
+        </div>
+
+        <!-- ☀️ 今日学习 (Daily Micro Learning Module) -->
+        <div class="bg-white rounded-2xl border border-gray-200 p-5 shadow-sm">
+          <div class="flex items-center justify-between pb-3 border-b border-gray-100">
+            <div class="flex items-center space-x-2">
+              <span class="text-lg">☀️</span>
+              <h2 class="font-bold text-gray-900 text-sm sm:text-base">今日学习 · 오늘의 핵심 학습 포인트</h2>
+            </div>
+            <span class="text-xs text-gray-400 font-mono">10월 2주차 선정</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+            <!-- 1. 오늘의 표현 -->
+            <div class="bg-rose-50/60 rounded-xl p-3.5 border border-rose-100 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between text-xs font-bold text-brand-red mb-1">
+                  <span>🔥 오늘의 인터넷 표현</span>
+                  <span class="text-[10px] bg-red-100 px-1.5 py-0.5 rounded">网络热梗</span>
+                </div>
+                <div class="flex items-center space-x-2 my-1">
+                  <span class="text-lg font-black text-gray-900">破防</span>
+                  <span class="text-xs text-gray-500 font-mono">pò fáng</span>
+                  <button onclick="playTts('破防')" class="p-1 hover:bg-rose-200/60 rounded text-brand-red transition">
+                    <i data-lucide="volume-2" class="w-3.5 h-3.5"></i>
+                  </button>
+                </div>
+                <p class="text-xs text-gray-700 leading-snug">
+                  <strong>직역:</strong> 방어가 뚫리다<br>
+                  <strong>실제 의미:</strong> 멘탈이 털리다 / 심각한 충격을 받다
+                </p>
+              </div>
+              <button onclick="openWordDetailModal('破防')" class="mt-3 text-left text-[11px] text-brand-red font-bold hover:underline">
+                어원·상황별 용례 해부 &rarr;
+              </button>
+            </div>
+
+            <!-- 2. 오늘의 댓글 분석 -->
+            <div class="bg-amber-50/60 rounded-xl p-3.5 border border-amber-100 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between text-xs font-bold text-amber-800 mb-1">
+                  <span>💬 오늘의 뉘앙스 댓글</span>
+                  <span class="text-[10px] bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded">반어·비꼼</span>
+                </div>
+                <p class="text-sm font-bold text-gray-900 mt-1 chinese-serif">“你可真行，把极限工况当免责金牌。”</p>
+                <p class="text-xs text-gray-600 mt-1 leading-snug">
+                  “너 진짜 대단하다(비꼼), 극한 테스트 조건을 면죄부 삼다니.”
+                </p>
+              </div>
+              <div class="mt-3 flex items-center justify-between text-[11px]">
+                <span class="text-amber-700 font-semibold">말투: 😏 비꼼 (反讽)</span>
+                <button onclick="openTopicDetail('topic-1')" class="text-brand-red font-bold hover:underline">이슈 보기 &rarr;</button>
+              </div>
+            </div>
+
+            <!-- 3. 오늘의 퀴즈 -->
+            <div class="bg-blue-50/60 rounded-xl p-3.5 border border-blue-100 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between text-xs font-bold text-brand-koreaBlue mb-1">
+                  <span>🎯 오늘의 실전 퀴즈</span>
+                  <span class="text-[10px] bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded">객관식</span>
+                </div>
+                <p class="text-xs text-gray-800 font-medium mt-1">
+                  중국 네티즌이 음식 사진을 보고 <strong>“看着就流口水”</strong>라고 했을 때 가장 알맞은 번역은?
+                </p>
+              </div>
+              <button onclick="navigateTab('quiz')" class="mt-3 w-full py-1.5 bg-brand-koreaBlue text-white text-xs font-bold rounded-lg hover:bg-blue-700 transition text-center shadow-xs">
+                퀴즈 풀러 가기 (30초)
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Category Chip Bar -->
+        <div class="flex items-center space-x-2 overflow-x-auto pb-2 custom-scroll">
+          <button onclick="filterCategory('ALL')" class="category-chip px-3.5 py-1.5 rounded-full text-xs font-bold bg-gray-900 text-white flex-shrink-0 transition" data-cat="ALL">全部 · 전체</button>
+          <button onclick="filterCategory('科技')" class="category-chip px-3.5 py-1.5 rounded-full text-xs font-bold bg-white text-gray-700 border border-gray-200 hover:border-gray-400 flex-shrink-0 transition" data-cat="科技">⚡ 科技·자동차 (尊界)</button>
+          <button onclick="filterCategory('KOREA')" class="category-chip px-3.5 py-1.5 rounded-full text-xs font-bold bg-blue-50 text-brand-koreaBlue border border-blue-200 hover:border-blue-400 flex-shrink-0 transition" data-cat="KOREA">🇰🇷 中国网友眼中的韩国</button>
+          <button onclick="filterCategory('社会')" class="category-chip px-3.5 py-1.5 rounded-full text-xs font-bold bg-white text-gray-700 border border-gray-200 hover:border-gray-400 flex-shrink-0 transition" data-cat="社会">🏙️ 社会 · 사회</button>
+          <button onclick="filterCategory('文化')" class="category-chip px-3.5 py-1.5 rounded-full text-xs font-bold bg-white text-gray-700 border border-gray-200 hover:border-gray-400 flex-shrink-0 transition" data-cat="文化">🎨 文化 · 문화</button>
+          <button onclick="filterCategory('网络热梗')" class="category-chip px-3.5 py-1.5 rounded-full text-xs font-bold bg-white text-gray-700 border border-gray-200 hover:border-gray-400 flex-shrink-0 transition" data-cat="网络热梗">🔥 网络热梗 · 유행어</button>
+          <button onclick="filterCategory('娱乐')" class="category-chip px-3.5 py-1.5 rounded-full text-xs font-bold bg-white text-gray-700 border border-gray-200 hover:border-gray-400 flex-shrink-0 transition" data-cat="娱乐">🎬 娱乐 · 연예</button>
+          <button onclick="filterCategory('生活')" class="category-chip px-3.5 py-1.5 rounded-full text-xs font-bold bg-white text-gray-700 border border-gray-200 hover:border-gray-400 flex-shrink-0 transition" data-cat="生活">🍜 生活·음식</button>
+        </div>
+
+        <!-- Section 1: 🔥 今日中国热榜 (Today's China Hot Topics) -->
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-brand-red"></span>
+              <h2 class="text-lg font-bold text-gray-900 tracking-tight">🔥 今日中国热榜 · 이번 주 중국 인터넷 핫토픽</h2>
+            </div>
+            <span class="text-xs text-gray-500">실시간 중국 웹 토픽 기반 분석</span>
+          </div>
+
+          <!-- Topics Cards Grid -->
+          <div id="homeTopicContainer" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <!-- Dynamically populated via JS -->
+          </div>
+        </div>
+
+        <!-- Section 2: 🇰🇷 中国网友眼中的韩国 (Dedicated Korea in China Section) -->
+        <div class="bg-gradient-to-br from-blue-900 to-indigo-950 rounded-3xl p-6 text-white shadow-md">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-5 pb-4 border-b border-blue-800">
+            <div>
+              <div class="flex items-center space-x-2">
+                <span class="text-xs bg-blue-500/30 text-blue-200 font-bold px-2 py-0.5 rounded border border-blue-400/30">특별 기획</span>
+                <h2 class="text-lg font-bold text-white tracking-tight">🇰🇷 中国网友眼中的韩国 · 중국 네티즌의 한국 인식</h2>
+              </div>
+              <p class="text-xs text-blue-200 mt-1">
+                한국 문화, 탕후루/마라탕, 드라마, K-pop, 반도체 및 사회 이슈에 달린 댓글 스펙트럼과 진짜 뉘앙스 분석
+              </p>
+            </div>
+            <button onclick="navigateTab('korea')" class="px-3.5 py-1.5 bg-white text-brand-koreaBlue font-bold text-xs rounded-xl hover:bg-blue-50 transition self-start sm:self-center flex items-center space-x-1">
+              <span>전체 한국 토픽 보기</span>
+              <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+
+          <!-- Korea Topics Preview Container -->
+          <div id="homeKoreaTopicContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Dynamically populated via JS -->
+          </div>
+        </div>
+
+        <!-- Section 3: 💬 今日评论精选 (Today's Curated Comments Stream) -->
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <i data-lucide="message-square-quote" class="w-5 h-5 text-emerald-600"></i>
+              <h2 class="text-lg font-bold text-gray-900 tracking-tight">💬 今日评论精选 · 오늘의 화제 댓글 해부</h2>
+            </div>
+            <button onclick="navigateTab('comments')" class="text-xs text-brand-red font-bold hover:underline">
+              전체 댓글 연구실 가기 &rarr;
+            </button>
+          </div>
+          <div id="homeCuratedCommentsContainer" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Dynamically populated via JS -->
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ================= TAB: HOT TOPICS (FEED) ================= -->
+      <section id="tab-hot" class="tab-view hidden space-y-6">
+        <div class="bg-white rounded-2xl border border-gray-200 p-5 shadow-sm">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h1 class="text-xl font-bold text-gray-900 flex items-center space-x-2">
+                <i data-lucide="flame" class="w-5 h-5 text-brand-red"></i>
+                <span>今日热榜 · 중국 인터넷 실시간 화제 이슈</span>
+              </h1>
+              <p class="text-xs text-gray-500 mt-1">
+                기사 원문 요약 [ARTICLE] · SNS 게시글 [POST] · 네티즌 실제 댓글 [COMMENT] 정밀 분석
+              </p>
+            </div>
+            <!-- Sub-filter -->
+            <div class="flex items-center space-x-2">
+              <select id="hotFilterSelect" onchange="applyHotFilter(this.value)" class="text-xs bg-gray-100 border border-gray-300 rounded-lg px-2.5 py-1.5 font-medium text-gray-700 focus:outline-none focus:border-red-400">
+                <option value="ALL">전체 카테고리</option>
+                <option value="科技">⚡ 科技 · 테크/자동차</option>
+                <option value="社会">🏙️ 社会 · 사회</option>
+                <option value="文化">🎨 文化 · 문화</option>
+                <option value="网络热梗">🔥 网络热梗 · 유행어</option>
+                <option value="生活">🍜 生活 · 라이프</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div id="hotFeedContainer" class="space-y-5">
+          <!-- Dynamically populated via JS -->
+        </div>
+      </section>
+
+      <!-- ================= TAB: KOREA IN CHINA ================= -->
+      <section id="tab-korea" class="tab-view hidden space-y-6">
+        <div class="bg-gradient-to-r from-blue-950 via-slate-900 to-indigo-950 text-white rounded-3xl p-6 sm:p-7 shadow-md">
+          <div class="max-w-2xl">
+            <div class="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-xs font-semibold mb-2 border border-blue-400/30">
+              <i data-lucide="compass" class="w-3.5 h-3.5"></i>
+              <span>中国网友眼中的韩国 专区</span>
+            </div>
+            <h1 class="text-2xl font-bold chinese-serif mb-2">
+              중국 인터넷에서 한국은 어떻게 이야기될까?
+            </h1>
+            <p class="text-xs sm:text-sm text-blue-200 leading-relaxed font-light">
+              한국의 음식 트렌드, K-콘텐츠, IT/반도체, 사회 현상에 대해 중국 네티즌들이 남긴 반응을 가감 없이 보여줍니다. 
+              특정 입장을 강요하지 않고 <strong>사실(事实)</strong>과 <strong>개인 의견(观点)</strong>, <strong>풍자(讽刺)</strong>를 객관적으로 분석합니다.
+            </p>
+          </div>
+
+          <!-- Korea Topic Spectrum Guide -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-5 pt-5 border-t border-blue-900/60 text-xs">
+            <div class="bg-blue-900/40 p-2.5 rounded-xl border border-blue-800/40">
+              <span class="text-blue-300 font-bold block mb-0.5">👍 긍정/호감 (认可)</span>
+              <span class="text-[11px] text-gray-300">문화·드라마 창의성, 감각 인정</span>
+            </div>
+            <div class="bg-blue-900/40 p-2.5 rounded-xl border border-blue-800/40">
+              <span class="text-yellow-300 font-bold block mb-0.5">🤔 비교/의문 (比较)</span>
+              <span class="text-[11px] text-gray-300">중한 라이프스타일, 물가, 학업 비교</span>
+            </div>
+            <div class="bg-blue-900/40 p-2.5 rounded-xl border border-blue-800/40">
+              <span class="text-orange-300 font-bold block mb-0.5">😂 밈/풍자 (调侃)</span>
+              <span class="text-[11px] text-gray-300">탕후루 유행, 피로사회, 커피 수혈 밈</span>
+            </div>
+            <div class="bg-blue-900/40 p-2.5 rounded-xl border border-blue-800/40">
+              <span class="text-red-300 font-bold block mb-0.5">👎 비판/반발 (争论)</span>
+              <span class="text-[11px] text-gray-300">산업 경쟁, 일부 오해에서 비롯된 언쟁</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Search in Korea DB -->
+        <div class="flex items-center space-x-3 bg-white p-3 rounded-2xl border border-gray-200">
+          <i data-lucide="search" class="w-4 h-4 text-gray-400 ml-2"></i>
+          <input 
+            type="text" 
+            id="koreaSearchInput" 
+            placeholder="한국 관련 주제 검색 (예: 糖葫芦, 电视剧, 半导体, 旅游)..." 
+            class="flex-1 text-sm bg-transparent border-none focus:outline-none"
+            oninput="handleKoreaSearch(this.value)"
+          />
+        </div>
+
+        <!-- Korea Topics Feed -->
+        <div id="koreaFeedContainer" class="space-y-5">
+          <!-- Dynamically populated via JS -->
+        </div>
+      </section>
+
+      <!-- ================= TAB: COMMENTS LAB ================= -->
+      <section id="tab-comments" class="tab-view hidden space-y-6">
+        <div class="bg-white rounded-2xl border border-gray-200 p-5 shadow-sm">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h1 class="text-xl font-bold text-gray-900 flex items-center space-x-2">
+                <i data-lucide="message-square" class="w-5 h-5 text-emerald-600"></i>
+                <span>评论海 · 중국 네티즌 댓글 해부실</span>
+              </h1>
+              <p class="text-xs text-gray-500 mt-1">
+                댓글 하나를 클릭하면 <strong>직역, 자연스러운 번역, 뉘앙스, 어원, 문화적 배경, 퀴즈</strong>까지 완전히 해부합니다.
+              </p>
+            </div>
+            <div class="flex items-center space-x-2">
+              <select id="commentToneFilter" onchange="filterCommentsByTone(this.value)" class="text-xs bg-gray-100 border border-gray-300 rounded-lg px-2.5 py-1.5 font-medium text-gray-700 focus:outline-none">
+                <option value="ALL">전체 말투 (全部语气)</option>
+                <option value="비꼼">😏 비꼼 / 반어 (反讽)</option>
+                <option value="놀람">😮 충격 / 경악 (破防)</option>
+                <option value="농담">😂 유머 / 드립 (调侃)</option>
+                <option value="긍정">😊 공감 / 칭찬 (认可)</option>
+                <option value="비판">😒 비판 / 의문 (质疑)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Comments Grid -->
+        <div id="commentsLabContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Dynamically populated via JS -->
+        </div>
+      </section>
+
+      <!-- ================= TAB: QUIZ & PRACTICE ================= -->
+      <section id="tab-quiz" class="tab-view hidden space-y-6">
+        <div class="bg-white rounded-2xl border border-gray-200 p-5 shadow-sm">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h1 class="text-xl font-bold text-gray-900 flex items-center space-x-2">
+                <i data-lucide="target" class="w-5 h-5 text-purple-600"></i>
+                <span>实战演练 · 중국 네티즌 말투 & 댓글 퀴즈</span>
+              </h1>
+              <p class="text-xs text-gray-500 mt-1">
+                “중국인이라면 이 상황에서 어떻게 댓글을 달까?” 진짜 현지 감각을 측정합니다.
+              </p>
+            </div>
+            <!-- Exam Mode Toggle -->
+            <label class="inline-flex items-center cursor-pointer bg-purple-50 px-3 py-1.5 rounded-xl border border-purple-200">
+              <input type="checkbox" id="examModeToggle" onchange="toggleExamMode(this.checked)" class="sr-only peer">
+              <div class="relative w-8 h-4 bg-gray-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-purple-600"></div>
+              <span class="ms-2 text-xs font-bold text-purple-900">시험 모드 (힌트 숨김)</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Quiz Container -->
+        <div id="quizAppContainer" class="space-y-4">
+          <!-- Dynamically populated quiz cards -->
+        </div>
+      </section>
+
+      <!-- ================= TAB: VOCABULARY (SRS) ================= -->
+      <section id="tab-vocab" class="tab-view hidden space-y-6">
+        <div class="bg-white rounded-2xl border border-gray-200 p-5 shadow-sm">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h1 class="text-xl font-bold text-gray-900 flex items-center space-x-2">
+                <i data-lucide="book-marked" class="w-5 h-5 text-amber-600"></i>
+                <span>我的词库 · 단어장 및 SRS 간격 복습</span>
+              </h1>
+              <p class="text-xs text-gray-500 mt-1">
+                학습 중 <strong>⭐ 收藏</strong>한 유행어, 뉘앙스 표현을 SRS 주기(1일-3일-7일-14일)로 복습합니다.
+              </p>
+            </div>
+            <div class="flex items-center space-x-2">
+              <button onclick="startVocabFlashcards()" class="px-3.5 py-1.5 bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs rounded-xl shadow-xs transition flex items-center space-x-1.5">
+                <i data-lucide="play" class="w-3.5 h-3.5"></i>
+                <span>플래시카드 복습 모드</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vocab Cards Container -->
+        <div id="vocabListContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Dynamically populated -->
+        </div>
+      </section>
+
+      <!-- ================= TOPIC DETAIL VIEW (FULL PAGE OVERLAY) ================= -->
+      <div id="topicDetailModal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-2 sm:p-4 overflow-y-auto">
+        <div class="bg-white w-full max-w-4xl rounded-3xl shadow-2xl border border-gray-200 overflow-hidden my-auto max-h-[92vh] flex flex-col">
+          <!-- Modal Header -->
+          <div class="px-6 py-4 bg-gray-50 border-b border-gray-200 flex items-center justify-between flex-shrink-0">
+            <div class="flex items-center space-x-2">
+              <span id="topicDetailBadge" class="badge-pill bg-red-100 text-brand-red font-bold">科技</span>
+              <span id="topicDetailDemoTag" class="text-[10px] bg-gray-200 text-gray-600 px-1.5 py-0.5 rounded font-mono">Demo · 示例内容</span>
+            </div>
+            <button onclick="closeTopicDetail()" class="p-1.5 text-gray-400 hover:text-gray-700 hover:bg-gray-200 rounded-full transition">
+              <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+          </div>
+
+          <!-- Modal Scroll Body -->
+          <div id="topicDetailBody" class="p-6 overflow-y-auto custom-scroll space-y-6">
+            <!-- Dynamically injected -->
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= COMMENT DISSECTION MODAL (댓글 해부실) ================= -->
+      <div id="commentDissectionModal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-2 sm:p-4 overflow-y-auto">
+        <div class="bg-white w-full max-w-3xl rounded-3xl shadow-2xl border border-gray-200 overflow-hidden my-auto max-h-[94vh] flex flex-col">
+          <!-- Header -->
+          <div class="px-6 py-4 bg-gray-900 text-white flex items-center justify-between flex-shrink-0">
+            <div class="flex items-center space-x-2">
+              <div class="w-3 h-3 rounded-full bg-emerald-400"></div>
+              <h3 class="font-bold text-sm tracking-wide">🔬 댓글 해부실 · 评论深度解剖实验室</h3>
+            </div>
+            <button onclick="closeCommentDissection()" class="p-1.5 text-gray-400 hover:text-white rounded-full transition">
+              <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+          </div>
+
+          <!-- Content -->
+          <div id="commentDissectionBody" class="p-6 overflow-y-auto custom-scroll space-y-6">
+            <!-- Dynamically injected -->
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= WORD DETAIL MODAL (어원 연구실 & 한자 분해) ================= -->
+      <div id="wordDetailModal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-gray-200 overflow-hidden my-auto flex flex-col">
+          <div class="px-5 py-3.5 bg-amber-50 border-b border-amber-200 flex items-center justify-between">
+            <div class="flex items-center space-x-2 text-amber-900 font-bold text-sm">
+              <i data-lucide="microscope" class="w-4 h-4 text-amber-700"></i>
+              <span>词源研究室 & 汉字拆解</span>
+            </div>
+            <button onclick="closeWordDetailModal()" class="text-gray-400 hover:text-gray-700 p-1">
+              <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+          </div>
+          <div id="wordDetailBody" class="p-5 overflow-y-auto max-h-[80vh] custom-scroll space-y-4">
+            <!-- Dynamically injected -->
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= ASK AI TEACHER MODAL (问老师) ================= -->
+      <div id="askAiModal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        <div class="bg-white w-full max-w-xl rounded-3xl shadow-2xl border border-gray-200 overflow-hidden my-auto flex flex-col">
+          <div class="px-5 py-4 bg-gradient-to-r from-red-800 to-brand-red text-white flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <i data-lucide="bot" class="w-5 h-5 text-red-200"></i>
+              <span class="font-bold text-sm">AI 중국어 선생님 (问老师)</span>
+            </div>
+            <button onclick="closeAskAiModal()" class="text-white/75 hover:text-white p-1">
+              <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+          </div>
+
+          <div class="p-5 space-y-4 overflow-y-auto max-h-[75vh] custom-scroll">
+            <div class="bg-gray-50 p-3 rounded-xl border border-gray-200 text-xs">
+              <span class="text-gray-500 block mb-0.5 font-medium">질문 대상 문장 / 표현:</span>
+              <p id="aiTargetExpression" class="font-bold text-gray-900 chinese-serif text-sm">--</p>
+            </div>
+
+            <!-- Quick Preset Questions -->
+            <div>
+              <p class="text-xs font-bold text-gray-700 mb-2">💡 자주 묻는 질문 선택:</p>
+              <div class="flex flex-wrap gap-1.5" id="aiPresetButtons">
+                <button onclick="askAiQuestion('이 표현은 비꼬는 것(讽刺)인가요, 아니면 진심인가요?')" class="px-2.5 py-1 bg-gray-100 hover:bg-gray-200 rounded-lg text-xs text-gray-700 transition">
+                  😏 비꼬는 표현인가요?
+                </button>
+                <button onclick="askAiQuestion('젊은 네티즌들이 쓰는 밈(梗)인가요? 어원은 어떻게 되나요?')" class="px-2.5 py-1 bg-gray-100 hover:bg-gray-200 rounded-lg text-xs text-gray-700 transition">
+                  🔥 젊은 세대 밈/어원은?
+                </button>
+                <button onclick="askAiQuestion('한국인이 이해하기 가장 쉬운 직관적인 번역과 유사한 한국어 관용구는?')" class="px-2.5 py-1 bg-gray-100 hover:bg-gray-200 rounded-lg text-xs text-gray-700 transition">
+                  🇰🇷 한국어 관용구와 비교
+                </button>
+                <button onclick="askAiQuestion('직장 상사나 공식적인 자리에서 쓰면 무례한가요?')" class="px-2.5 py-1 bg-gray-100 hover:bg-gray-200 rounded-lg text-xs text-gray-700 transition">
+                  ⚠️ 주의할 상황은?
+                </button>
+              </div>
+            </div>
+
+            <!-- Custom Question Input -->
+            <div class="flex gap-2">
+              <input 
+                type="text" 
+                id="customAiQuestionInput" 
+                placeholder="선생님께 직접 물어보기..." 
+                class="flex-1 text-xs border border-gray-300 rounded-xl px-3 py-2 focus:outline-none focus:border-brand-red"
+                onkeypress="if(event.key === 'Enter') submitCustomAiQuestion()"
+              />
+              <button onclick="submitCustomAiQuestion()" class="px-3 py-2 bg-brand-red hover:bg-red-700 text-white text-xs font-bold rounded-xl transition flex items-center space-x-1">
+                <span>질문</span>
+                <i data-lucide="send" class="w-3 h-3"></i>
+              </button>
+            </div>
+
+            <!-- AI Output Area -->
+            <div id="aiResponseContainer" class="hidden p-4 bg-red-50/60 border border-red-100 rounded-2xl space-y-2">
+              <div class="flex items-center space-x-2 text-brand-red text-xs font-bold">
+                <i data-lucide="sparkles" class="w-4 h-4"></i>
+                <span id="aiStatusLabel">AI 선생님의 해설:</span>
+              </div>
+              <div id="aiResponseText" class="text-xs text-gray-800 leading-relaxed space-y-2">
+                <!-- Response rendered here -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Mobile Bottom Navigation Bar -->
+  <nav class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200 shadow-lg px-2 py-1.5 flex items-center justify-around">
+    <button onclick="navigateTab('home')" id="mob-nav-home" class="mob-nav flex flex-col items-center justify-center p-1 text-brand-red font-bold text-[10px]">
+      <i data-lucide="home" class="w-5 h-5"></i>
+      <span>首页</span>
+    </button>
+    <button onclick="navigateTab('hot')" id="mob-nav-hot" class="mob-nav flex flex-col items-center justify-center p-1 text-gray-500 text-[10px]">
+      <i data-lucide="flame" class="w-5 h-5"></i>
+      <span>热榜</span>
+    </button>
+    <button onclick="navigateTab('korea')" id="mob-nav-korea" class="mob-nav flex flex-col items-center justify-center p-1 text-gray-500 text-[10px]">
+      <i data-lucide="globe" class="w-5 h-5"></i>
+      <span>韩国</span>
+    </button>
+    <button onclick="navigateTab('comments')" id="mob-nav-comments" class="mob-nav flex flex-col items-center justify-center p-1 text-gray-500 text-[10px]">
+      <i data-lucide="message-square" class="w-5 h-5"></i>
+      <span>评论</span>
+    </button>
+    <button onclick="navigateTab('quiz')" id="mob-nav-quiz" class="mob-nav flex flex-col items-center justify-center p-1 text-gray-500 text-[10px]">
+      <i data-lucide="target" class="w-5 h-5"></i>
+      <span>练习</span>
+    </button>
+    <button onclick="navigateTab('vocab')" id="mob-nav-vocab" class="mob-nav flex flex-col items-center justify-center p-1 text-gray-500 text-[10px]">
+      <i data-lucide="bookmark" class="w-5 h-5"></i>
+      <span>词库</span>
+    </button>
+  </nav>
+
+  <!-- Notification Toast Container -->
+  <div id="toastContainer" class="fixed bottom-20 right-4 z-50 flex flex-col space-y-2 pointer-events-none"></div>
+
+  <script>
+    /* ==========================================================================
+       DATA ARCHITECTURE: TOPICS, COMMENTS, VOCABULARY, ETYMOLOGY
+       ========================================================================== */
+
+    // Hot Topics Database (including the very latest news like 尊界刹车踏板断裂 and Korea-related topics)
+    const TOPICS_DATA = [
+      {
+        id: "topic-1",
+        title: "尊界回应刹车踏板断裂争议：非标准极端测试，底座受损并非踏板本身断裂",
+        koreanTitle: "존지에(Maextro), 브레이크 페달 파손 논란에 공식 해명: “비표준 극한 테스트, 지지대 파손이지 페달 본체 절단 아냐”",
+        category: "科技",
+        country: "China",
+        isKoreaTopic: false,
+        source: "懂车帝 / 尊界官方通报 (综合网络)",
+        sourceType: "ARTICLE",
+        publishedAt: "2026-10-10",
+        isDemo: true,
+        summary: "최근 자동차 전문 미디어의 급제동 테스트 중 백만 위안급 플래그십 전기차 ‘존지에(尊界)’의 브레이크 페달 브래킷(지탱부)이 파손되는 영상이 공개되어 중국 인터넷에서 대형 안전 논란이 점화되었습니다. 제조사 측은 '일반적 주행 조건이 아닌 비표준 극한 가압 상황'이라 해명했으나 네티즌들은 안전 부품에 대한 품질 불만과 '공관(PR) 해명의 말장난'이라며 격론을 벌이고 있습니다.",
+        originalText: "【新闻摘要】近日，知名汽车测评机构在对百万级豪华轿车尊界进行多轮极限急刹测试时，发生制动踏板支架底座断裂现象。尊界官方随后发布声明称：自交付以来实际用车场景中未发生此类事故，此次系非标准极端工况测试，底座在承受远超国标的瞬间冲击后受损，并非踏板连杆本身断裂，官方已启动强化升级方案。",
+        koreaBackground: null,
+        comments: [
+          {
+            id: "c1-1",
+            author: "极速车手老李",
+            chinese: "这波公关真是避重就轻，刹车踏板这关乎命门的东西，哪怕是极端工况断了也太让人破防了。",
+            pinyin: "Zhè bō gōngguān zhēnshi bì zhòng jiù qīng, shāchē tàbǎn zhè guānhū mìngmén de dōngxi, nǎpà shì jíduān gōngkuàng duàn le yě tài ràng rén pò fáng le.",
+            korean: "이번 언론 대응(PR)은 진짜 중요한 건 쏙 빼놓고 덜 중요한 것만 둘러대네. 브레이크 페달처럼 목숨과 직결된 부품이 극한 조건이라도 부러졌다는 건 정말 멘탈 털리는 일이다.",
+            literalTranslation: "이번 PR의 물결은 정말 무거운 것을 피하고 가벼운 데로 나아간다, 브레이크 페달이라는 생명과 관계된 것은 비록 극한 조건에서 부러졌더라도 사람의 방어를 너무 깬다.",
+            sentiment: "비판",
+            tone: "불만",
+            toneEmoji: "😒",
+            factOrOpinion: "个人观点",
+            expressions: ["避重就轻", "命门", "破防", "这波"],
+            grammar: "哪怕……也…… (설령 ~하더라도 역시 ~하다 / 양보 복문)",
+            etymology: "【避重就轻】 원문은 무거운 부담을 피하고 가벼운 것을 택한다는 성어로 현대 인터넷에서는 '본질적인 결함 질문은 회피하고 지엽적인 해명만 늘어놓는 태도'를 꼬집을 때 필수적으로 쓰임.",
+            culturalContext: "중국 네티즌들은 기업의 공식 사과문이나 해명(公关, PR)이 나올 때마다 문구를 낱낱이 쪼개어 '말장난(玩文字游戏)'인지 '성실한 인정'인지를 감별하는 문화가 정착되어 있습니다.",
+            koreaContext: "",
+            quiz: {
+              question: "댓글 속 '避重就轻'의 문맥상 실제 속뜻으로 가장 알맞은 것은?",
+              options: [
+                "무거운 짐을 가볍게 나누어 들다",
+                "핵심적인 안전 문제는 피하고 덜 중요한 핑계만 대다",
+                "차가 너무 무거워서 제동이 잘 안 되다",
+                "가벼운 소재를 사용해 차를 경량화하다"
+              ],
+              answerIndex: 1,
+              explanation: "‘避重就轻(bì zhòng jiù qīng)’은 무거운 책임이나 본질적 문제를 피하고 가벼운 구실로 때우려 할 때 신랄하게 비판하는 고사성어 표현입니다."
+            }
+          },
+          {
+            id: "c1-2",
+            author: "键盘车神999",
+            chinese: "你可真行，百万豪车玩的是“极限工况免责金牌”？真香定律这次怕是要失效了。",
+            pinyin: "Nǐ kě zhēn xíng, bǎiwàn háochē wán de shì 'jíduān gōngkuàng miǎnzé jīnpái'? Zhēn xiāng dìnglǜ zhè cì pà shì yào shīxiào le.",
+            korean: "너 진짜 대단하다(비꼼), 백만 위안짜리 호화차가 써먹는 게 '극한 조건 면책 골든티켓'이냐? '진향 법칙(처음엔 욕하다가도 결국 좋아하게 됨)'도 이번엔 안 통할 것 같다.",
+            literalTranslation: "너 정말 잘한다, 백만 고급차가 플레이하는 것은 극한 공황 면책 금패인가? 참향 법칙이 이번에는 무효가 될까 두렵다.",
+            sentiment: "풍자",
+            tone: "비꼼",
+            toneEmoji: "😏",
+            factOrOpinion: "讽刺",
+            expressions: ["你可真行", "真香定律", "免责金牌"],
+            grammar: "你可真行 (상황에 따라 극찬이 되기도 하고, 상대방의 황당한 처신을 비꼴 때 100% 반어법으로 쓰임)",
+            etymology: "【真香定律】 중국 예능 프로그램에서 '절대 안 먹겠다'고 장담하던 주인공이 밥을 먹으며 '진짜 맛있다(真香)'고 외친 데서 유래. '침 뱉고 돌아선 사람이 결국 인정할 때' 쓰는 대유행어.",
+            culturalContext: "‘你可真行’은 글자 그대로는 '너 참 능력 있다'이지만, 인터넷 댓글에서는 90% 이상이 '너 참 대단도 하시다~ 기가 차서 말이 안 나온다'는 빈정거림(反讽)입니다.",
+            koreaContext: "",
+            quiz: {
+              question: "화자가 '你可真行'이라고 말한 진의(True intention)는?",
+              options: [
+                "기술력이 훌륭하다고 감탄하고 있다",
+                "운전 실력이 대단하다고 칭찬하고 있다",
+                "기업의 황당한 변명을 몹시 비꼬고 있다",
+                "백만 위안의 가격대가 저렴하다고 권하고 있다"
+              ],
+              answerIndex: 2,
+              explanation: "‘你可真行’은 어조에 따라 극단적으로 갈립니다. 여기선 황당한 핑계에 대해 기가 막힘을 드러내는 전형적인 비꼼(반어)입니다."
+            }
+          },
+          {
+            id: "c1-3",
+            author: "理性打工人",
+            chinese: "客观地说，机械测试确实有标准阈值。但消费者的心理底线是：刹车踏板决不能掉链子。",
+            pinyin: "Kèguān de shuō, jīxiè cèshì quèshí yǒu biāozhǔn yùzhí. Dàn xiāofèizhě de xīnlǐ dǐxiàn shì: shāchē tàbǎn jué bù néng diào liànzi.",
+            korean: "객관적으로 말해서 기계 테스트엔 표준 임계치가 있는 건 맞다. 하지만 소비자의 심리적 마지노선은 이거다: 브레이크 페달은 절대로 삐끗해서 체인이 빠져선(중대한 순간에 펑크 나선) 안 된다는 거다.",
+            literalTranslation: "객관적으로 말해 기계 시험은 확실히 표준 문턱값이 있다. 그러나 소비자의 심리적 밑바닥 선은: 제동 페달은 결코 사슬이 떨어져선 안 된다는 것이다.",
+            sentiment: "중립",
+            tone: "중립",
+            toneEmoji: "😐",
+            factOrOpinion: "个人观点",
+            expressions: ["掉链子", "心理底线", "阈值"],
+            grammar: "决不能…… (절대로 ~해서는 안 된다 / 강한 금지·원칙 표명)",
+            etymology: "【掉链子】 자전거 체인이 갑자기 벗겨져서 주행이 불가능해지는 모습에서 유래. 중요한 순간에 일이 틀어지거나 약속/기능이 펑크 나는 것을 뜻하는 대중적 속어.",
+            culturalContext: "중국 네티즌들 사이에서도 무조건적인 비난 대신 '객관적 기준(客观地说)'을 짚으면서도 소비자의 권익 선을 지키려는 균형 잡힌 목소리가 공존합니다.",
+            koreaContext: "",
+            quiz: {
+              question: "'掉链子'의 실전 뜻은 무엇인가요?",
+              options: [
+                "체인 목걸이를 잃어버리다",
+                "중요한 타이밍에 펑크를 내거나 결정적 결함이 생기다",
+                "자전거 타이어에 공기를 넣다",
+                "사슬을 풀고 자유를 찾다"
+              ],
+              answerIndex: 1,
+              explanation: "‘掉链子(diào liànzi)’는 결정적인 고비에서 제 구실을 못 하고 일을 그르칠 때 쓰는 생활 관용 표현입니다."
+            }
+          }
+        ]
+      },
+      {
+        id: "topic-2",
+        title: "“麻辣烫依然排长队，糖葫芦却降温了”：中国网友热议韩国街头中华料理消费演变",
+        koreanTitle: "“마라탕은 여전히 오픈런인데, 탕후루는 줄폐업?”: 중국 네티즌이 분석한 한국 번화가 중식 디저트 열풍의 명암",
+        category: "KOREA",
+        country: "Korea",
+        isKoreaTopic: true,
+        source: "小红书 / 微博博主观察 (综合)",
+        sourceType: "POST",
+        publishedAt: "2026-10-09",
+        isDemo: true,
+        summary: "한국 성수동, 홍대 등 주요 상권에서 한때 폭발적이었던 탕후루 창업 열풍이 식어 폐업이 늘어난 반면, 마라탕과 마라샹궈는 이미 한국 젊은 층의 일상 식문화(소울푸드)로 안착했다는 소식이 중국 SNS(샤오홍슈, 웨이보)에서 큰 화제가 되었습니다. 중국 네티즌들은 과도한 단맛의 한계와 자극적인 매운맛의 중독성을 비교하며 한국의 소비 트렌드 속도에 혀를 내두르고 있습니다.",
+        originalText: "【网络帖文】博主在首尔街头观察发现：一年前开满大街小巷的糖葫芦门店不少已经关停转让，而隔壁的麻辣烫店依然座无虚席。韩国年轻人甚至发明了‘先吃麻辣烫后喝冰美式’的解腻闭环。有韩国博主自嘲这叫‘脆皮年轻人的生存套餐’。帖子引发了数万中国网友的热烈讨论。",
+        koreaBackground: "한국에서는 2023~2024년 탕후루 프랜차이즈가 급증했으나 과당 섭취 우려, 위생 및 쓰레기 문제, 유행 주기의 급변 등으로 점포 수가 급감했습니다. 반면 마라탕은 DIY 식재료 선택 방식과 매운맛 선호에 힘입어 1020세대를 넘어 직장인 점심 메뉴로 확고히 정착한 상태입니다.",
+        comments: [
+          {
+            id: "c2-1",
+            author: "首尔留学生小王",
+            chinese: "看着就流口水是真，但天天吃糖葫芦牙真的顶不住。麻辣烫则是成了韩国人的续命神器。",
+            pinyin: "Kànzhe jiù liú kǒushuǐ shì zhēn, dàn tiāntiān chī tánghúlu yá zhēnde dǐngbuzhù. Málàtàng zéshì chéng le Hánguórén de xùmìng shénqì.",
+            korean: "보기만 해도 군침 도는 건 사실인데, 매일 탕후루 먹으면 치아가 진짜 못 버틴다. 반면에 마라탕은 한국인들의 '수명 연장 필수템(소울푸드)'이 돼버렸다.",
+            literalTranslation: "보고 있으면 침이 흐르는 것은 진짜다, 하지만 날마다 탕후루를 먹으면 이빨이 정말 버티지 못한다. 마라탕은 곧 한국인의 수명을 잇는 신기가 되었다.",
+            sentiment: "공감",
+            tone: "농담",
+            toneEmoji: "😂",
+            factOrOpinion: "个人观点",
+            expressions: ["看着就流口水", "顶不住", "续命神器"],
+            grammar: "看着就…… (동사+着+就: ~하기만 해도 곧바로 ~하다 / 즉각적인 반응 표현)",
+            etymology: "【续命】 본래 게임에서 코인을 넣어 캐릭터의 목숨을 연장한다는 은어였으나, 현대 직장인들이 커피나 마라탕 등 에너지 원천을 가리킬 때 '생명줄을 이어준다'는 뜻으로 폭넓게 씀.",
+            culturalContext: "중국 네티즌들도 한국 젊은이들의 '마라탕 + 아이스 아메리카노(冰美式)' 조합을 보며, 중국 직장인들의 스트레스 해소 식문화와 똑같다며 깊은 공대감(共鸣)을 보입니다.",
+            koreaContext: "한국에서 마라탕이 단순 이국 음식을 넘어 '주 2회 이상 먹는 일상 음식'이 된 현상을 중국 네티즌들은 매우 신기해하면서도 자국 음식의 현지화 성공 사례로 흥미롭게 바라봅니다.",
+            quiz: {
+              question: "중국어 ‘看着就流口水’와 가장 잘 대칭되는 자연스러운 한국어 일상 표현은?",
+              options: [
+                "보고 있으니 침이 흘러내린다",
+                "보기만 해도 군침이 싹 도네",
+                "보기에 매우 아름다운 음식이다",
+                "눈으로 보니 맛이 없어 보인다"
+              ],
+              answerIndex: 1,
+              explanation: "‘看着就流口水’는 직역하면 침이 흐른다지만 한국어로는 ‘보기만 해도 군침이 돈다/군침 싹 돈다’가 가장 자연스러운 구어체 대칭입니다."
+            }
+          },
+          {
+            id: "c2-2",
+            author: "风口观察员",
+            chinese: "韩国这流行风向也是绝了，一阵风刮过去快得让人跟不上。资本疯狂割韭菜，最后加盟商全破防。",
+            pinyin: "Hánguó zhè liúxíng fēngxiàng yě shì jué le, yí zhèn fēng guā guòqù kuài de ràng rén gēnbushàng. Zīběn fēngkuáng gē jiǔcài, zuìhòu jiāméngshāng quán pò fáng.",
+            korean: "한국의 이 유행 트렌드도 진짜 대단하다(혀를 내두름), 바람 한번 쌩 불고 지나가는 속도가 빨라서 따라가질 못하네. 자본은 미친 듯이 개미들을 털어먹고(호구 잡고), 결국엔 가맹점주들만 전원 멘탈 붕괴.",
+            literalTranslation: "한국의 이 유행 풍향도 절품이다, 한바탕 바람이 불어 지나감이 빨라서 사람이 따라잡지 못하게 한다. 자본은 미치게 부추를 베고, 마지막엔 가맹상이 전부 방어를 깬다.",
+            sentiment: "비판",
+            tone: "비꼼",
+            toneEmoji: "😏",
+            factOrOpinion: "个人观点",
+            expressions: ["绝了", "割韭菜", "破防", "一阵风"],
+            grammar: "快得让人…… (정도보어 得: ~해서 사람이 ~할 지경이다)",
+            etymology: "【割韭菜】 부추는 베어내도 다시 자라난다는 생태에서 유래. 주식 시장이나 프랜차이즈 본사가 순진한 개인 투자자/자영업자의 돈을 지속해서 빨아먹는 행위를 비유.",
+            culturalContext: "‘绝了(jué le)’는 감탄사로 극찬일 수도 있지만, 어처구니없을 정도로 기가 찰 때 ‘참 대단도 하다’며 혀를 찰 때도 쓰입니다.",
+            koreaContext: "한국의 짧은 디저트 유행 주기(대만 카스텔라, 흑당 버블티, 탕후루 등)를 보며 중국 네티즌들 또한 자국 내 프랜차이즈 광풍과 겹쳐 보며 냉정하게 시장을 분석합니다.",
+            quiz: {
+              question: "‘割韭菜(gē jiǔcài)’의 중국 인터넷 경제/사회적 은어 뜻은?",
+              options: [
+                "채소 시장에서 부추 가격을 깎다",
+                "소자본 창업자나 개미 투자자를 호구 취급하여 돈을 갈취하다",
+                "농촌 체험을 통해 자급자족하다",
+                "채식을 권장하는 건강 캠페인을 펼치다"
+              ],
+              answerIndex: 1,
+              explanation: "‘割韭菜’는 부추를 베듯 힘없는 대중/투자자들의 돈을 착취하거나 단물만 빼먹는 행위를 뜻하는 대표적 현대 은어입니다."
+            }
+          }
+        ]
+      },
+      {
+        id: "topic-3",
+        title: "韩国科幻漫改新剧上线流媒体引发热议：中国网友评“脑洞很大，节奏拿捏住了”",
+        koreanTitle: "한국 SF 웹툰 원작 신작 드라마 글로벌 공개: 중국 네티즌 “상상력 기발하고, 호흡·서스펜스를 제대로 쥐락펴락하네”",
+        category: "KOREA",
+        country: "Korea",
+        isKoreaTopic: true,
+        source: "豆瓣电影 / 微博影视 (综合)",
+        sourceType: "POST",
+        publishedAt: "2026-10-08",
+        isDemo: true,
+        summary: "한국 웹툰을 원작으로 한 최신 OTT 미스터리 SF 시리즈가 중국 리뷰 플랫폼 더우반(豆瓣)과 웨이보에서 입소문을 타며 높은 평점을 기록 중입니다. 중국 네티즌들은 한국 드라마 특유의 촘촘한 복선 회수와 과감한 설정, 빠른 템포의 편집 감각을 호평하며 연출력에 주목하고 있습니다.",
+        originalText: "【影视观察】近日，改编自韩国知名网络漫画的奇幻悬疑剧在全球上线，豆瓣开分高达8.6分。中国观众热评集中在‘节奏紧凑’与‘人性刻画深刻’。不少网友直言：虽然中段有些韩式抓马狗血，但导演在悬念铺陈和情感拉扯上确实‘把观众拿捏得死死的’。",
+        koreaBackground: "한국 웹툰 기반 드라마는 탄탄한 팬덤과 신선한 소재로 글로벌 OTT 시장에서 지속적으로 강세를 보이고 있으며, 중국 내 정식 수입되지 않는 경우에도 소셜 미디어를 통해 방영 즉시 실시간 화제작으로 오르내리는 경우가 많습니다.",
+        comments: [
+          {
+            id: "c3-1",
+            author: "熬夜追剧狂人",
+            chinese: "第一集就直接封神，这个反转把我的好奇心拿捏得死死的，根本停不下来！",
+            pinyin: "Dì-yī jí jiù zhíjiē fēngshén, zhè ge fǎnzhuǎn bǎ wǒ de hàoqíxīn nániē de sǐsǐ de, gēnběn tíngbuxiàlai!",
+            korean: "1화부터 바로 레전드(신의 경지) 찍었네. 이 반전이 내 호기심의 멱살을 완전히 쥐락펴락 잡아서 도저히 멈출 수가 없다!",
+            literalTranslation: "제일 편부터 곧바로 신으로 봉해졌다, 이 반전이 나의 호기심을 꽉꽉 쥐어잡아 근본적으로 멈춰 내려올 수 없다!",
+            sentiment: "긍정",
+            tone: "놀람",
+            toneEmoji: "😮",
+            factOrOpinion: "个人观点",
+            expressions: ["封神", "拿捏", "拿捏得死死的", "根本停不下来"],
+            grammar: "把……拿捏得死死的 (把자문 + 정도보어: 대상을 빈틈없이 완벽하게 통제/장악하다)",
+            etymology: "【拿捏】 원래 손가락으로 가볍게 집거나 상대의 약점을 쥐고 흔든다는 방언이었으나, 최근엔 ‘심리나 분위기, 청중을 능숙하게 쥐락펴락 통제하다’라는 최고 유행어로 확장됨.",
+            culturalContext: "‘封神(fēngshén)’은 고대 소설 봉신연의에서 신으로 봉한다는 말에서 따와, 현대 인터넷에선 영화나 경기, 노래가 ‘역대급 레전드 경지에 오르다’를 뜻합니다.",
+            koreaContext: "한국 드라마의 스릴러 장르에 대해 중국 네티즌들은 '감정선을 극한까지 밀어붙이는 연출(情感拉扯)' 면에서 독보적이라 평가하는 경향이 짙습니다.",
+            quiz: {
+              question: "‘拿捏(nániē)’의 가장 적절한 현대 중국 인터넷상 뉘앙스는?",
+              options: [
+                "손에 쥐고 꼬집다",
+                "상대의 심리나 주도권을 손바닥 위에서 완벽히 통제하고 쥐락펴락하다",
+                "물건의 무게를 저울로 달다",
+                "억울한 일을 당해 하소연하다"
+              ],
+              answerIndex: 1,
+              explanation: "‘拿捏’는 요즘 중국 SNS에서 어떤 기술이나 분위기, 사람의 마음을 완벽하게 마스터하고 통제할 때 가장 빈번하게 쓰는 단어입니다."
+            }
+          }
+        ]
+      },
+      {
+        id: "topic-4",
+        title: "国庆黄金周后“错峰出游”与特种兵旅游退潮：年轻人开始追求“躺平式慢漫游”",
+        koreanTitle: "연휴 끝난 뒤 ‘역발상 비수기 여행’ 급증: 고단한 ‘특공대 여행’ 지고 멍때리는 ‘슬로우 힐링 여행’ 뜬다",
+        category: "社会",
+        country: "China",
+        isKoreaTopic: false,
+        source: "新华网 / 飞猪旅行数据",
+        sourceType: "ARTICLE",
+        publishedAt: "2026-10-09",
+        isDemo: true,
+        summary: "황금연휴 기간 동안 인파에 치이며 하루 3만 보씩 걷던 ‘특공대식 여행(特种兵旅游)’에 지친 중국 젊은이들이 연휴 직후 저렴해진 항공권과 호텔을 이용해 소도시에서 아무것도 하지 않고 휴식하는 ‘눕기식 힐링 여행(躺平式旅游)’으로 대거 선회하고 있습니다.",
+        originalText: "【社会新闻】文化和旅游部及各大旅游平台最新监测显示，节后错峰机票均价回落近四成。此前风靡大学校园的‘特种兵式打卡旅游’明显降温，取而代之的是选择在不知名小城‘住海景房、睡到自然醒、随便吃碗粉’的慢节奏疗愈型度假模式。受访年轻人直呼：再特种兵下去人都要麻了。",
+        koreaBackground: null,
+        comments: [
+          {
+            id: "c4-1",
+            author: "辞职看世界的大鹏",
+            chinese: "以前旅游跟行军打仗一样，玩一趟回来比搬砖还累。现在彻底悟了，不打卡不内卷才是真度假。",
+            pinyin: "Yǐqián lǚyóu gēn xíngjūn dǎzhàng yíyàng, wán yí tàng huílái bǐ bānzhuān hái lèi. Xiànzài chèdǐ wù le, bù dǎkǎ bù nèijuǎn cái shì zhēn dùjià.",
+            korean: "예전엔 여행이 군대 행군이나 전투 같아서 한번 다녀오면 노가다(벽돌 나르기)보다 더 피곤했다. 이제 완전히 깨달았다. 인증샷 안 찍고 무한경쟁(네이쥐안) 안 하는 게 진짜 휴가다.",
+            literalTranslation: "이전에 여행은 행군 전쟁과 같았다, 한번 놀고 돌아오면 벽돌 나르기보다 더 피곤했다. 지금은 철저히 깨달았다, 카드 안 찍고 내권 안 하는 것이 진정한 휴가다.",
+            sentiment: "긍정",
+            tone: "공감",
+            toneEmoji: "❤️",
+            factOrOpinion: "个人观点",
+            expressions: ["搬砖", "内卷", "打卡", "特种兵旅游"],
+            grammar: "比……还…… (비교문: ~보다도 오히려 더 ~하다)",
+            etymology: "【搬砖】 벽돌을 나르는 육체노동에서 유래. 현대 화이트칼라 직장인들이 자신들의 고된 노동과 저임금을 자조적으로 ‘노가다 뛴다’고 칭할 때 널리 씀.",
+            culturalContext: "중국 청년 세대의 과도한 업무 피로감이 여행 방식에도 투영되어, 극단적 효율 추구(특공대식)에서 번아웃 치유(탕핑식)로 급격히 무게중심이 이동하고 있습니다.",
+            koreaContext: "",
+            quiz: {
+              question: "‘搬砖(bānzhuān)’을 현대 중국 젊은이들이 쓸 때의 실제 의미는?",
+              options: [
+                "건설 현장에서 벽돌 쌓기 자격증을 따다",
+                "월급쟁이들이 고단하게 일하는 직장 생활을 자조하는 표현",
+                "벽돌로 집을 짓는 DIY 취미 활동",
+                "무거운 물건을 들어 올리는 헬스 운동"
+              ],
+              answerIndex: 1,
+              explanation: "‘搬砖’은 인터넷에서 '나 오늘 노가다(출근해서 일) 뛰러 간다'처럼 직장 생활을 유머러스하게 낮춰 부르는 단골 표현입니다."
+            }
+          }
+        ]
+      }
+    ];
+
+    // Comprehensive Word & Slang Database (with Etymology & Character breakdown)
+    const VOCAB_DATABASE = {
+      "破防": {
+        word: "破防",
+        pinyin: "pò fáng",
+        level: "Native Internet Chinese",
+        literal: "방어막이 파괴되다 (破: 깨질 파, 防: 막을 방)",
+        meaning: "멘탈이 붕괴되다, 심리적 방어선이 무너지다, 억장이 무너지거나 큰 충격을 받다",
+        etymologyType: "✓ 已确认 (검증된 유래)",
+        etymology: "원래는 대전 격투 게임이나 RPG 게임에서 적의 가드(방어 스탠스)를 뚫어 무방비 상태로 만드는 ‘파방(破除防御)’에서 시작되었습니다. 이후 인터넷 방송과 소셜미디어로 번지며 감정적으로 크게 상처받거나, 너무 감동받아 눈물이 터지거나, 혹은 치명적 팩트 폭행을 당해 반박 불가 상태가 되었을 때의 총칭으로 굳어졌습니다.",
+        hanziBreakdown: [
+          { char: "破", radical: "石 (돌 석)", meaning: "돌을 쪼개듯 껍질이나 형태를 부수고 깨뜨림. 현대에선 기록을 깨거나(破纪录) 관계가 깨질 때 두루 쓰임." },
+          { char: "防", radical: "阝 (언덕 부)", meaning: "방파제나 언덕 제방을 쌓아 외적이나 홍수를 막아냄(防御). 지키는 보루의 의미." }
+        ],
+        koreaComparison: "한국어 신조어의 ‘멘붕(멘탈 붕괴)’, ‘쿠쿠다스 심장 바사삭’과 매우 유사하지만, 눈물겨운 감동을 받아 심금이 울릴 때도 ‘이 장면 보고 완전 파방(破防)했다’고 쓸 수 있어 쓰임새가 더 넓습니다.",
+        examples: [
+          { cn: "看到父母满头白发的那一瞬间，我彻底破防了。", kr: "부모님의 하얗게 센 머리를 본 그 순간, 나는 완전히 눈물샘이 터져버렸다." },
+          { cn: "新买的车出了这种严重故障，换谁都得破防。", kr: "새로 산 차에 이런 중대 결함이 생기면 누구라도 멘탈이 나가지 않을 수 없다." }
+        ]
+      },
+      "避重就轻": {
+        word: "避重就轻",
+        pinyin: "bì zhòng jiù qīng",
+        level: "HSK 6+",
+        literal: "무거운 책임을 피하고 가벼운 데로 향하다",
+        meaning: "본질적이거나 불리한 핵심 문제는 쏙 빼놓고 지엽적인 변명만 늘어놓다",
+        etymologyType: "✓ 已确认 (성어 정통 출전)",
+        etymology: "원래 송나라 역사서 《송사(宋史)》 등 고문헌에서 군역이나 무거운 세금을 기피하고 가벼운 부역만을 찾는 간교한 관행을 지적한 성어입니다. 현대에는 기업 PR이나 정치인의 해명이 엉터리일 때 기자와 네티즌들이 가장 사랑하는 비판 성어 1위입니다.",
+        hanziBreakdown: [
+          { char: "避", radical: "辶 (책받침)", meaning: "피할 피. 길을 돌아 위험이나 책임을 비껴가다." },
+          { char: "就", radical: "尢 (절름발이 왕/서울 경)", meaning: "나아갈 취. 특정 방향이나 상태를 향해 다가가다." }
+        ],
+        koreaComparison: "한국어의 '핵심 회피', '물타기', '동문서답식 꼬리 자르기'의 한자어 버전입니다.",
+        examples: [
+          { cn: "发布会上发言人避重就轻，完全没有回答退换车的问题。", kr: "발표회에서 대변인은 핵심을 피해 물타기만 했고, 차량 환불 및 교환 질문에는 전혀 답변하지 않았다." }
+        ]
+      },
+      "拿捏": {
+        word: "拿捏",
+        pinyin: "ná niē",
+        level: "Native Internet Chinese",
+        literal: "손으로 쥐고 주무르다",
+        meaning: "상대방의 마음, 분위기, 스킬을 완벽하게 장악하여 쥐락펴락하다",
+        etymologyType: "✓ 已确认 (동북/북방 방언 -> SNS 대유행)",
+        etymology: "중국 북방 방언에서 어떤 사람의 꼬투리를 잡거나 능숙하게 조련하는 행동을 뜻하던 말이었습니다. 2020년대 들어 틱톡(도우인)과 샤오홍슈 등에서 '감정선을 들었다 놨다 하다', '스타일을 기막히게 소화하다'라는 긍정·찬사 표현으로 밈화되었습니다.",
+        hanziBreakdown: [
+          { char: "拿", radical: "手 (손 수)", meaning: "합할 합(合) + 손 수(手). 손으로 쥐어 잡다." },
+          { char: "捏", radical: "扌 (재방변 손 수)", meaning: "손가락 끝으로 흙이나 반죽을 빚고 주무르다." }
+        ],
+        koreaComparison: "한국어의 '멱살 잡고 캐리하다', '쥐락펴락하다', '폼 미쳤다'의 맥락과 통합니다.",
+        examples: [
+          { cn: "这部剧的导演把观众的情绪拿捏得死死的。", kr: "이 드라마 감독은 시청자들의 감정선을 아주 쥐락펴락 휘어잡았다." }
+        ]
+      },
+      "割韭菜": {
+        word: "割韭菜",
+        pinyin: "gē jiǔ cài",
+        level: "Native Internet Chinese",
+        literal: "부추를 베어 수확하다",
+        meaning: "개미 투자자나 소비자를 지속적으로 속여 부당한 이득을 챙기다 (호구 잡기)",
+        etymologyType: "✓ 已确认 (금융 시장 은어)",
+        etymology: "부추(韭菜)는 뿌리를 남겨두면 잎을 베어내도 며칠 뒤 다시 무럭무럭 자라납니다. 이처럼 주식 시장이나 가상화폐 시장, 과대 광고 창업 시장에서 아무리 손실을 보아도 새로운 투자자가 끊임없이 유입되는 개미들을 비유한 자조적 은어입니다.",
+        hanziBreakdown: [
+          { char: "割", radical: "刂 (선칼도방)", meaning: "벨 할. 칼로 자르고 베어내다." },
+          { char: "韭", radical: "韭 (부추 구)", meaning: "땅에서 거듭 자라나는 부추 채소의 형상." }
+        ],
+        koreaComparison: "한국 주식판의 '개미 털기', '호구 잡히다', '단물 쪽 빨아먹다'와 정확히 일치합니다.",
+        examples: [
+          { cn: "别轻信那些暴富神话，小心又被割韭菜。", kr: "단기간 벼락부자 된다는 신화 따위 믿지 마라, 또 호구 잡혀 털릴까 조심해라." }
+        ]
+      },
+      "掉链子": {
+        word: "掉链子",
+        pinyin: "diào liàn zi",
+        level: "Native Internet Chinese",
+        literal: "자전거 체인이 벗겨지다",
+        meaning: "결정적인 순간에 펑크가 나다, 약속을 어기거나 제 구실을 못 해 일을 그르치다",
+        etymologyType: "✓ 已确认 (생활 구어 관용구)",
+        etymology: "과거 중국의 주요 교통수단이었던 자전거에서 급하게 언덕을 넘거나 출근할 때 체인이 벗겨지면(掉链子) 큰 낭패를 겪던 일상 경험에서 유래한 관용어입니다.",
+        hanziBreakdown: [
+          { char: "掉", radical: "扌 (손 수)", meaning: "떨어질 조. 떨어져 나가다, 분실하다." },
+          { char: "链", radical: "钅 (쇠 금)", meaning: "사슬 련. 쇠로 엮은 체인이나 쇠사슬." }
+        ],
+        koreaComparison: "한국어의 '결정적일 때 삐끗하다', '치명적인 타이밍에 펑크 내다'와 상통합니다.",
+        examples: [
+          { cn: "关键时刻千万不能掉链子！", kr: "중요한 순간에 절대로 펑크 내거나 삐끗해선 안 돼!" }
+        ]
+      }
+    };
+
+    // User Saved Vocabulary (stored in localStorage)
+    let savedVocabList = [];
+
+    // Current State
+    let currentTab = 'home';
+    let currentTtsSpeed = 1.0;
+    let isExamMode = false;
+
+    /* ==========================================================================
+       INITIALIZATION & STORAGE
+       ========================================================================== */
+    window.onload = function() {
+      loadSavedVocab();
+      renderHomeTopics();
+      renderHomeKoreaTopics();
+      renderHomeCuratedComments();
+      renderHotFeed();
+      renderKoreaFeed();
+      renderCommentsLab();
+      renderQuizApp();
+      renderVocabList();
+      updateHeaderVocabBadge();
+      lucide.createIcons();
+    };
+
+    function loadSavedVocab() {
+      try {
+        const stored = localStorage.getItem("recixianchang_saved_words");
+        if (stored) {
+          savedVocabList = JSON.parse(stored);
+        } else {
+          // Initialize with default trending slangs
+          savedVocabList = [
+            { word: "破防", addedAt: new Date().toISOString(), reviewInterval: 1, lastReviewed: null, correctCount: 0 },
+            { word: "拿捏", addedAt: new Date().toISOString(), reviewInterval: 1, lastReviewed: null, correctCount: 0 }
+          ];
+          saveVocabToStorage();
+        }
+      } catch (e) {
+        savedVocabList = [];
+      }
+    }
+
+    function saveVocabToStorage() {
+      try {
+        localStorage.setItem("recixianchang_saved_words", JSON.stringify(savedVocabList));
+        updateHeaderVocabBadge();
+      } catch (e) {
+        console.error("Storage error:", e);
+      }
+    }
+
+    function updateHeaderVocabBadge() {
+      const badge = document.getElementById("headerVocabBadge");
+      if (badge) badge.innerText = savedVocabList.length;
+    }
+
+    /* ==========================================================================
+       NAVIGATION & TABS
+       ========================================================================== */
+    function navigateTab(tabName) {
+      currentTab = tabName;
+      document.querySelectorAll('.tab-view').forEach(el => el.classList.add('hidden'));
+      const activeTab = document.getElementById(`tab-${tabName}`);
+      if (activeTab) activeTab.classList.remove('hidden');
+
+      // Update PC Sidebar buttons
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('bg-red-50', 'text-brand-red', 'bg-blue-50', 'text-brand-koreaBlue', 'bg-gray-100');
+        btn.classList.add('text-gray-700');
+      });
+      const activeNav = document.getElementById(`nav-btn-${tabName}`);
+      if (activeNav) {
+        if (tabName === 'korea') {
+          activeNav.classList.add('bg-blue-50', 'text-brand-koreaBlue');
+        } else {
+          activeNav.classList.add('bg-red-50', 'text-brand-red');
+        }
+      }
+
+      // Update Mobile nav icons
+      document.querySelectorAll('.mob-nav').forEach(btn => {
+        btn.classList.remove('text-brand-red', 'font-bold');
+        btn.classList.add('text-gray-500');
+      });
+      const activeMob = document.getElementById(`mob-nav-${tabName}`);
+      if (activeMob) {
+        activeMob.classList.remove('text-gray-500');
+        activeMob.classList.add('text-brand-red', 'font-bold');
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      lucide.createIcons();
+    }
+
+    /* ==========================================================================
+       AUDIO & SPEECH SYNTHESIS (TTS)
+       ========================================================================== */
+    function setGlobalTtsSpeed(speed) {
+      currentTtsSpeed = speed;
+      document.getElementById('currentSpeedLabel').innerText = `${speed}x`;
+      document.getElementById('speedDropdownMenu').classList.add('hidden');
+      showToast(`음성 배속이 ${speed}배속으로 설정되었습니다.`);
+    }
+
+    function toggleSpeedDropdown() {
+      const menu = document.getElementById('speedDropdownMenu');
+      menu.classList.toggle('hidden');
+    }
+
+    function playTts(text) {
+      if (!('speechSynthesis' in window)) {
+        showToast("브라우저가 음성 합성을 지원하지 않습니다.");
+        return;
+      }
+      window.speechSynthesis.cancel(); // Stop ongoing
+      const cleanText = text.replace(/\[.*?\]/g, '').replace(/[^\u4e00-\u9fa5a-zA-Z0-9，。！？、]/g, '');
+      const utterance = new SpeechSynthesisUtterance(cleanText);
+      utterance.lang = 'zh-CN';
+      utterance.rate = currentTtsSpeed;
+      utterance.pitch = 1.0;
+      
+      // Attempt to choose a high-quality Chinese voice
+      const voices = window.speechSynthesis.getVoices();
+      const zhVoice = voices.find(v => v.lang.includes('zh') || v.lang.includes('cmn'));
+      if (zhVoice) utterance.voice = zhVoice;
+
+      window.speechSynthesis.speak(utterance);
+      showToast(`🔊 발음 재생 중 (${currentTtsSpeed}x): ${cleanText.substring(0, 10)}...`);
+    }
+
+    /* ==========================================================================
+       RENDERERS: HOME & FEEDS
+       ========================================================================== */
+    function renderHomeTopics() {
+      const container = document.getElementById('homeTopicContainer');
+      if (!container) return;
+      container.innerHTML = TOPICS_DATA.map(topic => createTopicCardHtml(topic)).join('');
+    }
+
+    function renderHomeKoreaTopics() {
+      const container = document.getElementById('homeKoreaTopicContainer');
+      if (!container) return;
+      const koreaTopics = TOPICS_DATA.filter(t => t.isKoreaTopic);
+      container.innerHTML = koreaTopics.map(topic => `
+        <div class="bg-blue-950/70 border border-blue-800/80 rounded-2xl p-5 hover:border-blue-500 transition cursor-pointer flex flex-col justify-between" onclick="openTopicDetail('${topic.id}')">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-[10px] font-bold bg-blue-500/30 text-blue-200 px-2 py-0.5 rounded">🇰🇷 한국 이슈 분석</span>
+              <span class="text-[10px] text-gray-400 font-mono">${topic.publishedAt}</span>
+            </div>
+            <h3 class="font-bold text-white text-base chinese-serif mb-1 leading-snug hover:text-blue-300 transition">${topic.title}</h3>
+            <p class="text-xs text-blue-200 line-clamp-2 mt-1 leading-relaxed">${topic.koreanTitle}</p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-blue-900/60 flex items-center justify-between text-xs">
+            <span class="text-blue-300 font-medium">💬 분석 댓글: ${topic.comments.length}개</span>
+            <span class="text-xs font-bold text-white flex items-center space-x-1 group">
+              <span>상세 해부</span>
+              <i data-lucide="arrow-right" class="w-3.5 h-3.5 group-hover:translate-x-0.5 transition"></i>
+            </span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderHomeCuratedComments() {
+      const container = document.getElementById('homeCuratedCommentsContainer');
+      if (!container) return;
+      
+      // Pull top comments across topics
+      const allComments = [];
+      TOPICS_DATA.forEach(t => {
+        t.comments.forEach(c => allComments.push({ ...c, topicId: t.id, topicTitle: t.title }));
+      });
+
+      container.innerHTML = allComments.slice(0, 3).map(comment => `
+        <div class="bg-white rounded-2xl border border-gray-200 p-4.5 card-shadow flex flex-col justify-between cursor-pointer" onclick="openCommentDissectionById('${comment.id}')">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-semibold text-gray-500">${comment.author}</span>
+              <span class="badge-pill bg-gray-100 text-gray-700 text-[10px]">${comment.toneEmoji} ${comment.tone}</span>
+            </div>
+            <p class="font-bold text-gray-900 text-sm chinese-serif leading-snug line-clamp-2">“${comment.chinese}”</p>
+            <p class="text-xs text-gray-600 mt-2 line-clamp-2 leading-relaxed">${comment.korean}</p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between text-xs">
+            <div class="flex gap-1">
+              ${comment.expressions.slice(0, 2).map(e => `<span class="bg-red-50 text-brand-red text-[10px] px-1.5 py-0.5 rounded font-mono font-bold">${e}</span>`).join('')}
+            </div>
+            <span class="text-brand-red font-bold text-xs flex items-center">해부실 &rarr;</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderHotFeed() {
+      const container = document.getElementById('hotFeedContainer');
+      if (!container) return;
+      container.innerHTML = TOPICS_DATA.map(topic => createTopicCardHtml(topic, true)).join('');
+    }
+
+    function renderKoreaFeed() {
+      const container = document.getElementById('koreaFeedContainer');
+      if (!container) return;
+      const koreaTopics = TOPICS_DATA.filter(t => t.isKoreaTopic);
+      container.innerHTML = koreaTopics.map(topic => createTopicCardHtml(topic, true)).join('');
+    }
+
+    function renderCommentsLab() {
+      const container = document.getElementById('commentsLabContainer');
+      if (!container) return;
+      const allComments = [];
+      TOPICS_DATA.forEach(t => {
+        t.comments.forEach(c => allComments.push({ ...c, topicId: t.id, topicTitle: t.title, isKorea: t.isKoreaTopic }));
+      });
+
+      container.innerHTML = allComments.map(c => `
+        <div class="bg-white rounded-2xl border border-gray-200 p-5 card-shadow flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <div class="flex items-center space-x-1.5">
+                <span class="text-xs font-bold text-gray-900">${c.author}</span>
+                <span class="text-[10px] text-gray-400 font-mono">(${c.factOrOpinion})</span>
+              </div>
+              <span class="badge-pill ${c.isKorea ? 'bg-blue-100 text-blue-800' : 'bg-red-100 text-brand-red'} font-bold">
+                ${c.toneEmoji} ${c.tone} (${c.sentiment})
+              </span>
+            </div>
+
+            <!-- Chinese with Audio Play button -->
+            <div class="flex items-start justify-between gap-2 my-2">
+              <p class="font-bold text-gray-900 text-base chinese-serif leading-snug">“${c.chinese}”</p>
+              <button onclick="playTts('${c.chinese.replace(/'/g, "\\'")}')" class="p-1.5 hover:bg-red-50 text-brand-red rounded-lg transition flex-shrink-0" title="발음 듣기">
+                <i data-lucide="volume-2" class="w-4 h-4"></i>
+              </button>
+            </div>
+
+            <p class="text-xs text-gray-500 font-mono mb-2">${c.pinyin}</p>
+            <p class="text-xs text-gray-800 bg-gray-50 p-2.5 rounded-xl border border-gray-100 leading-relaxed font-medium">
+              ${c.korean}
+            </p>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
+            <div class="flex flex-wrap gap-1">
+              ${c.expressions.map(exp => `
+                <button onclick="openWordDetailModal('${exp}')" class="px-2 py-0.5 bg-gray-100 hover:bg-red-50 text-gray-700 hover:text-brand-red text-[11px] font-bold rounded transition">
+                  #${exp}
+                </button>
+              `).join('')}
+            </div>
+            <button onclick="openCommentDissectionById('${c.id}')" class="px-3 py-1.5 bg-gray-900 hover:bg-brand-red text-white text-xs font-bold rounded-xl transition flex items-center space-x-1">
+              <i data-lucide="search" class="w-3.5 h-3.5"></i>
+              <span>정밀 해부</span>
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function createTopicCardHtml(topic, fullMode = false) {
+      const isKorea = topic.isKoreaTopic;
+      return `
+        <div class="bg-white rounded-3xl border border-gray-200 p-6 card-shadow flex flex-col justify-between transition" id="card-${topic.id}">
+          <div>
+            <!-- Badges & Meta -->
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center space-x-2">
+                <span class="badge-pill ${isKorea ? 'bg-blue-100 text-brand-koreaBlue' : 'bg-red-100 text-brand-red'} font-bold">
+                  ${isKorea ? '🇰🇷 韩国热议' : topic.category}
+                </span>
+                <span class="text-[10px] bg-gray-100 text-gray-500 font-bold px-2 py-0.5 rounded uppercase">
+                  [${topic.sourceType}]
+                </span>
+                <span class="text-[10px] text-gray-400 font-mono">${topic.publishedAt}</span>
+              </div>
+              <span class="text-[10px] text-gray-400 bg-gray-50 border border-gray-200 px-1.5 py-0.5 rounded">Demo Content</span>
+            </div>
+
+            <!-- Title in Chinese -->
+            <h3 class="text-base sm:text-lg font-bold text-gray-900 chinese-serif leading-snug cursor-pointer hover:text-brand-red transition" onclick="openTopicDetail('${topic.id}')">
+              ${topic.title}
+            </h3>
+            
+            <!-- Title in Korean -->
+            <p class="text-xs text-gray-600 mt-1 font-medium leading-relaxed">
+              ${topic.koreanTitle}
+            </p>
+
+            <!-- Summary snippet -->
+            <p class="text-xs text-gray-600 mt-3 bg-gray-50/80 p-3 rounded-xl border border-gray-100 leading-relaxed">
+              ${topic.summary}
+            </p>
+
+            <!-- Recent Comments Sneak Peek -->
+            <div class="mt-4 space-y-2">
+              <span class="text-[11px] font-bold text-gray-400 uppercase tracking-wider block">💬 화제 댓글 미리보기:</span>
+              ${topic.comments.slice(0, fullMode ? 3 : 2).map(c => `
+                <div class="p-2.5 rounded-xl bg-gray-50 hover:bg-red-50/50 border border-gray-100 transition cursor-pointer flex items-center justify-between text-xs" onclick="openCommentDissectionById('${c.id}')">
+                  <div class="truncate mr-2">
+                    <span class="font-bold text-gray-800 chinese-serif">“${c.chinese}”</span>
+                    <span class="text-gray-500 block text-[11px] truncate mt-0.5">${c.korean}</span>
+                  </div>
+                  <span class="text-[11px] font-bold text-gray-500 flex-shrink-0">${c.toneEmoji} ${c.tone}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <!-- Card Action Footer -->
+          <div class="mt-5 pt-4 border-t border-gray-100 flex items-center justify-between text-xs">
+            <span class="text-gray-500 font-medium">출처: ${topic.source}</span>
+            <button onclick="openTopicDetail('${topic.id}')" class="px-4 py-2 ${isKorea ? 'bg-brand-koreaBlue hover:bg-blue-700' : 'bg-brand-red hover:bg-brand-redHover'} text-white font-bold rounded-xl transition flex items-center space-x-1.5 shadow-xs">
+              <span>심층 해부실 열기</span>
+              <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    /* ==========================================================================
+       TOPIC DETAIL MODAL
+       ========================================================================== */
+    function openTopicDetail(topicId) {
+      const topic = TOPICS_DATA.find(t => t.id === topicId);
+      if (!topic) return;
+
+      const modal = document.getElementById('topicDetailModal');
+      const badge = document.getElementById('topicDetailBadge');
+      const body = document.getElementById('topicDetailBody');
+
+      badge.innerText = topic.isKoreaTopic ? '🇰🇷 中国网友眼中的韩国' : topic.category;
+      badge.className = `badge-pill ${topic.isKoreaTopic ? 'bg-blue-100 text-brand-koreaBlue' : 'bg-red-100 text-brand-red'} font-bold`;
+
+      let koreaSectionHtml = "";
+      if (topic.isKoreaTopic && topic.koreaBackground) {
+        koreaSectionHtml = `
+          <div class="p-4 bg-blue-50/80 border border-blue-200 rounded-2xl space-y-1.5">
+            <div class="flex items-center space-x-2 text-brand-koreaBlue font-bold text-xs">
+              <i data-lucide="info" class="w-4 h-4"></i>
+              <span>🇰🇷 这件事在韩国是什么情况？ (한국의 실제 상황 배경 설명)</span>
+            </div>
+            <p class="text-xs text-blue-950 leading-relaxed font-medium">
+              ${topic.koreaBackground}
+            </p>
+          </div>
+        `;
+      }
+
+      body.innerHTML = `
+        <!-- Title Header -->
+        <div class="space-y-2">
+          <div class="flex items-center space-x-2 text-xs text-gray-500">
+            <span>출처: ${topic.source}</span>
+            <span>·</span>
+            <span>일자: ${topic.publishedAt}</span>
+          </div>
+          <h2 class="text-xl sm:text-2xl font-black text-gray-900 chinese-serif leading-snug">
+            ${topic.title}
+          </h2>
+          <p class="text-sm font-semibold text-gray-600 leading-relaxed">
+            ${topic.koreanTitle}
+          </p>
+        </div>
+
+        <!-- Original Text / News Excerpt -->
+        <div class="bg-gray-50 border border-gray-200 rounded-2xl p-4.5 space-y-2">
+          <div class="flex items-center justify-between text-xs text-gray-500 font-bold">
+            <span class="flex items-center space-x-1.5">
+              <i data-lucide="file-text" class="w-4 h-4 text-gray-700"></i>
+              <span>📌 原文 핵심 발췌 [${topic.sourceType}]</span>
+            </span>
+            <button onclick="playTts('${topic.originalText.replace(/'/g, "\\'")}')" class="text-brand-red flex items-center space-x-1 hover:underline">
+              <i data-lucide="volume-2" class="w-3.5 h-3.5"></i>
+              <span>원문 전체 듣기</span>
+            </button>
+          </div>
+          <p class="text-sm text-gray-800 leading-relaxed chinese-serif font-medium">
+            ${topic.originalText}
+          </p>
+        </div>
+
+        <!-- Korean Background Section if Korea Topic -->
+        ${koreaSectionHtml}
+
+        <!-- Comments Section -->
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <i data-lucide="messages-square" class="w-5 h-5 text-brand-red"></i>
+              <h3 class="font-bold text-gray-900 text-base">💬 中国网友怎么说？ · 중국 네티즌 댓글 분석 (${topic.comments.length}개)</h3>
+            </div>
+            <span class="text-xs text-gray-400">댓글을 클릭하면 어원·뉘앙스 해부실이 열립니다</span>
+          </div>
+
+          <div class="space-y-3">
+            ${topic.comments.map((c, index) => `
+              <div class="p-4 bg-white hover:bg-red-50/30 border border-gray-200 rounded-2xl card-shadow transition cursor-pointer" onclick="openCommentDissectionById('${c.id}')">
+                <div class="flex items-center justify-between mb-1.5">
+                  <div class="flex items-center space-x-2">
+                    <span class="w-6 h-6 rounded-full bg-gray-200 text-gray-700 flex items-center justify-center font-bold text-xs">${index + 1}</span>
+                    <span class="font-bold text-gray-800 text-xs">${c.author}</span>
+                  </div>
+                  <span class="badge-pill bg-gray-100 text-gray-700 text-xs font-semibold">
+                    ${c.toneEmoji} 말투: ${c.tone} · (${c.sentiment})
+                  </span>
+                </div>
+                
+                <p class="text-base font-bold text-gray-900 chinese-serif my-1">
+                  “${c.chinese}”
+                </p>
+                <p class="text-xs text-gray-600 font-mono mb-1.5">${c.pinyin}</p>
+                <p class="text-xs text-gray-800 bg-gray-50 p-2.5 rounded-xl border border-gray-100 font-medium">
+                  <strong>자연스러운 번역:</strong> ${c.korean}
+                </p>
+
+                <div class="mt-3 flex items-center justify-between text-xs">
+                  <div class="flex flex-wrap gap-1">
+                    ${c.expressions.map(exp => `<span class="bg-red-50 text-brand-red text-[10px] px-2 py-0.5 rounded font-mono font-bold">#${exp}</span>`).join('')}
+                  </div>
+                  <span class="text-brand-red font-bold flex items-center space-x-1 text-xs">
+                    <span>댓글 해부실</span>
+                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                  </span>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+
+      modal.classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeTopicDetail() {
+      document.getElementById('topicDetailModal').classList.add('hidden');
+    }
+
+    /* ==========================================================================
+       COMMENT DISSECTION LAB (댓글 해부실)
+       ========================================================================== */
+    function openCommentDissectionById(commentId) {
+      let targetComment = null;
+      let parentTopic = null;
+
+      for (let t of TOPICS_DATA) {
+        for (let c of t.comments) {
+          if (c.id === commentId) {
+            targetComment = c;
+            parentTopic = t;
+            break;
+          }
+        }
+      }
+
+      if (!targetComment) return;
+      openCommentDissection(targetComment, parentTopic);
+    }
+
+    function openCommentDissection(c, topic) {
+      const modal = document.getElementById('commentDissectionModal');
+      const body = document.getElementById('commentDissectionBody');
+
+      body.innerHTML = `
+        <!-- Original Comment Large Display -->
+        <div class="bg-gray-50 p-5 rounded-2xl border border-gray-200 space-y-3">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-bold text-gray-500">작성자: ${c.author} · 구분: [${c.factOrOpinion}]</span>
+            <div class="flex items-center space-x-2">
+              <button onclick="playTts('${c.chinese.replace(/'/g, "\\'")}')" class="px-3 py-1 bg-brand-red text-white text-xs font-bold rounded-lg hover:bg-brand-redHover transition flex items-center space-x-1">
+                <i data-lucide="volume-2" class="w-3.5 h-3.5"></i>
+                <span>듣기 (1.0x)</span>
+              </button>
+              <button onclick="saveWordToVocab('${c.expressions[0]}', '${c.chinese.replace(/'/g, "\\'")}')" class="px-3 py-1 bg-yellow-100 hover:bg-yellow-200 text-yellow-900 text-xs font-bold rounded-lg transition flex items-center space-x-1">
+                <i data-lucide="star" class="w-3.5 h-3.5"></i>
+                <span>⭐ 단어장 저장</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Chinese Text with pinyin -->
+          <div class="space-y-1">
+            <span class="text-[10px] text-gray-400 font-mono tracking-widest uppercase">原评论 (Chinese Original)</span>
+            <p class="text-lg sm:text-xl font-black text-gray-900 chinese-serif leading-relaxed">
+              “${c.chinese}”
+            </p>
+            <p class="text-xs text-brand-red font-mono font-medium">${c.pinyin}</p>
+          </div>
+        </div>
+
+        <!-- Translations Side-by-Side -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+          <div class="p-4 bg-emerald-50/70 border border-emerald-200 rounded-2xl">
+            <span class="font-bold text-emerald-900 block mb-1">✨ 自然翻译 (자연스러운 한국어 번역)</span>
+            <p class="text-gray-800 leading-relaxed font-semibold text-sm">
+              ${c.korean}
+            </p>
+          </div>
+          <div class="p-4 bg-gray-50 border border-gray-200 rounded-2xl">
+            <span class="font-bold text-gray-500 block mb-1">📐 直译 (글자 그대로 직역)</span>
+            <p class="text-gray-700 leading-relaxed font-medium">
+              ${c.literalTranslation}
+            </p>
+          </div>
+        </div>
+
+        <!-- Nuance & Tone Analysis -->
+        <div class="p-4 bg-amber-50/70 border border-amber-200 rounded-2xl space-y-2 text-xs">
+          <div class="flex items-center space-x-2 text-amber-900 font-bold">
+            <span class="text-base">${c.toneEmoji}</span>
+            <span>语气与情绪分析 (말투 & 속마음 뉘앙스 분석)</span>
+          </div>
+          <p class="text-amber-950 leading-relaxed">
+            <strong>말투 판정:</strong> ${c.tone} / 감정: ${c.sentiment}<br>
+            <strong>문맥 판단 근거:</strong> 단순한 단어 번역만으로는 파악하기 힘든 화자의 태도입니다. ${c.grammar}
+          </p>
+        </div>
+
+        <!-- Keywords & Clickable Slangs -->
+        <div class="space-y-2">
+          <span class="text-xs font-bold text-gray-700 block">🔥 核心网络表达 (클릭하여 어원·한자 분해 보기):</span>
+          <div class="flex flex-wrap gap-2">
+            ${c.expressions.map(exp => `
+              <button onclick="openWordDetailModal('${exp}')" class="px-3.5 py-2 bg-white hover:bg-red-50 border border-gray-300 hover:border-brand-red rounded-xl text-xs font-bold text-gray-800 hover:text-brand-red transition flex items-center space-x-1.5 shadow-2xs">
+                <i data-lucide="sparkle" class="w-3.5 h-3.5 text-brand-red"></i>
+                <span>${exp}</span>
+                <span class="text-[10px] text-gray-400 font-normal">자세히 &rarr;</span>
+              </button>
+            `).join('')}
+          </div>
+        </div>
+
+        <!-- Why did Chinese Netizens say this? (Cultural Context) -->
+        <div class="p-4 bg-gray-900 text-white rounded-2xl space-y-2 text-xs">
+          <div class="flex items-center space-x-2 text-red-300 font-bold">
+            <i data-lucide="help-circle" class="w-4 h-4"></i>
+            <span>为什么中国网友会这么说？ (중국 인터넷 문화적 맥락)</span>
+          </div>
+          <p class="text-gray-200 leading-relaxed">
+            ${c.culturalContext}
+          </p>
+          ${c.koreaContext ? `
+            <div class="mt-3 pt-3 border-t border-gray-800 text-blue-200">
+              <span class="font-bold text-blue-300 block mb-0.5">🇰🇷 한중 비교 맥락:</span>
+              ${c.koreaContext}
+            </div>
+          ` : ''}
+        </div>
+
+        <!-- Interactive AI Teacher Question for this comment -->
+        <div class="bg-red-50 border border-red-200 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div>
+            <span class="font-bold text-brand-red text-xs block mb-0.5">🤖 AI 선생님께 뉘앙스 추가 질문하기</span>
+            <p class="text-xs text-gray-600">“이거 직장 상사 앞에서도 쓸 수 있나요?”, “더 강한 표현은 없나요?”</p>
+          </div>
+          <button onclick="openAskAiModalWithTarget('${c.chinese.replace(/'/g, "\\'")}')" class="px-4 py-2 bg-brand-red hover:bg-brand-redHover text-white text-xs font-bold rounded-xl transition flex items-center space-x-1.5 flex-shrink-0">
+            <i data-lucide="bot" class="w-4 h-4"></i>
+            <span>问老师 (질문하기)</span>
+          </button>
+        </div>
+
+        <!-- Mini Practice Quiz for this comment -->
+        ${c.quiz ? `
+          <div class="p-5 bg-purple-50/70 border border-purple-200 rounded-2xl space-y-3">
+            <div class="flex items-center space-x-2 text-purple-900 font-bold text-xs">
+              <i data-lucide="check-circle-2" class="w-4 h-4 text-purple-700"></i>
+              <span>你会怎么说？ (이 댓글 실전 이해도 체크)</span>
+            </div>
+            <p class="text-xs font-bold text-gray-900">${c.quiz.question}</p>
+            <div class="space-y-1.5" id="miniQuizOptionsContainer-${c.id}">
+              ${c.quiz.options.map((opt, optIdx) => `
+                <button onclick="checkMiniQuizAnswer('${c.id}', ${optIdx}, ${c.quiz.answerIndex})" class="w-full text-left p-2.5 rounded-xl bg-white hover:bg-purple-100/60 border border-purple-200 text-xs font-medium text-gray-800 transition">
+                  ${String.fromCharCode(65 + optIdx)}. ${opt}
+                </button>
+              `).join('')}
+            </div>
+            <div id="miniQuizFeedback-${c.id}" class="hidden p-3 rounded-xl text-xs font-medium mt-2"></div>
+          </div>
+        ` : ''}
+      `;
+
+      modal.classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeCommentDissection() {
+      document.getElementById('commentDissectionModal').classList.add('hidden');
+    }
+
+    function checkMiniQuizAnswer(commentId, selectedIdx, correctIdx) {
+      const feedback = document.getElementById(`miniQuizFeedback-${commentId}`);
+      if (!feedback) return;
+      feedback.classList.remove('hidden');
+
+      if (selectedIdx === correctIdx) {
+        feedback.className = "p-3 rounded-xl text-xs font-bold bg-emerald-100 text-emerald-900 border border-emerald-300";
+        feedback.innerHTML = "🎉 정답입니다! 댓글의 속뜻과 중국 네티즌의 문맥 뉘앙스를 정확하게 파악하셨습니다.";
+      } else {
+        feedback.className = "p-3 rounded-xl text-xs font-bold bg-rose-100 text-rose-900 border border-rose-300";
+        feedback.innerHTML = `❌ 아쉽습니다. 정답은 (${String.fromCharCode(65 + correctIdx)})번입니다. 해설을 다시 읽어보세요.`;
+      }
+    }
+
+    /* ==========================================================================
+       WORD DETAIL MODAL: ETYMOLOGY & HANZI BREAKDOWN
+       ========================================================================== */
+    function openWordDetailModal(wordKey) {
+      let data = VOCAB_DATABASE[wordKey];
+      if (!data) {
+        // Fallback generator for other expressions
+        data = {
+          word: wordKey,
+          pinyin: "pīnyīn",
+          level: "Native Internet Chinese",
+          literal: "글자 그대로의 뜻",
+          meaning: "중국 인터넷에서 빈번히 쓰이는 핵심 유행어 및 표현입니다.",
+          etymologyType: "△ 较可信 (유력한 설명)",
+          etymology: "소셜 미디어(웨이보, 샤오홍슈, 틱톡) 상에서 댓글과 숏폼 영상을 통해 급속도로 확산된 현대적 뉘앙스입니다.",
+          hanziBreakdown: [
+            { char: wordKey[0] || "字", radical: "部首", meaning: "한자의 기본 부수와 조자 원리 분석." }
+          ],
+          koreaComparison: "상황에 따른 맥락과 어조에 유의하여 학습하세요.",
+          examples: [
+            { cn: `网络热评常见用法：${wordKey}`, kr: "인터넷 화제 댓글 속 실제 사용 예시입니다." }
+          ]
+        };
+      }
+
+      const modal = document.getElementById('wordDetailModal');
+      const body = document.getElementById('wordDetailBody');
+
+      body.innerHTML = `
+        <div class="flex items-center justify-between pb-3 border-b border-gray-100">
+          <div>
+            <div class="flex items-center space-x-2">
+              <h2 class="text-2xl font-black text-gray-900 chinese-serif">${data.word}</h2>
+              <span class="text-xs text-brand-red font-mono">${data.pinyin}</span>
+              <button onclick="playTts('${data.word}')" class="p-1 hover:bg-red-50 text-brand-red rounded">
+                <i data-lucide="volume-2" class="w-4 h-4"></i>
+              </button>
+            </div>
+            <span class="badge-pill bg-gray-100 text-gray-700 text-[10px] mt-1 font-mono">${data.level}</span>
+          </div>
+          <button onclick="saveWordToVocab('${data.word}')" class="px-3 py-1.5 bg-yellow-400 hover:bg-yellow-500 text-white text-xs font-bold rounded-xl transition flex items-center space-x-1">
+            <i data-lucide="bookmark" class="w-3.5 h-3.5"></i>
+            <span>단어장 담기</span>
+          </button>
+        </div>
+
+        <div class="space-y-3 text-xs">
+          <!-- Meaning -->
+          <div class="bg-gray-50 p-3.5 rounded-xl border border-gray-200">
+            <span class="font-bold text-gray-500 block mb-0.5">실제 의미 (现代网络语义):</span>
+            <p class="text-sm font-bold text-gray-900">${data.meaning}</p>
+            <p class="text-gray-500 mt-1"><strong>직역:</strong> ${data.literal}</p>
+          </div>
+
+          <!-- Etymology Lab (词源研究室) -->
+          <div class="bg-amber-50/70 p-3.5 rounded-xl border border-amber-200 space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-amber-900 flex items-center space-x-1">
+                <i data-lucide="history" class="w-3.5 h-3.5 text-amber-700"></i>
+                <span>词源研究室 (어원 변천)</span>
+              </span>
+              <span class="text-[10px] px-1.5 py-0.2 rounded font-bold ${data.etymologyType.includes('已确认') ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">
+                ${data.etymologyType}
+              </span>
+            </div>
+            <p class="text-gray-800 leading-relaxed font-medium">
+              ${data.etymology}
+            </p>
+          </div>
+
+          <!-- Hanzi Breakdown (汉字拆解) -->
+          <div class="bg-white p-3.5 rounded-xl border border-gray-200 space-y-2">
+            <span class="font-bold text-gray-800 flex items-center space-x-1">
+              <i data-lucide="split" class="w-3.5 h-3.5 text-purple-600"></i>
+              <span>汉字拆解 (한자 분해 및 본래 글자 뜻)</span>
+            </span>
+            <div class="space-y-1.5">
+              ${data.hanziBreakdown.map(h => `
+                <div class="p-2 rounded-lg bg-gray-50 border border-gray-100 flex items-start space-x-2">
+                  <span class="font-serifSc text-lg font-bold text-brand-red w-6 text-center">${h.char}</span>
+                  <div>
+                    <span class="text-[10px] text-gray-500 font-bold block">${h.radical}</span>
+                    <p class="text-gray-700 text-[11px] leading-snug">${h.meaning}</p>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <!-- Korean vs Chinese -->
+          <div class="bg-blue-50/60 p-3.5 rounded-xl border border-blue-200 text-blue-950">
+            <span class="font-bold text-brand-koreaBlue block mb-0.5">🇰🇷 Korean vs 🇨🇳 Chinese:</span>
+            <p class="leading-relaxed font-medium">${data.koreaComparison}</p>
+          </div>
+
+          <!-- Examples -->
+          <div class="space-y-1.5">
+            <span class="font-bold text-gray-700 block">실전 예문:</span>
+            ${data.examples.map(ex => `
+              <div class="p-2.5 rounded-xl bg-gray-50 border border-gray-100 text-xs">
+                <p class="font-bold text-gray-900 chinese-serif">“${ex.cn}”</p>
+                <p class="text-gray-600 mt-0.5 text-[11px]">${ex.kr}</p>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+
+      modal.classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeWordDetailModal() {
+      document.getElementById('wordDetailModal').classList.add('hidden');
+    }
+
+    /* ==========================================================================
+       ASK AI TEACHER (问老师)
+       ========================================================================== */
+    let currentAiTargetText = "";
+
+    function openAskAiModalWithTarget(text) {
+      currentAiTargetText = text;
+      document.getElementById('aiTargetExpression').innerText = text;
+      document.getElementById('aiResponseContainer').classList.add('hidden');
+      document.getElementById('askAiModal').classList.remove('hidden');
+    }
+
+    function closeAskAiModal() {
+      document.getElementById('askAiModal').classList.add('hidden');
+    }
+
+    async function askAiQuestion(promptQuestion) {
+      const responseContainer = document.getElementById('aiResponseContainer');
+      const responseText = document.getElementById('aiResponseText');
+      const statusLabel = document.getElementById('aiStatusLabel');
+
+      responseContainer.classList.remove('hidden');
+      statusLabel.innerText = "AI 선생님이 답변을 작성 중입니다...";
+      responseText.innerHTML = `
+        <div class="flex items-center space-x-2 text-gray-500 py-2">
+          <div class="w-3 h-3 rounded-full bg-brand-red animate-ping"></div>
+          <span>중국어 인터넷 어법 및 뉘앙스를 심층 분석하고 있습니다...</span>
+        </div>
+      `;
+
+      const systemPrompt = `당신은 한국인 성인 학습자를 위한 '중국 인터넷 실전 중국어 및 네티즌 댓글 전문 AI 튜터'입니다.
+학습자가 질문한 표현이나 문장에 대해 교과서적 답변이 아닌, 중국 인터넷(웨이보, 샤오홍슈, 비리비리, 틱톡)의 생생한 현지 뉘앙스, 비꼬는 말투(反讽), 밈(梗)의 유래, 한국인이 흔히 겪는 오해, 직장 및 실생활에서의 적절성 여부를 명쾌하고 재치 있게 해설해 주세요. 한국어로 답변하세요.`;
+
+      const userQuery = `분석 대상 문장: "${currentAiTargetText}"\n학습자 질문: ${promptQuestion}`;
+
+      const apiKey = ""; // Canvas runtime provides API key automatically when empty
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+      try {
+        const payload = {
+          contents: [{ parts: [{ text: userQuery }] }],
+          systemInstruction: { parts: [{ text: systemPrompt }] }
+        };
+
+        const response = await fetch(apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) throw new Error("API Network issue");
+
+        const result = await response.json();
+        const candidate = result.candidates?.[0];
+        const generatedText = candidate?.content?.parts?.[0]?.text;
+
+        if (generatedText) {
+          statusLabel.innerText = "AI 선생님의 해설 완료:";
+          responseText.innerHTML = formatMarkdownText(generatedText);
+        } else {
+          throw new Error("Empty candidate");
+        }
+      } catch (err) {
+        // High quality offline fallback explanation tailored to the question
+        statusLabel.innerText = "실전 중국어 선생님의 핵심 노트:";
+        responseText.innerHTML = generateLocalTutorNote(currentAiTargetText, promptQuestion);
+      }
+      lucide.createIcons();
+    }
+
+    function submitCustomAiQuestion() {
+      const input = document.getElementById('customAiQuestionInput');
+      const q = input.value.trim();
+      if (!q) return;
+      askAiQuestion(q);
+      input.value = "";
+    }
+
+    function formatMarkdownText(text) {
+      return text
+        .replace(/\n\n/g, '<br><br>')
+        .replace(/\n/g, '<br>')
+        .replace(/\*\*(.*?)\*\*/g, '<strong class="text-brand-red">$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>');
+    }
+
+    function generateLocalTutorNote(targetText, question) {
+      return `
+        <div class="space-y-2">
+          <p><strong>💡 문맥 진단:</strong> “${targetText}”는 교과서 문법보다는 중국 인터넷 상에서 화자의 감정이나 풍자 의도를 극대화할 때 자주 쓰는 표현입니다.</p>
+          <p><strong>🎯 질문에 대한 직언:</strong> ${question.includes('비꼬는') ? '상황에 따라 80% 이상이 반어법(反讽)으로 쓰입니다. 칭찬의 형태를 띠고 있지만 실제로는 기가 차거나 황당함을 드러내는 대표적 뉘앙스입니다.' : '젊은 세대 사이에서 주로 쓰이며, 공식적인 비즈니스 이메일이나 격식 있는 면접에서는 피하고 일상 대화나 SNS 댓글에서 위트 있게 활용하시는 것을 추천합니다.'}</p>
+          <p><strong>🇰🇷 한국어 감각:</strong> 한국어의 맥락과 비교할 때 직역하지 마시고 상황별 말투(호응 관계)를 함께 기억해 두세요!</p>
+        </div>
+      `;
+    }
+
+    /* ==========================================================================
+       QUIZ & PRACTICE SYSTEM
+       ========================================================================== */
+    const PRACTICE_QUIZZES = [
+      {
+        id: "quiz-1",
+        category: "중국인이라면 어떻게 댓글을 달까?",
+        scenario: "자동차 전문 미디어가 극한 제동 테스트를 한 후 페달 부품이 부러진 이슈가 터졌다. 네티즌 입장에서 '중대한 안전 문제를 피하고 핑계만 대다니 진짜 기가 막히네'라는 의미로 가장 자연스러운 댓글은?",
+        options: [
+          { text: "A. 这个汽车的刹车很漂亮，我觉得非常满意。", isCorrect: false },
+          { text: "B. 这波公关真是避重就轻，关乎命门的东西断了太让人破防了。", isCorrect: true },
+          { text: "C. 极限工况测试是很难的，请大家都要遵守交通规则。", isCorrect: false },
+          { text: "D. 机械问题都是正常的，我们不需要太在意。", isCorrect: false }
+        ],
+        explanation: "B번의 ‘避重就轻’(핵심 회피 물타기)와 ‘破防’(멘탈 붕괴)은 중국 네티즌들이 기업의 어설픈 결함 해명 기사에 댓글을 달 때 가장 즐겨 쓰는 1순위 표현 조합입니다."
+      },
+      {
+        id: "quiz-2",
+        category: "이 댓글은 무슨 뜻일까? (뉘앙스 감별)",
+        scenario: "친구가 황당한 실수를 해놓고 '이건 내가 일부러 그런 거라 사실 큰 그림(전략)이다'라고 변명하자 다른 친구가 댓글로 “你可真行。”이라고 달았다. 이 댓글의 진짜 의도는?",
+        options: [
+          { text: "A. 친구의 깊은 전략적 안목에 진심으로 탄복하여 칭찬하고 있다.", isCorrect: false },
+          { text: "B. 친구의 운전이나 게임 조작 기술이 훌륭함을 입증하고 있다.", isCorrect: false },
+          { text: "C. ‘너 진짜 대단하다 대단해’라며 뻔뻔한 핑계에 기가 차서 비꼬고 있다.", isCorrect: true },
+          { text: "D. 다음 행동을 어서 신속하게 진행하라고 재촉하고 있다.", isCorrect: false }
+        ],
+        explanation: "‘你可真行(nǐ kě zhēn xíng)’은 표면적 글자는 칭찬이지만, 억지 변명 상황에 쓰이면 100% 빈정거림(反讽)입니다."
+      },
+      {
+        id: "quiz-3",
+        category: "한국 문화 관련 중국 네티즌 표현",
+        scenario: "한국의 번화가에서 탕후루 가게가 급감한 현상을 보며 중국 네티즌이 '단기간 유행 바람이 거세게 불고 지나가더니 개미 창업자들만 돈을 뜯겼다'고 비판할 때 어울리는 사자성어/은어는?",
+        options: [
+          { text: "A. 割韭菜 (gē jiǔcài)", isCorrect: true },
+          { text: "B. 秀恩爱 (xiù ēn'ài)", isCorrect: false },
+          { text: "C. 凡尔赛 (fán'ěrsài)", isCorrect: false },
+          { text: "D. 躺平 (tǎngpíng)", isCorrect: false }
+        ],
+        explanation: "‘割韭菜(부추 베기)’는 자본이나 본사가 유행을 미끼로 순진한 대중의 돈을 착취하거나 단물만 빼먹는 행위를 꼬집는 은어입니다."
+      }
+    ];
+
+    function renderQuizApp() {
+      const container = document.getElementById('quizAppContainer');
+      if (!container) return;
+
+      container.innerHTML = PRACTICE_QUIZZES.map((q, qIdx) => `
+        <div class="bg-white rounded-2xl border border-gray-200 p-6 card-shadow space-y-4" id="quizCard-${q.id}">
+          <div class="flex items-center justify-between text-xs">
+            <span class="badge-pill bg-purple-100 text-purple-900 font-bold">문제 ${qIdx + 1} · ${q.category}</span>
+            <span class="text-gray-400 font-mono">난이도: Native</span>
+          </div>
+
+          <div class="p-4 bg-gray-50 rounded-2xl border border-gray-100 text-sm font-medium text-gray-800 leading-relaxed">
+            ${q.scenario}
+          </div>
+
+          <div class="space-y-2">
+            ${q.options.map((opt, oIdx) => `
+              <button 
+                onclick="submitQuizAnswer('${q.id}', ${oIdx})" 
+                class="quiz-option-btn w-full text-left p-3.5 rounded-xl border border-gray-200 hover:border-purple-400 hover:bg-purple-50/50 text-xs font-medium text-gray-800 transition flex items-center justify-between"
+                data-quiz="${q.id}" 
+                data-idx="${oIdx}"
+              >
+                <span>${opt.text}</span>
+                <i data-lucide="circle" class="w-4 h-4 text-gray-300"></i>
+              </button>
+            `).join('')}
+          </div>
+
+          <div id="quizFeedback-${q.id}" class="hidden p-4 rounded-xl text-xs space-y-1.5 transition"></div>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function submitQuizAnswer(quizId, optionIndex) {
+      const quiz = PRACTICE_QUIZZES.find(q => q.id === quizId);
+      if (!quiz) return;
+
+      const isCorrect = quiz.options[optionIndex].isCorrect;
+      const feedbackEl = document.getElementById(`quizFeedback-${quizId}`);
+      if (!feedbackEl) return;
+
+      feedbackEl.classList.remove('hidden');
+
+      // Style option buttons
+      const buttons = document.querySelectorAll(`[data-quiz="${quizId}"]`);
+      buttons.forEach((btn, idx) => {
+        btn.disabled = true;
+        if (quiz.options[idx].isCorrect) {
+          btn.classList.add('bg-emerald-50', 'border-emerald-500', 'text-emerald-900', 'font-bold');
+        } else if (idx === optionIndex && !isCorrect) {
+          btn.classList.add('bg-rose-50', 'border-rose-500', 'text-rose-900');
+        }
+      });
+
+      if (isCorrect) {
+        feedbackEl.className = "p-4 rounded-xl text-xs bg-emerald-50 border border-emerald-200 text-emerald-950 font-medium space-y-1";
+        feedbackEl.innerHTML = `
+          <div class="flex items-center space-x-1.5 font-bold text-emerald-800">
+            <i data-lucide="check" class="w-4 h-4 text-emerald-600"></i>
+            <span>정답입니다! 완벽한 네이티브 감각입니다.</span>
+          </div>
+          <p class="leading-relaxed">${quiz.explanation}</p>
+        `;
+      } else {
+        feedbackEl.className = "p-4 rounded-xl text-xs bg-rose-50 border border-rose-200 text-rose-950 font-medium space-y-1";
+        feedbackEl.innerHTML = `
+          <div class="flex items-center space-x-1.5 font-bold text-rose-800">
+            <i data-lucide="x" class="w-4 h-4 text-rose-600"></i>
+            <span>오답입니다. 해설을 확인하세요.</span>
+          </div>
+          <p class="leading-relaxed">${quiz.explanation}</p>
+        `;
+      }
+      lucide.createIcons();
+    }
+
+    function toggleExamMode(enabled) {
+      isExamMode = enabled;
+      showToast(enabled ? "시험 모드 ON: 한국어 힌트가 숨겨집니다." : "시험 모드 OFF: 일반 학습 모드");
+    }
+
+    /* ==========================================================================
+       VOCABULARY & SRS REVIEW
+       ========================================================================== */
+    function saveWordToVocab(wordKey, exampleSentence = "") {
+      const exists = savedVocabList.find(v => v.word === wordKey);
+      if (exists) {
+        showToast(`'${wordKey}'은(는) 이미 단어장에 있습니다.`);
+        return;
+      }
+
+      savedVocabList.push({
+        word: wordKey,
+        example: exampleSentence,
+        addedAt: new Date().toISOString(),
+        reviewInterval: 1, // days: 1, 3, 7, 14
+        lastReviewed: null,
+        correctCount: 0
+      });
+
+      saveVocabToStorage();
+      renderVocabList();
+      showToast(`⭐ '${wordKey}' 단어가 내 단어장에 저장되었습니다!`);
+    }
+
+    function removeWordFromVocab(wordKey) {
+      savedVocabList = savedVocabList.filter(v => v.word !== wordKey);
+      saveVocabToStorage();
+      renderVocabList();
+      showToast(`'${wordKey}' 단어를 단어장에서 삭제했습니다.`);
+    }
+
+    function renderVocabList() {
+      const container = document.getElementById('vocabListContainer');
+      if (!container) return;
+
+      if (savedVocabList.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full py-12 text-center text-gray-400 bg-white rounded-2xl border border-gray-200">
+            <i data-lucide="bookmark" class="w-8 h-8 mx-auto mb-2 text-gray-300"></i>
+            <p class="text-sm font-bold text-gray-600">아직 저장된 단어가 없습니다.</p>
+            <p class="text-xs text-gray-400 mt-1">댓글 해부실에서 ⭐ 收藏 버튼을 눌러 인터넷 유행어를 저장해 보세요.</p>
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      container.innerHTML = savedVocabList.map(item => {
+        const info = VOCAB_DATABASE[item.word] || {
+          pinyin: "pīnyīn",
+          meaning: "중국 인터넷 표현",
+          literal: "글자 뜻"
+        };
+
+        return `
+          <div class="bg-white rounded-2xl border border-gray-200 p-5 card-shadow flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-[10px] font-mono bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded font-bold">
+                  SRS 간격: ${item.reviewInterval}일차
+                </span>
+                <button onclick="removeWordFromVocab('${item.word}')" class="text-gray-400 hover:text-rose-600 text-xs">
+                  <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
+
+              <div class="flex items-center space-x-2 my-1">
+                <span class="text-xl font-black text-gray-900 chinese-serif">${item.word}</span>
+                <span class="text-xs text-brand-red font-mono">${info.pinyin}</span>
+                <button onclick="playTts('${item.word}')" class="p-1 hover:bg-red-50 text-brand-red rounded">
+                  <i data-lucide="volume-2" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
+
+              <p class="text-xs font-bold text-gray-800 mt-1">${info.meaning}</p>
+              <p class="text-[11px] text-gray-500 mt-0.5">직역: ${info.literal}</p>
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
+              <button onclick="openWordDetailModal('${item.word}')" class="text-xs font-bold text-brand-red hover:underline">
+                어원·한자 분해 &rarr;
+              </button>
+              <div class="flex space-x-1">
+                <button onclick="reviewVocabWord('${item.word}', false)" class="px-2.5 py-1 bg-gray-100 hover:bg-gray-200 text-gray-700 text-[11px] font-bold rounded-lg transition">
+                  다시 보기 (再来)
+                </button>
+                <button onclick="reviewVocabWord('${item.word}', true)" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold rounded-lg transition">
+                  기억함 (认识)
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+      lucide.createIcons();
+    }
+
+    function reviewVocabWord(word, success) {
+      const item = savedVocabList.find(v => v.word === word);
+      if (!item) return;
+
+      if (success) {
+        item.correctCount = (item.correctCount || 0) + 1;
+        if (item.reviewInterval === 1) item.reviewInterval = 3;
+        else if (item.reviewInterval === 3) item.reviewInterval = 7;
+        else if (item.reviewInterval === 7) item.reviewInterval = 14;
+        showToast(`👍 '${word}' 정답! 복습 주기가 ${item.reviewInterval}일 후로 연장되었습니다.`);
+      } else {
+        item.reviewInterval = 1;
+        showToast(`🔁 '${word}' 복습 리셋: 내일 다시 복습 목록에 출제됩니다.`);
+      }
+      item.lastReviewed = new Date().toISOString();
+      saveVocabToStorage();
+      renderVocabList();
+    }
+
+    function startVocabFlashcards() {
+      if (savedVocabList.length === 0) {
+        showToast("단어장에 단어가 없습니다. 먼저 관심 있는 표현을 저장하세요!");
+        return;
+      }
+      showToast("플래시카드 학습 세션을 시작합니다.");
+      openWordDetailModal(savedVocabList[0].word);
+    }
+
+    /* ==========================================================================
+       FILTERS & SEARCH
+       ========================================================================== */
+    function filterCategory(category) {
+      document.querySelectorAll('.category-chip').forEach(btn => {
+        btn.classList.remove('bg-gray-900', 'text-white');
+        btn.classList.add('bg-white', 'text-gray-700');
+        if (btn.getAttribute('data-cat') === category) {
+          btn.classList.remove('bg-white', 'text-gray-700');
+          btn.classList.add('bg-gray-900', 'text-white');
+        }
+      });
+
+      const container = document.getElementById('homeTopicContainer');
+      if (!container) return;
+
+      if (category === 'ALL') {
+        container.innerHTML = TOPICS_DATA.map(topic => createTopicCardHtml(topic)).join('');
+      } else if (category === 'KOREA') {
+        const filtered = TOPICS_DATA.filter(t => t.isKoreaTopic);
+        container.innerHTML = filtered.map(topic => createTopicCardHtml(topic)).join('');
+      } else {
+        const filtered = TOPICS_DATA.filter(t => t.category === category);
+        container.innerHTML = filtered.map(topic => createTopicCardHtml(topic)).join('');
+      }
+      lucide.createIcons();
+    }
+
+    function applyHotFilter(category) {
+      const container = document.getElementById('hotFeedContainer');
+      if (!container) return;
+      if (category === 'ALL') {
+        container.innerHTML = TOPICS_DATA.map(t => createTopicCardHtml(t, true)).join('');
+      } else {
+        const filtered = TOPICS_DATA.filter(t => t.category === category);
+        container.innerHTML = filtered.map(t => createTopicCardHtml(t, true)).join('');
+      }
+      lucide.createIcons();
+    }
+
+    function filterCommentsByTone(tone) {
+      const container = document.getElementById('commentsLabContainer');
+      if (!container) return;
+      const allComments = [];
+      TOPICS_DATA.forEach(t => {
+        t.comments.forEach(c => allComments.push({ ...c, topicId: t.id, topicTitle: t.title, isKorea: t.isKoreaTopic }));
+      });
+
+      const filtered = tone === 'ALL' ? allComments : allComments.filter(c => c.tone === tone);
+      container.innerHTML = filtered.map(c => `
+        <div class="bg-white rounded-2xl border border-gray-200 p-5 card-shadow flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-bold text-gray-900">${c.author}</span>
+              <span class="badge-pill bg-gray-100 text-gray-700 font-bold">${c.toneEmoji} ${c.tone}</span>
+            </div>
+            <p class="font-bold text-gray-900 text-base chinese-serif">“${c.chinese}”</p>
+            <p class="text-xs text-gray-500 font-mono mb-2">${c.pinyin}</p>
+            <p class="text-xs text-gray-800 bg-gray-50 p-2.5 rounded-xl border border-gray-100 font-medium">${c.korean}</p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
+            <button onclick="openCommentDissectionById('${c.id}')" class="text-xs font-bold text-brand-red flex items-center space-x-1">
+              <span>댓글 해부실</span>
+              <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function handleGlobalSearch(query) {
+      const q = query.toLowerCase().trim();
+      if (!q) {
+        renderHomeTopics();
+        return;
+      }
+      const container = document.getElementById('homeTopicContainer');
+      const filtered = TOPICS_DATA.filter(t => 
+        t.title.toLowerCase().includes(q) || 
+        t.koreanTitle.toLowerCase().includes(q) ||
+        t.summary.toLowerCase().includes(q) ||
+        t.comments.some(c => c.chinese.toLowerCase().includes(q) || c.korean.toLowerCase().includes(q) || c.expressions.some(e => e.toLowerCase().includes(q)))
+      );
+      container.innerHTML = filtered.length > 0 
+        ? filtered.map(t => createTopicCardHtml(t)).join('')
+        : `<div class="col-span-full text-center py-10 text-gray-400 text-xs">검색어 '${query}'에 일치하는 핫토픽이 없습니다.</div>`;
+      lucide.createIcons();
+    }
+
+    function handleKoreaSearch(query) {
+      const q = query.toLowerCase().trim();
+      const container = document.getElementById('koreaFeedContainer');
+      const filtered = TOPICS_DATA.filter(t => t.isKoreaTopic && (
+        t.title.toLowerCase().includes(q) || 
+        t.koreanTitle.toLowerCase().includes(q) ||
+        t.summary.toLowerCase().includes(q) ||
+        t.comments.some(c => c.chinese.toLowerCase().includes(q) || c.korean.toLowerCase().includes(q))
+      ));
+      container.innerHTML = filtered.length > 0
+        ? filtered.map(t => createTopicCardHtml(t, true)).join('')
+        : `<div class="text-center py-10 text-gray-400 text-xs">한국 관련 이슈 검색 결과가 없습니다.</div>`;
+      lucide.createIcons();
+    }
+
+    /* ==========================================================================
+       TOAST UTILITY
+       ========================================================================== */
+    function showToast(message) {
+      const container = document.getElementById('toastContainer');
+      if (!container) return;
+      const toast = document.createElement('div');
+      toast.className = "bg-gray-900/95 text-white px-4 py-2.5 rounded-xl shadow-lg text-xs font-semibold flex items-center space-x-2 border border-gray-700 pointer-events-auto transition-all transform translate-y-2 opacity-0";
+      toast.innerHTML = `
+        <span class="w-2 h-2 rounded-full bg-brand-red"></span>
+        <span>${message}</span>
+      `;
+      container.appendChild(toast);
+      
+      requestAnimationFrame(() => {
+        toast.classList.remove('translate-y-2', 'opacity-0');
+      });
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => toast.remove(), 300);
+      }, 2500);
+    }
+  </script>
+</body>
+</html>
