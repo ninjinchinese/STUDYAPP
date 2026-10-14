@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>恁近热词现场 · NINJIN Daily Chinese Academy (제09기)</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Noto Sans KR, Noto Sans SC, Noto Serif SC -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Noto+Serif+SC:wght@600;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ninjin: {
+              orange: '#EA580C',
+              orangeLight: '#FFF7ED',
+              orangeHover: '#C2410C',
+              yellow: '#F59E0B',
+              yellowLight: '#FEF3C7',
+              warmBg: '#FAF7F2',
+              cardBg: '#FFFFFF',
+              charcoal: '#262626',
+              muted: '#737373',
+              border: '#F0EBE1',
+              koreaBlue: '#2563EB',
+              koreaBg: '#EFF6FF',
+              green: '#10B981'
+            }
+          },
+          fontFamily: {
+            sans: ['"Noto Sans KR"', '"Noto Sans SC"', 'sans-serif'],
+            serifSc: ['"Noto Serif SC"', 'serif'],
+            chinese: ['"Noto Sans SC"', '"PingFang SC"', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #FAF7F2;
+      color: #262626;
+      font-family: 'Noto Sans KR', 'Noto Sans SC', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    ruby {
+      ruby-position: over;
+      display: inline-flex;
+      flex-direction: column-reverse;
+      align-items: center;
+      vertical-align: bottom;
+      margin: 0 1.5px;
+      line-height: 1.15;
+    }
+    rt {
+      font-size: 0.62em;
+      color: #D97706;
+      font-weight: 600;
+      font-family: 'Noto Sans SC', sans-serif;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      margin-bottom: 2px;
+      user-select: none;
+      transition: all 0.15s ease-in-out;
+    }
+
+    body.hide-pinyin rt {
+      display: none !important;
+    }
+
+    .chinese-serif {
+      font-family: 'Noto Serif SC', serif;
+    }
+
+    .custom-scroll::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background-color: #E5E0D8;
+      border-radius: 9999px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background-color: transparent;
+    }
+
+    .ninjin-shadow {
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03), 0 1px 3px rgba(0, 0, 0, 0.02);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .ninjin-shadow:hover {
+      box-shadow: 0 6px 20px rgba(234, 88, 12, 0.07), 0 2px 6px rgba(0, 0, 0, 0.03);
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.2rem 0.6rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .flashcard-perspective {
+      perspective: 1400px;
+    }
+    .flashcard-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.65s cubic-bezier(0.34, 1.45, 0.64, 1);
+      transform-style: preserve-3d;
+    }
+    .flashcard-inner.flipped {
+      transform: rotateY(180deg);
+    }
+    .flashcard-front, .flashcard-back {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border-radius: 1.75rem;
+    }
+    .flashcard-back {
+      transform: rotateY(180deg);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased select-text">
+
+  <!-- Header Bar -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#F0EBE1] shadow-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-col md:flex-row md:items-center justify-between gap-3">
+      
+      <!-- Brand & Badges Area -->
+      <div class="flex items-center space-x-3.5">
+        <div class="relative w-12 h-12 rounded-2xl bg-[#FFF7ED] border border-[#FED7AA] flex items-center justify-center text-2xl shadow-xs flex-shrink-0 cursor-pointer" onclick="navigateTab('home')">
+          <span>🥕</span>
+          <span class="absolute bottom-1 right-1 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-white"></span>
+        </div>
+
+        <div>
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="chinese-serif text-2xl font-black text-gray-900 tracking-tight hover:text-ninjin-orange cursor-pointer transition" onclick="navigateTab('home')">
+              恁近热词现场
+            </span>
+            <span class="bg-[#EA580C] text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-xs">
+              HSK 5~9级 晨读特刊
+            </span>
+            <span class="bg-[#FEF3C7] text-[#92400E] border border-[#FDE68A] text-[11px] font-bold px-2.5 py-0.5 rounded-full flex items-center space-x-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#D97706] inline-block"></span>
+              <span>恁近中文研学社 (NINJIN)</span>
+            </span>
+          </div>
+          <div class="flex items-center space-x-2 mt-0.5 text-xs text-gray-500">
+            <span id="headerIssueBadge" class="bg-gray-100 text-gray-700 px-2 py-0.5 rounded font-mono text-[10px] font-bold">제09기 (2026.10.14)</span>
+            <span class="hidden sm:inline">중국 실시간 핫토픽 5선 & 촌철살인 神评论 50선 어학원 마스터 에디션</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Controls Area: Pinyin Toggle, TTS Speed -->
+      <div class="flex flex-wrap items-center gap-2 sm:gap-3 self-end md:self-center">
+        <button 
+          id="pinyinToggleBtn" 
+          onclick="togglePinyinDisplay()" 
+          class="px-3 py-1.5 rounded-xl border border-[#FDBA74] bg-[#FFF7ED] text-[#EA580C] text-xs font-bold flex items-center space-x-1.5 hover:bg-orange-100 transition shadow-xs"
+          title="중국어 글자 바로 위의 병음(Pinyin) 표시 토글"
+        >
+          <span class="w-4 h-4 rounded bg-[#EA580C] text-white flex items-center justify-center text-[10px] font-black">拼</span>
+          <span id="pinyinToggleText">글자 위 병음 ON</span>
+        </button>
+
+        <div class="flex items-center space-x-1 bg-gray-100/90 p-1 rounded-xl border border-gray-200 text-xs">
+          <button onclick="playSampleTts()" class="p-1 text-gray-500 hover:text-ninjin-orange rounded transition" title="원어민 발음 샘플">
+            <i data-lucide="volume-2" class="w-3.5 h-3.5"></i>
+          </button>
+          <button onclick="setSpeed(0.75)" id="speed-075" class="px-2 py-0.5 rounded-lg text-gray-600 font-semibold hover:bg-white transition text-[11px]">0.75x</button>
+          <button onclick="setSpeed(1.0)" id="speed-100" class="px-2 py-0.5 rounded-lg bg-white text-[#EA580C] font-bold shadow-2xs transition text-[11px]">1.0x</button>
+          <button onclick="setSpeed(1.25)" id="speed-125" class="px-2 py-0.5 rounded-lg text-gray-600 font-semibold hover:bg-white transition text-[11px]">1.25x</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Top Pill Navigation Bar -->
+  <div class="bg-white border-b border-[#F0EBE1] shadow-2xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5">
+      <nav class="flex items-center space-x-2 sm:space-x-3 overflow-x-auto custom-scroll text-xs font-bold">
+        <button onclick="navigateTab('home')" id="tab-nav-home" class="tab-pill-btn px-4 py-2 rounded-full bg-[#EA580C] text-white flex items-center space-x-1.5 flex-shrink-0 transition shadow-xs">
+          <span>🔥 今日热榜 (5대 핫토픽)</span>
+        </button>
+        <button onclick="filterArticles('CN')" id="tab-nav-cn" class="tab-pill-btn px-4 py-2 rounded-full bg-white text-gray-700 border border-gray-200 hover:border-gray-400 flex items-center space-x-1.5 flex-shrink-0 transition">
+          <span class="w-2 h-2 rounded-full bg-red-500"></span>
+          <span>中国相关 (중국 이슈 3선)</span>
+        </button>
+        <button onclick="filterArticles('KR')" id="tab-nav-kr" class="tab-pill-btn px-4 py-2 rounded-full bg-white text-gray-700 border border-gray-200 hover:border-blue-400 flex items-center space-x-1.5 flex-shrink-0 transition">
+          <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+          <span>韩国·中韩 (한류·사회 2선)</span>
+        </button>
+        <button onclick="navigateTab('vocab')" id="tab-nav-vocab" class="tab-pill-btn px-4 py-2 rounded-full bg-white text-gray-700 border border-gray-200 hover:border-yellow-400 flex items-center space-x-1.5 flex-shrink-0 transition">
+          <span>📙 今日词库 (어휘장 & 3D 플래시카드)</span>
+          <span id="navVocabTotalBadge" class="bg-[#F59E0B] text-white text-[10px] px-1.5 py-0.2 rounded-full font-bold">33</span>
+        </button>
+        <button onclick="navigateTab('quiz')" id="tab-nav-quiz" class="tab-pill-btn px-4 py-2 rounded-full bg-white text-gray-700 border border-gray-200 hover:border-emerald-400 flex items-center space-x-1.5 flex-shrink-0 transition">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <span>实战测验 (실전 퀴즈 10문항)</span>
+        </button>
+        <button onclick="navigateTab('listen')" id="tab-nav-listen" class="tab-pill-btn px-4 py-2 rounded-full bg-white text-gray-700 border border-gray-200 hover:border-purple-400 flex items-center space-x-1.5 flex-shrink-0 transition">
+          <span>🎧 听写挑战 (받아쓰기 챌린지)</span>
+        </button>
+        <button onclick="navigateTab('insight')" id="tab-nav-insight" class="tab-pill-btn px-4 py-2 rounded-full bg-white text-gray-700 border border-gray-200 hover:border-rose-400 flex items-center space-x-1.5 flex-shrink-0 transition">
+          <span>🌏 社会洞察 (중국·한중 비교 심층)</span>
+        </button>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Main Content Wrapper -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-5 space-y-6">
+
+    <!-- Xiehouyu Banner -->
+    <section id="banner-xiehouyu" class="bg-[#FFF7ED] rounded-3xl p-5 sm:p-6 border border-[#FED7AA] ninjin-shadow relative overflow-hidden">
+      <!-- Injected dynamically -->
+    </section>
+
+    <!-- Sub-Filter Bar (for Articles) -->
+    <div id="articlesControlBar" class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs border-b border-[#F0EBE1] pb-3">
+      <div class="flex items-center space-x-2">
+        <span class="text-gray-500 font-bold flex items-center space-x-1">
+          <i data-lucide="filter" class="w-3.5 h-3.5"></i>
+          <span>카테고리:</span>
+        </span>
+        <button onclick="filterArticles('ALL')" class="sub-filter-btn px-3 py-1 rounded-full bg-gray-900 text-white font-bold transition" data-filter="ALL">전체 토픽 (5선)</button>
+        <button onclick="filterArticles('CN')" class="sub-filter-btn px-3 py-1 rounded-full bg-white text-gray-700 border border-gray-300 hover:border-gray-500 font-medium transition" data-filter="CN">🇨🇳 중국 현지 핫이슈 (3선)</button>
+        <button onclick="filterArticles('KR')" class="sub-filter-btn px-3 py-1 rounded-full bg-white text-gray-700 border border-gray-300 hover:border-gray-500 font-medium transition" data-filter="KR">🇰🇷 한국·한중 관련 이슈 (2선)</button>
+      </div>
+
+      <div class="text-gray-600 font-medium">
+        총 <strong class="text-[#EA580C] font-bold" id="statArticleCount">5개</strong> 핫토픽 · 실전 神评论 <strong class="text-[#EA580C] font-bold" id="statCommentCount">50선</strong> 전수 해부
+      </div>
+    </div>
+
+    <!-- VIEW 1: ARTICLES -->
+    <section id="view-articles" class="space-y-8"></section>
+
+    <!-- VIEW 2: VOCABULARY -->
+    <section id="view-vocab" class="hidden space-y-6">
+      <div class="bg-white rounded-3xl p-6 border border-[#F0EBE1] ninjin-shadow">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-gray-100">
+          <div>
+            <h2 class="text-xl font-bold text-gray-900 flex items-center space-x-2">
+              <span>📙 今日词库 · HSK 5~9급 핵심 어휘 및 8대 어원·신조어 사전</span>
+            </h2>
+            <p class="text-xs text-gray-500 mt-1">
+              신조어, 관용구, 고사성어 전수 해부 및 인터랙티브 3D 플래시카드 복습 모드
+            </p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <div class="flex items-center bg-gray-100 p-1 rounded-2xl border border-gray-200 text-xs font-bold">
+              <button onclick="setVocabMode('flashcard')" id="vocabModeFlashcardBtn" class="px-3 py-1.5 rounded-xl bg-white text-[#EA580C] shadow-2xs flex items-center space-x-1.5 transition">
+                <span>🎴 3D 플래시카드 모드</span>
+              </button>
+              <button onclick="setVocabMode('grid')" id="vocabModeGridBtn" class="px-3 py-1.5 rounded-xl text-gray-600 hover:text-gray-900 flex items-center space-x-1.5 transition">
+                <span>📋 전체 목록 사전</span>
+              </button>
+            </div>
+            <button onclick="toggleMyVocabFilter()" id="myVocabOnlyBtn" class="px-3 py-1.5 bg-[#FEF3C7] text-[#92400E] border border-[#FDE68A] text-xs font-bold rounded-xl transition flex items-center space-x-1">
+              <i data-lucide="bookmark" class="w-3.5 h-3.5"></i>
+              <span>내 저장 단어만 (<span id="myVocabBadge">0</span>)</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap gap-1.5 my-4 text-xs font-medium" id="vocabFilterChips"></div>
+
+        <!-- 3D Flashcard Stage -->
+        <div id="flashcardContainer" class="space-y-4 py-2">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-orange-50/70 p-3.5 rounded-2xl border border-orange-200 text-xs">
+            <div class="flex items-center space-x-3">
+              <span class="badge-pill bg-[#EA580C] text-white font-mono font-bold px-2.5 py-0.5">
+                <span id="fcCurrentNum">1</span> / <span id="fcTotalNum">0</span>
+              </span>
+              <span class="text-gray-700 font-medium hidden sm:inline">
+                💡 카드를 터치하면 <strong>3D 카드 회전</strong>! (키보드 단축키: Space 카드 뒤집기, &larr;/&rarr; 이전/다음)
+              </span>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-lg font-bold text-[11px] flex items-center space-x-1">
+                <span>마스터:</span> <strong id="fcMemorizedCount">0</strong>
+              </span>
+              <span class="text-amber-800 bg-amber-100 px-2 py-0.5 rounded-lg font-bold text-[11px] flex items-center space-x-1">
+                <span>복습 예정:</span> <strong id="fcReviewCount">0</strong>
+              </span>
+              <button onclick="shuffleFlashcards()" class="px-2.5 py-1 bg-white text-gray-700 hover:text-[#EA580C] border border-gray-200 rounded-lg font-bold transition flex items-center space-x-1" title="카드 순서 랜덤 섞기">
+                <i data-lucide="shuffle" class="w-3.5 h-3.5"></i>
+                <span>무작위 섞기</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="flashcard-perspective w-full max-w-xl mx-auto h-[420px] sm:h-[430px] my-4 select-none">
+            <div id="flashcardElement" class="flashcard-inner cursor-pointer" onclick="toggleCardFlip()"></div>
+          </div>
+
+          <div class="max-w-xl mx-auto flex flex-col space-y-3">
+            <div class="grid grid-cols-2 gap-3">
+              <button onclick="markFlashcardKnown(false); event.stopPropagation();" class="py-2.5 px-4 bg-white hover:bg-rose-50 text-rose-600 border border-rose-200 rounded-2xl font-bold text-xs flex items-center justify-center space-x-1.5 shadow-2xs transition active:scale-98">
+                <i data-lucide="rotate-ccw" class="w-4 h-4 text-rose-500"></i>
+                <span>다시 복습하기 (헷갈림)</span>
+              </button>
+              <button onclick="markFlashcardKnown(true); event.stopPropagation();" class="py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-bold text-xs flex items-center justify-center space-x-1.5 shadow-xs transition active:scale-98">
+                <i data-lucide="check-circle" class="w-4 h-4"></i>
+                <span>마스터 완료 (외웠음)</span>
+              </button>
+            </div>
+
+            <div class="flex items-center justify-between pt-1">
+              <button onclick="prevFlashcard(); event.stopPropagation();" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-bold text-xs flex items-center space-x-1.5 transition">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                <span>이전 단어</span>
+              </button>
+              <button onclick="toggleCardFlip(); event.stopPropagation();" class="px-4 py-2 bg-[#FFF7ED] border border-[#FED7AA] text-[#EA580C] hover:bg-orange-100 rounded-xl font-bold text-xs flex items-center space-x-1.5 transition">
+                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                <span>카드 뒤집기 (3D Flip)</span>
+              </button>
+              <button onclick="nextFlashcard(); event.stopPropagation();" class="px-4 py-2 bg-gray-900 hover:bg-black text-white rounded-xl font-bold text-xs flex items-center space-x-1.5 transition">
+                <span>다음 단어</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vocab Grid View -->
+        <div id="vocabCardsGrid" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-2"></div>
+      </div>
+    </section>
+
+    <!-- VIEW 3: QUIZ -->
+    <section id="view-quiz" class="hidden space-y-6">
+      <div class="bg-white rounded-3xl p-6 border border-[#F0EBE1] ninjin-shadow space-y-5">
+        <div>
+          <h2 class="text-xl font-bold text-gray-900 flex items-center space-x-2">
+            <span>🟢 实战测验 · HSK 5~9급 네이티브 댓글 뉘앙스 실전 퀴즈 (10문항)</span>
+          </h2>
+          <p class="text-xs text-gray-500 mt-1">
+            성어, 신조어, 관용 표현, 문맥 속뜻과 문법 논리를 꿰뚫어 보는 종합 테스트
+          </p>
+        </div>
+        <div id="quizContainer" class="space-y-4"></div>
+      </div>
+    </section>
+
+    <!-- VIEW 4: DICTATION -->
+    <section id="view-listen" class="hidden space-y-6">
+      <div class="bg-white rounded-3xl p-6 border border-[#F0EBE1] ninjin-shadow space-y-5">
+        <div>
+          <h2 class="text-xl font-bold text-gray-900 flex items-center space-x-2">
+            <span>🎧 听写挑战 · 네이티브 실전 속도 받아쓰기 챌린지</span>
+          </h2>
+          <p class="text-xs text-gray-500 mt-1">
+            원어민 음성을 듣고 빈칸에 들어갈 한자나 어휘를 입력하세요.
+          </p>
+        </div>
+        <div id="dictationContainer" class="space-y-4"></div>
+      </div>
+    </section>
+
+    <!-- VIEW 5: SOCIAL INSIGHT (중국 및 한중 사회 분석) -->
+    <section id="view-insight" class="hidden space-y-6">
+      <div class="bg-white rounded-3xl p-6 sm:p-7 border border-[#F0EBE1] ninjin-shadow space-y-6">
+        <div class="border-b border-gray-100 pb-4">
+          <h2 class="text-xl font-bold text-gray-900 flex items-center space-x-2">
+            <span>🌏 今日中国与中韩观察 · 오늘의 뉴스로 읽는 사회·문화 심층 리포트</span>
+          </h2>
+          <p class="text-xs text-gray-500 mt-1">
+            단순 언어 학습을 넘어 현대 중국 청년 트렌드와 한중 양국의 정서적 교차점을 분석합니다.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- 중국 사회 청년 트렌드 관찰 -->
+          <div class="bg-orange-50/50 rounded-2xl p-5 border border-orange-200/80 space-y-4">
+            <h3 class="font-bold text-orange-950 text-base flex items-center space-x-2">
+              <span class="text-lg">🇨🇳</span>
+              <span>今日中国观察 (중국 사회·청년 트렌드 4대 핵심)</span>
+            </h3>
+            <ul class="space-y-3 text-xs text-gray-700 leading-relaxed">
+              <li class="p-3 bg-white rounded-xl border border-orange-100 shadow-2xs">
+                <strong class="text-gray-900 font-bold block mb-1">1. 엘리트 스포츠의 ‘자립형 프로 자본화’ 정착:</strong>
+                정친원의 연간 1,500만 위안 전담팀 유지비와 90%에 달하는 광고 후원 수익 구조는, 중국 체육이 과거 ‘거국체제(举国体制)’에서 벗어나 시장 자본과 스폰서십 기반의 프로 생태계로 안착했음을 상징합니다.
+              </li>
+              <li class="p-3 bg-white rounded-xl border border-orange-100 shadow-2xs">
+                <strong class="text-gray-900 font-bold block mb-1">2. Z세대 ‘다즈(搭子)’ 사교의 명암:</strong>
+                감정 노동에 지친 청년들의 초경량 목적형 관계 맺기(밥·운동 짝꿍)라는 순수한 수요에 기생해 음성적 불법 성매매 은어(纯绿·半绿)가 확산되자, 플랫폼의 알고리즘 규제와 사회적 정화가 시급한 화두로 떠올랐습니다.
+              </li>
+              <li class="p-3 bg-white rounded-xl border border-orange-100 shadow-2xs">
+                <strong class="text-gray-900 font-bold block mb-1">3. ‘호텔 자객’에 맞선 소비자 주권의 연대:</strong>
+                샤오잔 콘서트 특수를 틈타 10배 폭리와 일방 예약 취소를 자행한 숙박업계에 대해, 대형버스 대절과 찜질방 숙박 등 팬덤 중심의 집단 보이콧이 조직되며 강력한 소비자 저항권이 표출되었습니다.
+              </li>
+              <li class="p-3 bg-white rounded-xl border border-orange-100 shadow-2xs">
+                <strong class="text-gray-900 font-bold block mb-1">4. 현대 도시인의 고독과 아날로그 공동체 갈망:</strong>
+                방범 도어로 단절된 아파트 숲에서 고립된 현대인들이 《응팔》의 ‘밥상 나눔’과 골목길 온기에 눈물을 흘리는 현상은, 물질적 풍요 속 메말라가는 인간적 유대를 향한 깊은 향수를 보여줍니다.
+              </li>
+            </ul>
+          </div>
+
+          <!-- 한중 문화 비교 및 중국의 한국 시선 -->
+          <div class="bg-blue-50/50 rounded-2xl p-5 border border-blue-200/80 space-y-4">
+            <h3 class="font-bold text-blue-950 text-base flex items-center space-x-2">
+              <span class="text-lg">🇰🇷</span>
+              <span>中韩观察 (중국 네티즌 시선 & 문화 비교)</span>
+            </h3>
+            <ul class="space-y-3 text-xs text-gray-700 leading-relaxed">
+              <li class="p-3 bg-white rounded-xl border border-blue-100 shadow-2xs">
+                <strong class="text-gray-900 font-bold block mb-1">1. 아날로그 이웃 공동체 (골목길 vs 胡同·大院):</strong>
+                한국의 ‘쌍문동 반찬 나눔’은 중국 80·90년대 베이징의 후통(胡同) 및 국유기업 노동자 거주 단지인 대원(大院) 문화와 완벽히 공명합니다. “샤오밍아 밥 먹어라” 하고 골목으로 부르던 이웃 간의 온기가 양국 대중을 동시에 울렸습니다.
+              </li>
+              <li class="p-3 bg-white rounded-xl border border-blue-100 shadow-2xs">
+                <strong class="text-gray-900 font-bold block mb-1">2. 성숙해진 팬덤과 ‘意难平’의 페이소스:</strong>
+                현실 연인의 결별(혜리·류준열) 앞에서도 배우들의 사생활을 헐뜯지 않고 “드라마가 준 동화 같은 선물에 감사하고 각자의 자리에서 평안하길(各自安好)” 바라는 중국 팬들의 반응은 성숙한 K-드라마 소비 태도를 입증합니다.
+              </li>
+              <li class="p-3 bg-white rounded-xl border border-blue-100 shadow-2xs">
+                <strong class="text-gray-900 font-bold block mb-1">3. AI 윤리와 ‘선 넘은 노이즈마케팅’ 공분:</strong>
+                가상 아이돌의 가짜 임신 마케팅에 대해 한중 네티즌은 일제히 “여성의 실존적 고통인 임신과 경력단절을 클릭 장사 미끼로 썼다”며 국경 없는 연대 분노와 스밍 0회 보이콧을 선언했습니다.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-[#F0EBE1] py-8 text-center text-xs text-gray-500 space-y-2 mt-8">
+    <div class="max-w-7xl mx-auto px-4">
+      <p class="font-bold text-gray-800 tracking-wide">© 2026 NINJIN 중국어 (닌진중국어 · 恁近中文). All Rights Reserved.</p>
+      <p class="text-[11px] text-gray-400 max-w-2xl mx-auto leading-relaxed">
+        본 학습 웹앱의 디자인, 소프트웨어 구성 및 자체 제작 학습 콘텐츠는 닌진중국어(NINJIN 중국어 · 恁近中文)의 저작물입니다. 
+        사전 서면 허가 없는 무단 복제, 재배포 및 상업적 이용을 금합니다.
+      </p>
+    </div>
+  </footer>
+
+  <!-- MODALS -->
+  <!-- Comment Modal -->
+  <div id="commentModal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-5 overflow-y-auto">
+    <div class="bg-white w-full max-w-3xl rounded-3xl shadow-2xl border border-gray-200 overflow-hidden my-auto max-h-[92vh] flex flex-col">
+      <div class="px-6 py-4 bg-gray-900 text-white flex items-center justify-between flex-shrink-0">
+        <div class="flex items-center space-x-2">
+          <span class="w-3 h-3 rounded-full bg-[#EA580C]"></span>
+          <h3 class="font-bold text-sm tracking-wide">🔬 댓글 해부실 · 评论深度解剖实验室</h3>
+        </div>
+        <button onclick="closeCommentModal()" class="p-1.5 text-gray-400 hover:text-white rounded-full transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div id="commentModalBody" class="p-6 overflow-y-auto custom-scroll space-y-5"></div>
+    </div>
+  </div>
+
+  <!-- Word Modal -->
+  <div id="wordModal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+    <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-gray-200 overflow-hidden my-auto flex flex-col">
+      <div class="px-5 py-4 bg-[#FFF7ED] border-b border-[#FED7AA] flex items-center justify-between">
+        <div class="flex items-center space-x-2 text-[#9A3412] font-bold text-sm">
+          <i data-lucide="microscope" class="w-4 h-4 text-[#EA580C]"></i>
+          <span>词源研究室 & 汉字拆解</span>
+        </div>
+        <button onclick="closeWordModal()" class="text-gray-400 hover:text-gray-700 p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div id="wordModalBody" class="p-5 overflow-y-auto max-h-[80vh] custom-scroll space-y-4"></div>
+    </div>
+  </div>
+
+  <!-- AI Teacher Modal -->
+  <div id="aiTeacherModal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+    <div class="bg-white w-full max-w-xl rounded-3xl shadow-2xl border border-gray-200 overflow-hidden my-auto flex flex-col">
+      <div class="px-5 py-4 bg-gradient-to-r from-orange-600 to-[#EA580C] text-white flex items-center justify-between">
+        <div class="flex items-center space-x-2">
+          <i data-lucide="bot" class="w-5 h-5 text-orange-200"></i>
+          <span class="font-bold text-sm">AI 중국어 선생님 (问老师)</span>
+        </div>
+        <button onclick="closeAiModal()" class="text-white/75 hover:text-white p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div class="p-5 space-y-4 overflow-y-auto max-h-[75vh] custom-scroll">
+        <div class="bg-gray-50 p-3 rounded-xl border border-gray-200 text-xs">
+          <span class="text-gray-500 block mb-0.5 font-medium">질문 대상 문장:</span>
+          <p id="aiTargetSentence" class="font-bold text-gray-900 chinese-serif text-sm">--</p>
+        </div>
+        <div>
+          <p class="text-xs font-bold text-gray-700 mb-2">💡 빠른 질문 선택:</p>
+          <div class="flex flex-wrap gap-1.5" id="aiPresetButtons">
+            <button onclick="askAiQuestion('이 댓글은 비꼬는 것(反讽)인가요, 아니면 진심인가요?')" class="px-2.5 py-1 bg-gray-100 hover:bg-orange-50 rounded-lg text-xs text-gray-700 transition">😏 비꼬는 표현인가요?</button>
+            <button onclick="askAiQuestion('젊은 네티즌들이 쓰는 밈(梗)인가요? 어원은 어떻게 되나요?')" class="px-2.5 py-1 bg-gray-100 hover:bg-orange-50 rounded-lg text-xs text-gray-700 transition">🔥 젊은 세대 밈/어원은?</button>
+            <button onclick="askAiQuestion('한국인이 직관적으로 이해할 수 있는 한국어 관용구와 대조해 주세요.')" class="px-2.5 py-1 bg-gray-100 hover:bg-orange-50 rounded-lg text-xs text-gray-700 transition">🇰🇷 한국어 관용구 대조</button>
+            <button onclick="askAiQuestion('직장 상사나 공식적인 자리에서 쓰면 무례한가요?')" class="px-2.5 py-1 bg-gray-100 hover:bg-orange-50 rounded-lg text-xs text-gray-700 transition">⚠️ 주의할 상황은?</button>
+          </div>
+        </div>
+        <div id="aiResponseContainer" class="hidden p-4 bg-orange-50/70 border border-orange-200 rounded-2xl space-y-2">
+          <div class="flex items-center space-x-2 text-[#EA580C] text-xs font-bold">
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+            <span id="aiStatusLabel">AI 선생님의 해설:</span>
+          </div>
+          <div id="aiResponseText" class="text-xs text-gray-800 leading-relaxed space-y-2"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col space-y-2 pointer-events-none"></div>
+
+  <!-- APPLICATION JAVASCRIPT LOGIC & EDITION 09 DATA -->
+  <script>
+    // 1. BANNER DATA (제09기)
+    const BANNER_DATA = {
+      dateText: "2026년 10월 14일 (수요일) | 제09기 특간",
+      chineseRuby: "<ruby>姜<rt>jiāng</rt></ruby><ruby>太<rt>tài</rt></ruby><ruby>公<rt>gōng</rt></ruby><ruby>钓<rt>diào</rt></ruby><ruby>鱼<rt>yú</rt></ruby><span class=\"mx-1 text-gray-400\">——</span><ruby>愿<rt>yuàn</rt></ruby><ruby>者<rt>zhě</rt></ruby><ruby>上<rt>shàng</rt></ruby><ruby>钩<rt>gōu</rt></ruby>",
+      audioText: "姜太公钓鱼，愿者上钩",
+      koreanMeaning: "강태공이 낚시를 하다 —— 걸려들고 싶은 자만 걸려든다",
+      newsContext: "(미끼나 함정을 놓아두고 스스로 유혹에 빠지거나 어리석게 걸려들기를 기다림, 혹은 쌍방이 암묵적 동의 하에 벌이는 거래나 계략을 비유)"
+    };
+
+    // Helper: Dynamic Ruby generator for Chinese sentences + Pinyin
+    function makeRubyHtml(chineseText, pinyinText) {
+      if (!pinyinText) return chineseText;
+      const chars = Array.from(chineseText);
+      const syllables = pinyinText.split(/\s+/).filter(Boolean);
+      
+      let sylIdx = 0;
+      let html = "";
+      for (let i = 0; i < chars.length; i++) {
+        const ch = chars[i];
+        if (/[\u4e00-\u9fa5]/.test(ch)) {
+          const py = syllables[sylIdx] || "";
+          html += `<ruby>${ch}<rt>${py}</rt></ruby>`;
+          sylIdx++;
+        } else {
+          html += ch;
+        }
+      }
+      return html;
+    }
+
+    // 2. ARTICLES DATA (5대 핫토픽 & 50개 촌철살인 댓글)
+    const ARTICLES_DATA = [
+      {
+        id: "art-1",
+        code: "01",
+        country: "CN",
+        categoryText: "중국 스포츠·청년 엘리트·상업화",
+        date: "2026.10.14",
+        sources: "新浪体育 / 虎嗅网 / 联合早报",
+        titlePlain: "郑钦文三年狂赚4.74亿背后：海外参赛团队一天开销超5万，收入九成来自代言，职业体育‘高投入高产出’引爆全网热议",
+        titleRuby: "<ruby>郑<rt>Zhèng</rt></ruby><ruby>钦<rt>Qīn</rt></ruby><ruby>文<rt>wén</rt></ruby><ruby>三<rt>sān</rt></ruby><ruby>年<rt>nián</rt></ruby><ruby>狂<rt>kuáng</rt></ruby><ruby>赚<rt>zhuàn</rt></ruby>4.74<ruby>亿<rt>yì</rt></ruby><ruby>背<rt>bèi</rt></ruby><ruby>后<rt>hòu</rt></ruby>：<ruby>海<rt>hǎi</rt></ruby><ruby>外<rt>wài</rt></ruby><ruby>参<rt>cān</rt></ruby><ruby>赛<rt>sài</rt></ruby><ruby>团<rt>tuán</rt></ruby><ruby>队<rt>duì</rt></ruby><ruby>一<rt>yì</rt></ruby><ruby>天<rt>tiān</rt></ruby><ruby>开<rt>kāi</rt></ruby><ruby>销<rt>xiāo</rt></ruby><ruby>超<rt>chāo</rt></ruby>5<ruby>万<rt>wàn</rt></ruby>，<ruby>收<rt>shōu</rt></ruby><ruby>入<rt>rù</rt></ruby><ruby>九<rt>jiǔ</rt></ruby><ruby>成<rt>chéng</rt></ruby><ruby>来<rt>lái</rt></ruby><ruby>自<rt>zì</rt></ruby><ruby>代<rt>dài</rt></ruby><ruby>言<rt>yán</rt></ruby>",
+        titleKorean: "‘테니스 여제’ 정친원, 3년간 900억 원 수입의 이면: 전담팀 하루 유지비만 1,000만 원, 수입 90%가 광고 후원… 프로 스포츠 ‘하이 리스크 하이 리턴’ 방정식에 전 중국 주목",
+        summary: "2026년 차이나오픈(中网) 단식 우승으로 세계 정상급 반열에 오른 정친원의 누적 수입 4.74억 위안(약 900억 원) 중 순수 상금은 10%에 불과하며, 90% 이상이 14개 글로벌 브랜드의 장기 후원에서 발생했습니다. 동시에 전담팀 유지비가 하루 5만 위안, 연간 1,500만 위안에 육박한다는 사실이 알려지며 현대 프로 스포츠의 자립형 생태계가 집중 조명되었습니다.",
+        originalExcerptPlain: "新晋中网女单冠军郑钦文近三年总收入达4.74亿元人民币但其中近九成依赖商业代言，其教练团队每日海外开销超5万元、年养团队需1500万的账单曝光，撕开了高度职业化体育‘单靠奖金活不下去’的残酷现实引发全网深度剖析。",
+        originalExcerptRuby: "新晋中网女单冠军郑钦文近三年总收入达4.74亿元人民币，其海外教练团队每日开销超5万元，年养团队需1500万，撕开了高度职业化体育‘单靠奖金活不下去’的残酷现实。",
+        comments: [
+          {
+            id: "c1-1",
+            author: "网民1",
+            factOpinion: "의견/평가",
+            tone: "압도당한 경탄과 인정",
+            toneEmoji: "👏",
+            chinese: "一天开销五万多，换成普通打工人一天连利息都挣不出来；但也只有这种真金白银砸出来的顶级团队，才能在四大满贯的红土硬地上硬碰硬。",
+            pinyin: "Yì tiān kāixiāo wǔ wàn duō, huànchéng pǔtōng dǎgōngrén yì tiān lián lìxī dōu zhèng bù chūlai; dàn yě zhǐyǒu zhè zhǒng zhēnjīn-báiyín zá chūlai de dǐngjí tuánduì, cái néng zài sì dà mǎnguàn de hóngtǔ yìngdì shàng yìngpèngyìng.",
+            ruby: "一天开销五万多，换成普通打工人一天连利息都挣不出来；但也只有这种真金白银砸出来的顶级团队，才能在四大满贯的红土硬地上硬碰硬。",
+            korean: "하루 숨만 쉬어도 나가는 돈이 천만 원이라니 일반 직장인은 평생 상상도 못 할 액수네요. 하지만 이렇게 피 같은 거액(真金白银)을 쏟아부어 만든 정예 팀이 버텨주니까 메이저 결승에서 세계 최강자들과 정면 승부(硬碰硬)가 가능한 겁니다.",
+            literal: "하루 지출이 5만여 위안이니 보통 일하는 사람으로 치면 하루 이자조차 못 버는데; 오직 이런 진짜 금과 은을 쏟아부어 만든 정상급 팀이어야만 4대 그랜드슬램의 붉은 흙과 하드코트 위에서 정면 승부를 할 수 있다.",
+            grammar: "일반인의 일당과 프로 선수의 하루 팀 비용을 대조 / 潜台词: 세계 최고가 되기 위해선 세계 최고의 자본 투자가 선행되어야 한다.",
+            keywords: ["硬碰硬", "真金白银", "开销"]
+          },
+          {
+            id: "c1-2",
+            author: "网民2",
+            factOpinion: "의견/분석",
+            tone: "냉철한 현실 각성",
+            toneEmoji: "💡",
+            chinese: "以前以为拿金牌靠拼命，现在才知道顶级职业体育是一台精密的资本运转机；光有天赋没钱烧，连起跑线上的门票都买不起。",
+            pinyin: "Yǐqián yǐwéi ná jīnpái kào pīnmìng, xiànzài cái zhīdào dǐngjí zhíyè tǐyù shì yì tái jīngmì de zīběn yùnzhuǎnjī; guāng yǒu tiānfù méi qián shāo, lián qǐpǎoxiàn shàng de ménpiào dōu mǎi bu qǐ.",
+            ruby: "以前以为拿金牌靠拼命，现在才知道顶级职业体育是一台精密的资本运转机；光有天赋没钱烧，连起跑线上的门票都买不起。",
+            korean: "옛날엔 죽기 살기로 악바리처럼 뛰면 금메달 따는 줄 알았는데, 현대 프로 스포츠는 정밀하게 계산된 자본의 엔진이네요. 재능만 있고 때려 박을 자본(烧钱)이 없으면 출발선 입장권조차 못 끊습니다.",
+            literal: "예전엔 금메달 따는 게 목숨 거는 데 달린 줄 알았더니 지금에야 정상급 직업 체육이 정밀한 자본 운전 기계임을 알았으니; 타고난 재능만 있고 태울 돈이 없으면 출발선 입장표조차 살 수 없다.",
+            grammar: "‘拼命’과 ‘资本运转机’ 대조 / 潜台词: 순수한 열정만으로는 넘을 수 없는 프로 테니스의 계층 장벽.",
+            keywords: ["资本运转机", "烧钱", "起跑线"]
+          },
+          {
+            id: "c1-3",
+            author: "网民3",
+            factOpinion: "반박/사이다",
+            tone: "당당하고 거침없는 일침",
+            toneEmoji: "🔥",
+            chinese: "收入九成靠代言怎么了？商业价值本来就是竞技体育的一部分；有本事你让耐克劳力士也给你一年送几千万，酸什么酸？",
+            pinyin: "Shōurù jiǔ chéng kào dàiyán zěnme le? Shāngyè jiàzhí běnlái jiù shì jìngjì tǐyù de yí bùfen; yǒu běnshi nǐ ràng Nàikè Láolìshì yě gěi nǐ yì nián sòng jǐ qiān wàn, suān shénme suān?",
+            ruby: "收入九成靠代言怎么了？商业价值本来就是竞技体育的一部分；有本事你让耐克劳力士也给你一年送几千万，酸什么酸？",
+            korean: "수입의 90%가 광고 스폰서면 뭐 어때서요? 상업적 가치와 스타성도 실력의 일부입니다. 능력 있으면 나이키나 롤렉스가 매년 수백억씩 쥐여주게 만들어 보든가요. 왜 배 아파서 빈정댑니까(酸)?",
+            literal: "수입의 9할이 광고 대행에 기댄 게 어쨌단 말인가? 상업적 가치는 본래 경기 체육의 일부분이다; 재주가 있다면 당신이 나이키와 롤렉스가 당신에게도 1년에 수천만을 주게 하라, 왜 시기하는가?",
+            grammar: "수사학적 의문문으로 악플러 일침 / 潜台词: 최고 수준의 상업 가치는 최고 수준의 기량이 담보되어야 발생한다.",
+            keywords: ["代言", "酸", "有本事"]
+          },
+          {
+            id: "c1-4",
+            author: "网民4",
+            factOpinion: "찬사/지지",
+            tone: "자부심과 확신",
+            toneEmoji: "✨",
+            chinese: "自负盈亏才是真正的大女主剧本，不用纳税人的钱，打出来的每一分成绩、挣到的每一分代言都干干净净、理直气壮。",
+            pinyin: "Zìfù-yíngkuī cái shì zhēnzhèng de dà nǚzhǔ jùběn, bú yòng nàshuìrén de qián, dǎ chūlai de měi yì fēn chéngjì, zhèng dào de měi yì fēn dàiyán dōu gāngān-jìngjìng, lǐzhí-qìzhuàng.",
+            ruby: "自负盈亏才是真正的大女主剧本，不用纳税人的钱，打出来的每一分成绩、挣到的每一分代言都干干净净、理直气壮。",
+            korean: "국가 세금 1원도 안 축내고 온전히 자립 경영(自负盈亏)으로 일어선 게 진짜 현실판 '알파우먼(大女主)'이죠. 라켓으로 따낸 모든 트로피와 광고비 앞에 한 점 부끄럼 없이 당당합니다(理直气壮).",
+            literal: "스스로 이익과 손실을 감당함이야말로 진정한 대여주인공 대본이니, 납세자의 돈을 쓰지 않고 쳐서 만들어낸 모든 성적과 번 모든 광고비가 깨끗하고 떳떳하다.",
+            grammar: "成语 理直气壮 활용 / 潜台词: 시장 경제 원리에 기반한 스포츠맨십이 가장 투명하다.",
+            keywords: ["自负盈亏", "大女主", "理直气壮"]
+          },
+          {
+            id: "c1-5",
+            author: "网民5",
+            factOpinion: "분석/찬사",
+            tone: "단호한 찬탄",
+            toneEmoji: "💎",
+            chinese: "伤停十个月没打比赛，商业代言一个都没掉，这就是李娜之后内娱和体育圈唯一的全球硬通货，资本的眼睛比谁都毒。",
+            pinyin: "Shāngtíng shí gè yuè méi dǎ bǐsài, shāngyè dàiyán yí gè dōu méi diào, zhè jiù shì Lǐ Nà zhīhòu nèiyú hé tǐyùquān wéiyī de quánqiú yìngtōnghuò, zīběn de yǎnjing bǐ shéi dōu dú.",
+            ruby: "伤停十个月没打比赛，商业代言一个都没掉，这就是李娜之后内娱和体育圈唯一的全球硬通货，资本的眼睛比谁都毒。",
+            korean: "부상으로 10개월 동안 코트도 못 밟았는데 스폰서 계약이 단 하나도 안 끊겼습니다. 리나 이후 중국 스포츠계에서 독보적인 '글로벌 안전자산(硬通货)'이란 뜻이죠. 자본의 눈은 귀신보다 정확합니다.",
+            literal: "부상으로 10개월을 멈추고 경기를 뛰지 않았는데 상업 광고가 하나도 떨어지지 않았으니 이것이 바로 리나 이후 유일한 글로벌 기축통화이며 자본의 눈은 누구보다 독하다.",
+            grammar: "관용구 ‘眼睛毒’(안목이 날카롭다) 구사 / 潜台词: 진짜 월드클래스는 일시적 슬럼프에도 가치가 훼손되지 않는다.",
+            keywords: ["硬通货", "眼睛毒", "伤停"]
+          },
+          {
+            id: "c1-6",
+            author: "网民6",
+            factOpinion: "사회/고발",
+            tone: "무거운 현실 직시",
+            toneEmoji: "⚠️",
+            chinese: "一天五万块只是冰山一角，从四岁开始打网球，父母卖房抵押贷款几千万砸进去，这是一场普通中产家庭根本玩不起的豪赌。",
+            pinyin: "Yì tiān wǔ wàn kuài zhǐ shì bīngshān yì jiǎo, cóng sì suì kāishǐ dǎ wǎngqiú, fùmǔ màifáng dǐyā dàikuǎn jǐ qiān wàn zá jìnqu, zhè shì yì chǎng pǔtōng zhōngchǎn jiātíng gēnběn wán bu qǐ de háodǔ.",
+            ruby: "一天五万块只是冰山一角，从四岁开始打网球，父母卖房抵押贷款几千万砸进去，这是一场普通中产家庭根本玩不起的豪赌。",
+            korean: "하루 5만 위안은 빙산의 일각(冰山一角)입니다. 4살 때부터 집 팔고 수십억 대출받아 쏟아부은 부모의 투자가 있었죠. 이건 평범한 중산층은 엄두도 못 낼 인생을 건 거대한 도박(豪赌)입니다.",
+            literal: "하루 5만 위안은 빙산의 모서리일 뿐이니 4세부터 테니스를 쳐서 부모가 집을 팔고 담보대출 수천만을 쏟아부었으니 보통 중산층 가정이 도저히 감당할 수 없는 거대한 도박이다.",
+            grammar: "가능보어 부정형 ‘玩不起’ 구사 / 潜台词: 프로 테니스는 엄청난 가문 자본의 뒷받침 없이는 진입조차 불가능하다.",
+            keywords: ["冰山一角", "豪赌", "玩不起"]
+          },
+          {
+            id: "c1-7",
+            author: "网民7",
+            factOpinion: "평가/통찰",
+            tone: "깊은 통찰과 감탄",
+            toneEmoji: "🎯",
+            chinese: "看到郑钦文的团队配置才明白什么叫专业，体能师、康复师、战术分析师各司其职，现代体育比的早就不只是运动员肉体了。",
+            pinyin: "Kàndào Zhèng Qīnwén de tuánduì pèizhì cái míngbai shénme jiào zhuānyè, tǐnéngshī, kāngfùshī, zhànshù fēnxīshī gè sī qí zhí, xiàndài tǐyù bǐ de zǎojiù bù zhǐ shì yùndòngyuán ròutǐ le.",
+            ruby: "看到郑钦文的团队配置才明白什么叫专业，体能师、康复师、战术分析师各司其职，现代体育比的早就不只是运动员肉体了。",
+            korean: "정친원의 전담팀 라인업을 보니 진정한 프로페셔널이 뭔지 알겠네요. 트레이너, 재활 닥터, 전술 분석관이 각자 맡은 바(各司其职)를 철저히 해냅니다. 현대 스포츠는 선수의 신체 능력만 겨루는 게 아닙니다.",
+            literal: "정친원의 팀 배치를 보고서야 무엇이 전문적인지 깨달았으니 체능사, 재활사, 전술분석사가 각자 제 직분을 다하니 현대 체육이 겨루는 것은 일찍이 선수 육체만이 아니게 되었다.",
+            grammar: "성어 各司其职 활용 / 潜台词: 현대 프로 승부는 선수를 둘러싼 과학 시스템의 격돌이다.",
+            keywords: ["各司其职", "配置", "康复师"]
+          },
+          {
+            id: "c1-8",
+            author: "网民8",
+            factOpinion: "비판/일침",
+            tone: "맵찬 질타와 반박",
+            toneEmoji: "👊",
+            chinese: "那些叫嚣着‘拿了那么多钱为什么不捐出来’的键盘侠，怎么不算算人家一年要养活多少个家庭的就业？这叫良性商业生态！",
+            pinyin: "Nà xiē jiàoxiāozhe ‘ná le nàme duō qián wèishénme bù juān chūlai’ de jiànpánxiá, zěnme bú suànsuan rénjiā yì nián yào yǎnghuo duōshao gè jiātíng de jiùyè? Zhè jiào liángxìng shāngyè shēngtài!",
+            ruby: "那些叫嚣着‘拿了那么多钱为什么不捐出来’的键盘侠，怎么不算算人家一年要养活多少个家庭的就业？这叫良性商业生态！",
+            korean: "돈 많이 벌었으니 기부하라고 도덕적 훈계질(键盘侠)하는 악플러들은, 그녀가 매년 전담팀을 고용해 얼마나 많은 가정을 먹여 살리는지는 계산 안 해보나요? 이게 바로 건강한 상업 생태계입니다!",
+            literal: "‘그렇게 많은 돈을 벌었으면서 왜 기부하지 않는가’ 떠들어대는 키보드 협객들은 왜 그녀가 1년에 얼마나 많은 가정의 취업을 먹여 살리는지 셈해보지 않는가? 이것이 바로 양호한 상업 생태계다!",
+            grammar: "신조어 键盘侠 풍자 / 潜台词: 기업가적 프로 선수의 소비와 투자는 그 자체로 사회적 기여다.",
+            keywords: ["叫嚣", "键盘侠", "良性生态"]
+          },
+          {
+            id: "c1-9",
+            author: "网民9",
+            factOpinion: "평가/예찬",
+            tone: "웅장한 서사와 격려",
+            toneEmoji: "🌟",
+            chinese: "从李娜到郑钦文，中国网球的崛起撕开了一条路：真正的国际范儿不需要在温室里被精心呵护，要在风雨里自己给自己挣饭吃。",
+            pinyin: "Cóng Lǐ Nà dào Zhèng Qīnwén, Zhōngguó wǎngqiú de juéqǐ sīkāi le yì tiáo lù: Zhēnzhèng de guójì fànr bù xūyào zài wēnshì lǐ bèi jīngxīn hēhù, yào zài fēngyǔ lǐ zìjǐ gěi zìjǐ zhèng fàn chī.",
+            ruby: "从李娜到郑钦文，中国网球的崛起撕开了一条路：真正的国际范儿不需要在温室里被精心呵护，要在风雨里自己给自己挣饭吃。",
+            korean: "리나에서 정친원으로 이어진 테니스의 도약은 새로운 길을 열었습니다. 진정한 월드클래스(国际范儿)는 온실 속 화초처럼 보호받는 게 아니라, 비바람 속에서 제 손으로 밥벌이를 해내는 겁니다.",
+            literal: "리나부터 정친원까지 중국 테니스의 굴기는 한 길을 찢어 열었으니: 진정한 국제적 품격은 온실 속에서 정성스레 보살펴질 필요가 없고 비바람 속에서 스스로 자신에게 밥을 벌어먹여 주어야 한다.",
+            grammar: "온실(温室)과 비바람(风雨) 대조 / 潜台词: 독립성과 프로의식이 진정한 글로벌 경쟁력을 낳는다.",
+            keywords: ["国际范儿", "呵护", "挣饭吃"]
+          },
+          {
+            id: "c1-10",
+            author: "网民10",
+            factOpinion: "찬탄/전망",
+            tone: "벅찬 감동과 찬탄",
+            toneEmoji: "🚀",
+            chinese: "4.74亿不是终点而是新起点，郑钦文让中国年轻一代看到了：靠自己的硬核实力去征服全世界，是多么酷的一件事。",
+            pinyin: "4.74 yì bú shì zhōngdiǎn ér shì xīn qǐdiǎn, Zhèng Qīnwén ràng Zhōngguó niánqīng yídài kàndào le: Kào zìjǐ de yìnghé shílì qù zhēngfú quán shìjiè, shì duōme kù de yí jiàn shì.",
+            ruby: "4.74亿不是终点而是新起点，郑钦文让中国年轻一代看到了：靠自己的硬核实力去征服全世界，是多么酷的一件事。",
+            korean: "900억 원의 수입은 끝이 아니라 새로운 출발점입니다. 정친원은 중국 청년들에게 확실히 보여주었네요. 오직 자신의 독보적 실력(硬核实力)만으로 전 세계를 정복한다는 게 얼마나 가슴 뛰고 멋진 일인지를요.",
+            literal: "4.74억은 종점이 아니라 새로운 출발점이니 정친원은 중국 젊은 일대로 하여금 보게 했으니: 자신의 하드코어 실력에 기대어 전 세계를 정복하는 것이 얼마나 멋진 일인가를.",
+            grammar: "‘不是……而是……’ 구문 / 潜台词: 실력과 프로정신으로 세계의 정점에 선 청년 영웅에 대한 헌사.",
+            keywords: ["硬核实力", "征服", "起点"]
+          }
+        ]
+      },
+      {
+        id: "art-2",
+        code: "02",
+        country: "CN",
+        categoryText: "중국 청년 사회·사교 문화 변질·사회 고발",
+        date: "2026.10.14",
+        sources: "观察者网 / 羊城晚报 / 新快报",
+        titlePlain: "“找搭子”暗藏灰色交易：社交平台有偿陪伴用“纯绿、半绿”暗语引流，500多名小姐姐可选引发全网怒斥‘把年轻人的孤独当摇钱树’",
+        titleRuby: "“<ruby>找<rt>Zhǎo</rt></ruby><ruby>搭<rt>dā</rt></ruby><ruby>子<rt>zi</rt></ruby>”<ruby>暗<rt>àn</rt></ruby><ruby>藏<rt>cáng</rt></ruby><ruby>灰<rt>huī</rt></ruby><ruby>色<rt>sè</rt></ruby><ruby>交<rt>jiāo</rt></ruby><ruby>易<rt>yì</rt></ruby>：<ruby>社<rt>shè</rt></ruby><ruby>交<rt>jiāo</rt></ruby><ruby>平<rt>píng</rt></ruby><ruby>台<rt>tái</rt></ruby><ruby>有<rt>yǒu</rt></ruby><ruby>偿<rt>cháng</rt></ruby><ruby>陪<rt>péi</rt></ruby><ruby>伴<rt>bàn</rt></ruby><ruby>用<rt>yòng</rt></ruby>“<ruby>纯<rt>chún</rt></ruby><ruby>绿<rt>lǜ</rt></ruby>、<ruby>半<rt>bàn</rt></ruby><ruby>绿<rt>lǜ</rt></ruby>”<ruby>暗<rt>àn</rt></ruby><ruby>语<rt>yǔ</rt></ruby><ruby>引<rt>yǐn</rt></ruby><ruby>流<rt>liú</rt></ruby>",
+        titleKorean: "소셜미디어 ‘다즈(搭子, 짝꿍)’ 사교의 어두운 변질: ‘순녹·반녹’ 은어로 유상 동행 유인하고 500명 대기… ‘청년의 외로움을 착취하는 회색 범죄’ 전 국민 분노",
+        summary: "Z세대의 가벼운 취향 기반 관계였던 '다즈(搭子)' 문화가 음성적인 성매매 및 주탁(酒托, 바가지 술집) 사기의 온상으로 악용되고 있습니다. '순녹(纯绿, 스킨십 없는 동행)'과 '반녹(半绿, 스킨십 허용)' 등의 은어로 알고리즘 필터링을 우회하는 범죄 카르텔에 대해 청년층의 분노가 들끓고 있습니다.",
+        originalExcerptPlain: "原本主打饭搭子、运动搭子的年轻化社交形式近期被曝暗藏有偿陪侍、酒托欺诈与灰色交易，黑灰产利用‘纯绿’（纯陪伴）与‘半绿’（允许肢体接触）等暗语在社交平台明目张胆引流，引发全网对新型涉黄陷阱与扭曲孤独经济的强烈声讨。",
+        originalExcerptRuby: "年轻化社交‘找搭子’暗藏有偿陪侍与酒托欺诈，黑灰产利用‘纯绿’与‘半绿’等暗语明目张胆引流，引发全网声讨。",
+        comments: [
+          {
+            id: "c2-1",
+            author: "网民1",
+            factOpinion: "비판/풍자",
+            tone: "극도의 혐오와 분노",
+            toneEmoji: "🤬",
+            chinese: "好好的饭搭子、旅游搭子，硬生生被这帮灰产搞成了‘皮条搭子’，真是应了那句话：林子大了，什么鸟都想出来卖。",
+            pinyin: "Hǎohāo de fàndāzi, lǚyóu dāzi, yìngshēngshēng bèi zhè bāng huīchǎn gǎo chéng le ‘pítiáo dāzi’, zhēn shì yīng le nà jù huà: Línzi dà le, shénme niǎo dōu xiǎng chūlái mài.",
+            ruby: "好好的饭搭子、旅游搭子，硬生生被这帮灰产搞成了‘皮条搭子’，真是应了那句话：林子大了，什么鸟都想出来卖。",
+            korean: "멀쩡하고 건전했던 밥 친구, 여행 친구 문화를 이 파렴치한 범죄 조직들이 기어코 '성매매 알선(皮条)'으로 물을 흐려놓네요. 그야말로 '숲이 넓으니 별의별 잡새가 다 꼬인다'는 속담 그대로입니다.",
+            literal: "멀쩡하던 밥 짝꿍이 뚜쟁이 짝꿍으로 변질되었으니 진짜 그 말에 딱 들어맞는다: 숲이 크니 온갖 새들이 다 나와서 몸을 팔려 한다.",
+            grammar: "‘硬生生’(기어코/고스란히)과 속담 비틀기 / 潜台词: 건전한 청년 문화를 더럽히는 불법 브로커들을 뿌리 뽑아야 한다.",
+            keywords: ["灰产", "拉皮条", "硬生生"]
+          },
+          {
+            id: "c2-2",
+            author: "网民2",
+            factOpinion: "비판/조소",
+            tone: "통렬한 빈정거림과 조소",
+            toneEmoji: "😒",
+            chinese: "还整出‘纯绿、半绿’这种黑话，把违法交易包装得跟有机蔬菜似的，做贼心虚到了连说句人话都不敢的程度。",
+            pinyin: "Hái zhěng chū ‘chúnlǜ, bànlǜ’ zhè zhǒng hēihuà, bǎ wéifǎ jiāoyì bāozhuāng de gēn yǒujī shūcài shìde, zuòzéi-xīnxū dào le lián shuō jù rénhuà dōu bù gǎn de chéngdù.",
+            ruby: "还整出‘纯绿、半绿’这种黑话，把违法交易包装得跟有机蔬菜似的，做贼心虚到了连说句人话都不敢的程度。",
+            korean: "'순녹'이니 '반녹'이니 은어 지어내서 불법 성매매를 유기농 채소마냥 포장하는 꼴이라니요. 도둑이 제 발 저려서(做贼心虚) 떳떳하게 사람 말도 못 뱉는 비겁한 작태입니다.",
+            literal: "‘순녹, 반녹’ 같은 은어를 지어내어 불법 거래를 유기농 채소처럼 포장하니 도둑이 제 발 저려 사람 말 한마디조차 감히 하지 못하는 지경이다.",
+            grammar: "성어 做贼心虚 구사 / 潜台词: 은어로 숨긴다고 해서 추악한 범죄의 본질이 가려지지 않는다.",
+            keywords: ["黑话", "做贼心虚", "包装"]
+          },
+          {
+            id: "c2-3",
+            author: "网民3",
+            factOpinion: "사회/고발",
+            tone: "한탄과 준엄한 규탄",
+            toneEmoji: "💔",
+            chinese: "现代年轻人不过是想找个饭友缓解一下孤独，结果点开全是明码标价的陷阱，把孤独当摇钱树的资本真是毫无底线。",
+            pinyin: "Xiàndài niánqīngrén búguò shì xiǎng zhǎo gè fànyǒu huǎnjiě yíxià gūdú, jiéguǒ diǎnkāi quán shì míngmǎ-biāojià de xiànjǐng, bǎ gūdú dāng yáoqiánshù de zīběn zhēn shì háowú dǐxiàn.",
+            ruby: "现代年轻人不过是想找个饭友缓解一下孤独，结果点开全是明码标价的陷阱，把孤独当摇钱树的资本真是毫无底线。",
+            korean: "요즘 젊은이들은 그저 밥 한 끼 같이 먹으며 외로움 좀 달래려 했을 뿐인데, 앱을 열면 온통 가격표 붙은 지뢰밭이네요. 청년들의 고독을 현금 인출기(摇钱树) 삼는 악덕 자본은 도덕적 마지노선도 없습니까?",
+            literal: "젊은이는 밥 친구를 찾아 고독을 완화하고 싶었을 뿐인데 전부 가격표가 붙은 함정이니 고독을 돈나무로 삼는 자본은 아무런 마지노선이 없다.",
+            grammar: "‘摇钱树’(돈나무/화수분) 은유 / 潜台词: 외로운 사회적 약자의 정서를 약탈하는 비윤리적 비즈니스 규탄.",
+            keywords: ["摇钱树", "明码标价", "毫无底线"]
+          },
+          {
+            id: "c2-4",
+            author: "网民4",
+            factOpinion: "비판/통찰",
+            tone: "냉소적인 꿰뚫어 봄",
+            toneEmoji: "🕵️",
+            chinese: "500多名小姐姐在线选？说白了就是把以前洗浴中心那一套搬到了小红书上，换汤不换药的黄色灰产又在借尸还魂。",
+            pinyin: "Wǔbǎi duō míng xiǎojiějie zàixiàn xuǎn? Shuōbáile jiù shì bǎ yǐqián xǐyù zhōngxīn nà yí tào bān dào le Xiǎohóngshū shàng, huàntāng-búhuànyào de huángsè huīchǎn yòu zài jièshī-huánhún.",
+            ruby: "500多名小姐姐在线选？说白了就是把以前洗浴中心那一套搬到了小红书上，换汤不换药的黄色灰产又在借尸还魂。",
+            korean: "500명 넘는 아가씨가 실시간 대기 중이라고요? 까놓고 말해서 옛날 음란 안마시술소 판을 소셜미디어로 옮겨온 것에 불과합니다. 껍데기만 바꾼 성매매 카르텔이 다시 좀비처럼 환생(借尸还魂)했네요.",
+            literal: "500여 명의 아가씨가 온라인 대기 중이라고? 까놓고 말해 과거 사우나 안마방 수법을 샤오홍슈로 옮겨왔을 뿐이니 탕만 바꾸고 약은 안 바꾼 황색 음지 산업이 또 시체를 빌려 환생한다.",
+            grammar: "성어 换汤不换药와 借尸还魂 결합 / 潜台词: 플랫폼만 바뀌었을 뿐 구시대 불법 성매매 조직이다.",
+            keywords: ["换汤不换药", "借尸还魂", "说白了"]
+          },
+          {
+            id: "c2-5",
+            author: "网民5",
+            factOpinion: "책임 추궁",
+            tone: "날카로운 플랫폼 질타",
+            toneEmoji: "🚨",
+            chinese: "平台大数据天天吹AI算法多先进，违禁词封得比谁都快，结果这种打擦边球的有偿中介在眼皮底下横行，分明是‘揣着明白装糊涂’。",
+            pinyin: "Píngtái dàshùjù tiāntiān chuī AI suànfǎ duō xiānjìn, wéijìncí fēng de bǐ shéi dōu kuài, jiéguǒ zhè zhǒng dǎ cābiānqiú de yǒucháng zhōngjiè zài yǎnpídǐxia héngxíng, fēnmíng shì ‘chuāizhe míngbai zhuāng hútu’.",
+            ruby: "平台大数据天天吹AI算法多先进，违禁词封得比谁都快，结果这种打擦边球的有偿中介在眼皮底下横行，分明是‘揣着明白装糊涂’。",
+            korean: "플랫폼들은 맨날 최첨단 AI 알고리즘 자랑하고 금지어는 귀신같이 잡으면서, 이런 저질 불법 중개는 눈앞에서 버젓이 판을 치게 두나요? 뻔히 다 알면서 트래픽 때문에 모른 척 눈감아주는(揣着明白装糊涂) 겁니다.",
+            literal: "플랫폼은 AI 알고리즘을 떠벌리고 금지어는 빠르게 차단하면서 이런 선을 넘나드는 유상 중개가 눈앞에서 횡행하니 분명 속으로는 알면서 멍청한 척하는 것이다.",
+            grammar: "‘打擦边球’와 ‘揣着明白装糊涂’ 구사 / 潜台词: 플랫폼이 트래픽 욕심 때문에 불법을 방조한다.",
+            keywords: ["打擦边球", "揣着明白装糊涂"]
+          },
+          {
+            id: "c2-6",
+            author: "网民6",
+            factOpinion: "가치 정의",
+            tone: "진지하고 단호한 일침",
+            toneEmoji: "🤝",
+            chinese: "真正的搭子是精神AA、去目的化的互相陪伴，一旦扯上了明码标价的金钱交易，那就是对人际交往最赤裸裸的亵渎。",
+            pinyin: "Zhēnzhèng de dāzi shì jīngshén AA, qù mùdìhuà de hùxiāng péibàn, yídàn chě shàng le míngmǎ-biāojià de jīnqián jiāoyì, nà jiù shì duì rénjì jiāowǎng zuì chīluǒluǒ de xièdú.",
+            ruby: "真正的搭子是精神AA、去目的化的互相陪伴，一旦扯上了明码标价的金钱交易，那就是对人际交往最赤裸裸的亵渎。",
+            korean: "진짜 '다즈(搭子)'의 본질은 각자 계산(精神AA)하고 어떠한 꿍꿍이도 없이 순수하게 곁을 지켜주는 겁니다. 거기에 돈거래와 가격표가 붙는 순간, 인간관계에 대한 가장 노골적인 모독(赤裸裸的亵渎)으로 전락합니다.",
+            literal: "진정한 짝꿍은 정신적 더치페이이자 탈목적화된 상호 동반인데 일단 가격표 붙은 금전 거래와 얽히는 순간 대인관계에 대한 가장 적나라한 모독이다.",
+            grammar: "‘精神AA’(정신적 독립성) 개념 제시 / 潜台词: 돈으로 오염된 관계는 결코 진정한 우정이 될 수 없다.",
+            keywords: ["精神AA", "赤裸裸", "亵渎"]
+          },
+          {
+            id: "c2-7",
+            author: "网民7",
+            factOpinion: "경고/조언",
+            tone: "현실적 경고와 당부",
+            toneEmoji: "🛑",
+            chinese: "这种挂羊头卖狗肉的套路，最后不是涉黄被拘留，就是被引流到黑酒吧当冤大头宰割，年轻人千万别被好奇心害惨了。",
+            pinyin: "Zhè zhǒng guà yángtóu mài gǒuròu de tàolù, zuìhòu bú shì shèhuáng bèi jūliú, jiù shì bèi yǐnliú dào hēi jiǔbā dāng yuāndàtóu zǎigē, niánqīngrén qiānwàn bié bèi hàoqíxīn hài cǎn le.",
+            ruby: "这种挂羊头卖狗肉的套路，最后不是涉黄被拘留，就是被引流到黑酒吧当冤大头宰割，年轻人千万别被好奇心害惨了。",
+            korean: "양 머리 걸어놓고 개고기 파는(挂羊头卖狗肉) 사기 수법입니다. 끝은 뻔하죠. 성매매로 유치장 신세 지거나, 바가지 술집으로 끌려가 호구(冤大头)처럼 탈탈 털릴 뿐입니다. 호기심에 패가망신하지 마세요!",
+            literal: "양 머리를 걸고 개고기를 파는 수작은 마지막에 음란물 연루로 구류 처분을 받지 않으면 불법 주점으로 유인되어 호구로서 도살당할 뿐이다.",
+            grammar: "‘挂羊头卖狗肉’와 ‘冤大头’ 대비 / 潜台词: 음성 사교의 끝은 범죄 피해나 법적 처벌이다.",
+            keywords: ["挂羊头卖狗肉", "冤大头", "宰割"]
+          },
+          {
+            id: "c2-8",
+            author: "网民8",
+            factOpinion: "사법 촉구",
+            tone: "정의로운 격분과 단호함",
+            toneEmoji: "⚖️",
+            chinese: "打着陪伴的幌子干着皮条的勾当，法律的铁拳必须重重砸下去，绝不能让网络社交平台沦为藏污纳垢的法外之地！",
+            pinyin: "Dǎzhe péibàn de huǎngzi gànzhe pítiáo de gòudàng, fǎlǜ de tiěquán bìxū zhòngzhòng zá xiàqù, juébù néng ràng wǎngluò shèjiāo píngtái lúnwéi cángwū-nàgòu de fǎwài zhī dì!",
+            ruby: "打着陪伴的幌子干着皮条的勾当，法律的铁拳必须重重砸下去，绝不能让网络社交平台沦为藏污纳垢的法外之地！",
+            korean: "'말벗 동행'이라는 그럴싸한 간판(幌子)을 내걸고 더러운 성매매 알선을 일삼다니요! 법률의 철퇴(铁拳)를 사정없이 내리쳐야 합니다. 소셜미디어가 온갖 오물이 우글거리는 무법지대(藏污纳垢)로 전락하게 둬선 안 됩니다!",
+            literal: "동반이라는 간판을 내걸고 뚜쟁이 짓거리를 자행하니 법률의 쇠주먹이 무겁게 내리쳐야 하며 사교 플랫폼이 더러움을 품는 치외법권의 땅이 되게 해선 안 된다.",
+            grammar: "성어 藏污纳垢 구사 / 潜台词: 플랫폼 내 불법 범죄에 대해 무관용 형사 처벌해야 한다.",
+            keywords: ["幌子", "勾当", "藏污纳垢"]
+          },
+          {
+            id: "c2-9",
+            author: "网民9",
+            factOpinion: "사회 심층",
+            tone: "묵직한 사회학적 고뇌",
+            toneEmoji: "🧠",
+            chinese: "为什么现在年轻人宁愿花钱找搭子也不愿意正经谈恋爱？这才是整个社会最该反思的病灶，高压生活把人的情感系统都逼瘫痪了。",
+            pinyin: "Wèishénme xiànzài niánqīngrén nìngyuàn huāqián zhǎo dāzi yě bú yuànyì zhèngjīng tán liàn'ài? Zhè cái shì zhěng gè shèhuì zuì gāi fǎnsī de bìngzào, gāoyā shēnghuó bǎ rén de qínggǎn xìtǒng dōu bī tānhuàn le.",
+            ruby: "为什么现在年轻人宁愿花钱找搭子也不愿意正经谈恋爱？这才是整个社会最该反思的病灶，高压生活把人的情感系统都逼瘫痪了。",
+            korean: "왜 요즘 청년들은 차라리 돈을 주고서라도 짝꿍을 사고 정식 연애는 기피할까요? 이게 바로 사회가 뼈아프게 돌아봐야 할 진짜 병폐(病灶)입니다. 숨 막히는 생존 압박이 인간의 감정 시스템마저 마비시켜 버렸습니다.",
+            literal: "왜 지금 젊은이들은 차라리 돈을 써서 짝꿍을 찾을지언정 제대로 연애하려 하지 않는가? 이것이야말로 온 사회가 반성해야 할 병소이니 고압의 삶이 감정 시스템을 몰아붙여 마비시켰다.",
+            grammar: "‘宁愿……也不……’(차라리 ~할지언정 ~하지 않는다) / 潜台词: 청년의 고독은 경쟁 압박이 낳은 비극이다.",
+            keywords: ["病灶", "瘫痪", "宁愿"]
+          },
+          {
+            id: "c2-10",
+            author: "网民10",
+            factOpinion: "제도 비판",
+            tone: "단호한 알고리즘 책임론",
+            toneEmoji: "🪜",
+            chinese: "社交平台必须承担起审核主体责任，如果搜索‘搭子’出来的全是暗语引流，那算法推荐就等于在给违法犯罪‘递梯子’。",
+            pinyin: "Shèjiāo píngtái bìxū chéngdān qǐ shěnhé zhǔtǐ zérèn, rúguǒ sōusuǒ ‘dāzi’ chūlai de quán shì ànyǔ yǐnliú, nà suànfǎ tuījiàn jiù děngyú zài gěi wéifǎ fànzuì ‘dì tīzi’.",
+            ruby: "社交平台必须承担起审核主体责任，如果搜索‘搭子’出来的全是暗语引流，那算法推荐就等于在给违法犯罪‘递梯子’。",
+            korean: "플랫폼은 콘텐츠 검열에 대한 무한 책임을 져야 합니다. '다즈'를 쳤을 때 온통 성매매 은어와 사기 글만 쏟아진다면, 알고리즘 추천 시스템이 불법 범죄자들에게 범죄 사다리를 놔주는(递梯子) 꼴입니다.",
+            literal: "사교 플랫폼은 심사 주체 책임을 져야 하니 ‘짝꿍’을 검색해 나오는 것이 전부 은어 유인이라면 알고리즘 추천은 불법 범죄에 ‘사다리를 건네는 것’과 같다.",
+            grammar: "관용구 ‘递梯子’(사다리를 대어주다/조장하다) 구사 / 潜台词: 빅테크는 알고리즘 부작용에 연대 책임을 져야 한다.",
+            keywords: ["递梯子", "审核责任", "暗语引流"]
+          }
+        ]
+      },
+      {
+        id: "art-3",
+        code: "03",
+        country: "CN",
+        categoryText: "중국 팬덤 경제·소비 풍속·호텔 자객",
+        date: "2026.10.14",
+        sources: "网易新闻 / 河北新闻网 / 澎湃新闻",
+        titlePlain: "肖战2026巡回演唱会官宣即引发周边酒店抢空暴涨近10倍：门票未售房先空，粉丝直呼‘酒店刺客’卷土重来",
+        titleRuby: "<ruby>肖<rt>Xiào</rt></ruby><ruby>战<rt>Zhàn</rt></ruby>2026<ruby>巡<rt>xún</rt></ruby><ruby>回<rt>huí</rt></ruby><ruby>演<rt>yǎn</rt></ruby><ruby>唱<rt>chàng</rt></ruby><ruby>会<rt>huì</rt></ruby><ruby>官<rt>guān</rt></ruby><ruby>宣<rt>xuān</rt></ruby><ruby>引<rt>yǐn</rt></ruby><ruby>发<rt>fā</rt></ruby><ruby>周<rt>zhōu</rt></ruby><ruby>边<rt>biān</rt></ruby><ruby>酒<rt>jiǔ</rt></ruby><ruby>店<rt>diàn</rt></ruby><ruby>抢<rt>qiǎng</rt></ruby><ruby>空<rt>kōng</rt></ruby><ruby>暴<rt>bào</rt></ruby><ruby>涨<rt>zhǎng</rt></ruby><ruby>近<rt>jìn</rt></ruby>10<ruby>倍<rt>bèi</rt></ruby>",
+        titleKorean: "샤오잔(肖战) 2026 순회 콘서트 발표 직후 인근 호텔 예약 폭주 및 10배 폭등: 티켓팅 시작도 전에 방부터 품절, 팬들 ‘호텔 자객(바가지)’에 분통",
+        summary: "최정상 톱스타 샤오잔의 스타디움 투어 일정이 발표되자마자 공연장 반경 5km 내 비즈니스호텔이 200위안에서 2,000위안으로 폭등했습니다. 특히 기존 저가 예약 건을 시스템 누수 핑계로 일방 취소한 뒤 5배 가격에 재판매하는 '호텔 자객' 수법에 당국이 긴급 단속에 착수했습니다.",
+        originalExcerptPlain: "顶级顶流艺人肖战官宣启动2026年大型体育场巡回演唱会，首站体育场周边5公里内经济型酒店一晚房价从200元瞬间暴涨至2000元甚至强行退单重卖，引发文旅监管介入与全网对‘演唱会经济刺客’的口诛笔伐。",
+        originalExcerptRuby: "肖战大型巡回演唱会官宣，周边经济型酒店一晚房价暴涨至2000元甚至强行退单重卖，引发对‘酒店刺客’的口诛笔伐。",
+        comments: [
+          {
+            id: "c3-1",
+            author: "网民1",
+            factOpinion: "비판/분노",
+            tone: "격앙된 분노와 일침",
+            toneEmoji: "😡",
+            chinese: "门票八字还没一撇呢，隔壁如家汉庭先涨到了希尔顿的价，这不叫演唱会经济，这叫趁火打劫明抢！",
+            pinyin: "Ménpiào bāzì hái méi yì piě ne, gébì Rújiā Hàntíng xiān zhǎng dào le Xī'ěrdùn de jià, zhè bù jiào yǎnchànghuì jīngjì, zhè jiào chènhuǒ-dǎjié míngqiǎng!",
+            ruby: "门票八字还没一撇呢，隔壁如家汉庭先涨到了希尔顿的价，这不叫演唱会经济，这叫趁火打劫明抢！",
+            korean: "티켓팅은 시작도 안 해서 손에 쥔 것도 없는데(八字没一撇), 옆 동네 모텔급 체인점들이 힐튼호텔 가격으로 먼저 치솟았네요. 이게 무슨 공연 경제입니까? 불난 틈 타 대놓고 털어가는 강도질(趁火打劫)이지!",
+            literal: "입장권은 여덟 팔 자의 한 획도 아직 안 그어졌는데 루자·한팅이 힐튼 가격으로 먼저 올랐으니 이건 노략질하고 대놓고 강도질하는 것이다!",
+            grammar: "관용구 ‘八字还没一撇’와 성어 ‘趁火打劫’ 결합 / 潜台词: 콘서트 특수를 핑계로 선을 넘는 탐욕은 범죄 수준이다.",
+            keywords: ["八字还没一撇", "趁火打劫", "明抢"]
+          },
+          {
+            id: "c3-2",
+            author: "网民2",
+            factOpinion: "상술 고발",
+            tone: "극도의 경멸과 혐오",
+            toneEmoji: "🤮",
+            chinese: "最恶心的是‘以装修漏水为由强制退单’，转头在美团上翻五倍重新上架，做生意连底裤都不要了。",
+            pinyin: "Zuì ěxin de shì ‘yǐ zhuāngxiū lòushuǐ wéi yóu qiángzhì tuìdān’, zhuǎntóu zài Měituán shàng fān wǔ bèi chóngxīn shàngjià, zuò shēngyi lián dǐkù dōu bú yào le.",
+            ruby: "最恶心的是‘以装修漏水为由强制退单’，转头在美团上翻五倍重新上架，做生意连底裤都不要了。",
+            korean: "제일 역겨운 건 인테리어 누수 핑계 대며 일방적으로 강제 취소해 버리고, 뒤돌아서 배달·예약 앱에 5배 가격으로 다시 올려놓는 겁니다. 장사하면서 최소한의 염치와 체면(底裤)마저 내팽개쳤네요.",
+            literal: "가장 메스꺼운 것은 누수를 이유로 강제 주문 취소하고 메이투안에서 5배로 올려 다시 진열하는 것이니 팬티조차 원하지 않는 꼴이다.",
+            grammar: "속어 ‘连底裤都不要了’(최소한의 염치도 없다) / 潜台词: 계약을 헌신짝처럼 버리는 악덕 업자는 강력 처벌해야 한다.",
+            keywords: ["强制退单", "翻五倍", "底裤"]
+          },
+          {
+            id: "c3-3",
+            author: "网民3",
+            factOpinion: "행정 비판",
+            tone: "뼈아픈 개탄과 경고",
+            toneEmoji: "🗡️",
+            chinese: "文旅局天天在网上喊‘宠粉、欢迎八方来客’，结果线下被这帮黑心酒店背刺，一座城市的口碑经得起几刀？",
+            pinyin: "Wénlǚjú tiāntiān zài wǎngshàng hǎn ‘chǒngfěn, huānyíng bāfāng láikè’, jiéguǒ xiànxià bèi zhè bāng hēixīn jiǔdiàn bèicì, yí zuò chéngshì de kǒubēi jīngdeqǐ jǐ dāo?
+            ruby: "文旅局天天在网上喊‘宠粉、欢迎八方来客’，结果线下被这帮黑心酒店背刺，一座城市的口碑经得起几刀？",
+            korean: "시청 문화관광국은 인터넷에서 팬 극진히 모신다 환영한다 홍보하더니, 정작 현장에선 양심 불량 호텔들한테 뒤통수(背刺)를 맞네요. 한 도시의 평판이 이런 칼질을 몇 번이나 버텨내겠습니까?",
+            literal: "문광국은 손님을 환영한다고 외치더니 오프라인에서 흑심 호텔 놈들에게 등 뒤에서 찔리니 한 도시의 평판이 칼을 몇 번이나 견디겠는가?",
+            grammar: "신조어 ‘背刺’(뒤통수치다) 구사 / 潜台词: 바가지요금을 방치하면 도시 전체의 관광 신뢰도가 무너진다.",
+            keywords: ["背刺", "口碑", "经得起"]
+          },
+          {
+            id: "c3-4",
+            author: "网民4",
+            factOpinion: "비판/조소",
+            tone: "조소와 통렬한 일침",
+            toneEmoji: "🎣",
+            chinese: "别把割韭菜说得那么清新脱俗，这叫‘竭泽而渔’；真当粉丝是人傻钱多的自动提款机啊？",
+            pinyin: "Bié bǎ gē jiǔcài shuō de nàme qīngxīn tuōsú, zhè jiào ‘jiézé-éryú’; zhēn dāng fěnsī shì rén shǎ qián duō de zìdòng tíkuǎnjī a?",
+            ruby: "别把割韭菜说得那么清新脱俗，这叫‘竭泽而渔’；真当粉丝是人傻钱多的自动提款机啊？",
+            korean: "호텔 호황이니 뭐니 그럴싸하게 포장하지 마세요. 이건 연못 물을 다 말려서 물고기를 싹쓸이하는 갈택이어(竭泽而渔)입니다. 팬들이 뇌 빼고 돈만 퍼주는 호구 ATM인 줄 압니까?",
+            literal: "부추 베기를 그렇게 산뜻하게 말하지 마라 이건 연못 물을 다 말려 물고기를 잡는다는 것이다; 진짜 팬들을 돈만 많은 자동인출기로 아는가?",
+            grammar: "성어 竭泽而渔와 ‘人傻钱多’ 구사 / 潜台词: 소비자를 만만한 호구로 여기는 장사는 자멸한다.",
+            keywords: ["清新脱俗", "竭泽而渔", "人傻钱多"]
+          },
+          {
+            id: "c3-5",
+            author: "网民5",
+            factOpinion: "제도 촉구",
+            tone: "단호한 행정 처벌 요구",
+            toneEmoji: "📢",
+            chinese: "如果文旅部门只管发通告不重罚，那明年的演唱会只会变成黄牛和酒店合谋的狂欢节。",
+            pinyin: "Rúguǒ wénlǚ bùmén zhǐ guǎn fā tōnggào bù zhòngfá, nà míngnián de yǎnchànghuì zhǐ huì biànchéng huángniú hé jiǔdiàn hémóu de kuánghuānjié.",
+            ruby: "如果文旅部门只管发通告不重罚，那明年的演唱会只会变成黄牛和酒店合谋的狂欢节。",
+            korean: "관할 당국이 말로만 훈계 공문 보내고 철퇴(重罚)를 안 때리면, 앞으로의 모든 콘서트는 암표상과 호텔 업자가 짜고 치는 합법적 약탈 파티로 전락할 겁니다.",
+            literal: "만약 문광 부서가 공지만 발표할 뿐 중벌을 내리지 않는다면 내년 콘서트는 암표상과 호텔이 결탁한 광란의 축제로 변할 뿐이다.",
+            grammar: "‘如果……只会……’ 가정문 / 潜台词: 솜방망이 처벌이 불법 바가지 카르텔을 키운다.",
+            keywords: ["重罚", "黄牛", "合谋"]
+          },
+          {
+            id: "c3-6",
+            author: "网民6",
+            factOpinion: "탄식/비판",
+            tone: "안타까움과 뼈아픈 탄식",
+            toneEmoji: "🤦",
+            chinese: "肖战辛辛苦苦给当地引流几万人，拉动餐饮文创消费，全让这几家贪婪的破酒店把好名声给败光了，真是‘一颗老鼠屎坏了一锅粥’。",
+            pinyin: "Xiào Zhàn xīnxīn-kǔkǔ gěi dāngdì yǐnliú jǐ wàn rén, lādòng cānyǐn wénchuàng xiāofèi, quán ràng zhè jǐ jiā tānlán de pò jiǔdiàn bǎ hǎo míngshēng gěi bài guāng le, zhēn shì ‘yì kē lǎoshǔshǐ huài le yì guō zhōu’.",
+            ruby: "肖战辛辛苦苦给当地引流几万人，拉动餐饮文创消费，全让这几家贪婪的破酒店把好名声给败光了，真是‘一颗老鼠屎坏了一锅粥’。",
+            korean: "샤오잔이 뼈 빠지게 수만 명 인파 몰고 와서 식당이며 골목 상권 살려놓으면 뭐 합니까? 몇몇 파렴치한 숙박업소들이 도시 평판을 죄다 말아먹네요. 그야말로 미꾸라지 한 마리가 온 웅덩이를 흐려놓은 꼴(一颗老鼠屎)입니다.",
+            literal: "샤오잔이 고생해서 수만 명 트래픽을 유치하고 소비를 견인했건만 탐욕스러운 호텔들이 좋은 명성을 다 망쳐놓았으니 진짜 쥐똥 한 톨이 죽 한 솥을 망친 격이다.",
+            grammar: "대표 속담 ‘一颗老鼠屎坏了一锅粥’ 활용 / 潜台词: 지역 활성화 기회를 근시안적 탐욕으로 걷어차고 있다.",
+            keywords: ["引流", "败光", "老鼠屎"]
+          },
+          {
+            id: "c3-7",
+            author: "网民7",
+            factOpinion: "대안 제시",
+            tone: "결의에 찬 보이콧 선동",
+            toneEmoji: "🚌",
+            chinese: "建议粉丝直接拼大巴当天往返，或者组团去洗浴中心过夜，坚决不让无良黑心商家赚走一分昧心钱！",
+            pinyin: "Jiànyì fěnsī zhíjiē pīn dàbā dāngtiān wǎngfǎn, huòzhě zǔtuán qù xǐyù zhōngxīn guòyè, jiānjué bú ràng wúliáng hēixīn shāngjiā zhuàn zǒu yì fēn mèixīn qián!",
+            ruby: "建议粉丝直接拼大巴当天往返，或者组团去洗浴中心过夜，坚决不让无良黑心商家赚走一分昧心钱！",
+            korean: "팬 여러분, 아예 대형버스 대절해서 당일치기로 왕복하거나 찜질방·사우나(洗浴中心)에서 옹기종기 묵으세요
